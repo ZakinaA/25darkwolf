@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CouleurRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CouleurRepository::class)]
@@ -15,6 +17,17 @@ class Couleur
 
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $nom = null;
+
+    /**
+     * @var Collection<int, Instrument>
+     */
+    #[ORM\ManyToMany(targetEntity: Instrument::class, mappedBy: 'couleurs')]
+    private Collection $instruments;
+
+    public function __construct()
+    {
+        $this->instruments = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -29,6 +42,33 @@ class Couleur
     public function setNom(?string $nom): static
     {
         $this->nom = $nom;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Instrument>
+     */
+    public function getInstruments(): Collection
+    {
+        return $this->instruments;
+    }
+
+    public function addInstrument(Instrument $instrument): static
+    {
+        if (!$this->instruments->contains($instrument)) {
+            $this->instruments->add($instrument);
+            $instrument->addCouleur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInstrument(Instrument $instrument): static
+    {
+        if ($this->instruments->removeElement($instrument)) {
+            $instrument->removeCouleur($this);
+        }
 
         return $this;
     }

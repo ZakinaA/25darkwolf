@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\InstrumentRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -31,6 +33,17 @@ class Instrument
 
     #[ORM\ManyToOne(inversedBy: 'instruments')]
     private ?TypeInstrument $typeInstrument = null;
+
+    /**
+     * @var Collection<int, Couleur>
+     */
+    #[ORM\ManyToMany(targetEntity: Couleur::class, inversedBy: 'instruments')]
+    private Collection $couleurs;
+
+    public function __construct()
+    {
+        $this->couleurs = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -105,6 +118,30 @@ class Instrument
     public function setTypeInstrument(?TypeInstrument $typeInstrument): static
     {
         $this->typeInstrument = $typeInstrument;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Couleur>
+     */
+    public function getCouleurs(): Collection
+    {
+        return $this->couleurs;
+    }
+
+    public function addCouleur(Couleur $couleur): static
+    {
+        if (!$this->couleurs->contains($couleur)) {
+            $this->couleurs->add($couleur);
+        }
+
+        return $this;
+    }
+
+    public function removeCouleur(Couleur $couleur): static
+    {
+        $this->couleurs->removeElement($couleur);
 
         return $this;
     }
