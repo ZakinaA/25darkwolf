@@ -11,7 +11,7 @@ body {
     padding: 20px;
 }
 
-h1, h2 {
+h1 {
     color: #1f3d7a;
 }
 
@@ -44,13 +44,6 @@ a:hover {
     <li><strong>Assurance :</strong> {{ pret.attestationAssurance ? 'Oui' : 'Non' }}</li>
     <li><strong>État au début :</strong> {{ pret.etatDetailleDebut }}</li>
     <li><strong>État au retour :</strong> {{ pret.etatDetailleRetour }}</li>
-    <li><strong>Intervention :</strong>
-        <a href="{{ path('app_intervention_show', {'id': pret.intervention.id}) }}">
-            {{ pret.intervention.descriptif }}
-        </a>
-    </li>
-    <li><strong>Professionnel :</strong> {{ pret.intervention.professionnel.nom }}</li>
-    <li><strong>Métier :</strong> {{ pret.intervention.professionnel.metier.libelle }}</li>
 </ul>
 
 <a href="{{ path('app_contrat_pret') }}">⬅ Retour à la liste des prêts</a>

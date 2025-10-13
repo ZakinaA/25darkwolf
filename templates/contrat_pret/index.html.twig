@@ -11,7 +11,7 @@ body {
     padding: 20px;
 }
 
-h1, h2 {
+h1 {
     color: #1f3d7a;
 }
 
@@ -42,7 +42,6 @@ table tr:nth-child(even) {
 
 table tr:hover {
     background-color: #dbe4f0;
-    cursor: pointer;
 }
 
 a {
@@ -54,15 +53,6 @@ a {
 a:hover {
     text-decoration: underline;
     color: #ff5e5e;
-}
-
-ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-ul li {
-    padding: 5px 0;
 }
 </style>
 
@@ -79,9 +69,6 @@ ul li {
             <th>Assurance</th>
             <th>État début</th>
             <th>État retour</th>
-            <th>Intervention</th>
-            <th>Professionnel</th>
-            <th>Métier</th>
             <th>Actions</th>
         </tr>
 
@@ -93,13 +80,6 @@ ul li {
                 <td>{{ pret.attestationAssurance ? 'Oui' : 'Non' }}</td>
                 <td>{{ pret.etatDetailleDebut }}</td>
                 <td>{{ pret.etatDetailleRetour }}</td>
-                <td>
-                    <a href="{{ path('app_intervention_show', {'id': pret.intervention.id}) }}">
-                        {{ pret.intervention.descriptif }}
-                    </a>
-                </td>
-                <td>{{ pret.intervention.professionnel.nom }}</td>
-                <td>{{ pret.intervention.professionnel.metier.libelle }}</td>
                 <td>
                     <a href="{{ path('app_contrat_pret_show', {'id': pret.id}) }}">Voir</a>
                 </td>
