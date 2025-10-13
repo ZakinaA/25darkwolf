@@ -20,6 +20,9 @@ class Paiement
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTime $datePaiement = null;
 
+    #[ORM\ManyToOne(inversedBy: 'paiements')]
+    private ?Inscription $inscription = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -45,6 +48,18 @@ class Paiement
     public function setDatePaiement(?\DateTime $datePaiement): static
     {
         $this->datePaiement = $datePaiement;
+
+        return $this;
+    }
+
+    public function getInscription(): ?Inscription
+    {
+        return $this->inscription;
+    }
+
+    public function setInscription(?Inscription $inscription): static
+    {
+        $this->inscription = $inscription;
 
         return $this;
     }
