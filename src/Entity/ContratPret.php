@@ -29,6 +29,10 @@ class ContratPret
     #[ORM\Column(type: Types::TEXT)]
     private ?string $etatDetailleRetour = null;
 
+    #[ORM\ManyToOne(inversedBy: 'no')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Intervention $intervention = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -90,6 +94,18 @@ class ContratPret
     public function setEtatDetailleRetour(string $etatDetailleRetour): static
     {
         $this->etatDetailleRetour = $etatDetailleRetour;
+
+        return $this;
+    }
+
+    public function getIntervention(): ?Intervention
+    {
+        return $this->intervention;
+    }
+
+    public function setIntervention(?Intervention $intervention): static
+    {
+        $this->intervention = $intervention;
 
         return $this;
     }

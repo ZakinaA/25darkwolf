@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\InterventionRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -32,6 +34,17 @@ class Intervention
     #[ORM\ManyToOne(inversedBy: 'interventions')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Professionnel $professionnel = null;
+
+    /**
+     * @var Collection<int, ContratPret>
+     */
+    #[ORM\OneToMany(targetEntity: ContratPret::class, mappedBy: 'intervention')]
+    private Collection $no;
+
+    public function __construct()
+    {
+        $this->no = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -106,6 +119,36 @@ class Intervention
     public function setProfessionnel(?Professionnel $professionnel): static
     {
         $this->professionnel = $professionnel;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ContratPret>
+     */
+    public function getNo(): Collection
+    {
+        return $this->no;
+    }
+
+    public function addNo(ContratPret $no): static
+    {
+        if (!$this->no->contains($no)) {
+            $this->no->add($no);
+            $no->setIntervention($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNo(ContratPret $no): static
+    {
+        if ($this->no->removeElement($no)) {
+            // set the owning side to null (unless already changed)
+            if ($no->getIntervention() === $this) {
+                $no->setIntervention(null);
+            }
+        }
 
         return $this;
     }
