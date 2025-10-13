@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des prêts{% endblock %}
+
+{% block body %}
+<h1>📋 Liste des Contrats de Prêt</h1>
+
+{% if prets is empty %}
+    <p>Aucun prêt enregistré.</p>
+{% else %}
+    <table border="1" cellspacing="0" cellpadding="6">
+        <tr>
+            <th>ID</th>
+            <th>Date début</th>
+            <th>Date fin</th>
+            <th>Assurance</th>
+            <th>État début</th>
+            <th>État retour</th>
+            <th>Intervention</th>
+            <th>Professionnel</th>
+            <th>Métier</th>
+        </tr>
+
+        {% for pret in prets %}
+            <tr>
+                <td>{{ pret.id }}</td>
+                <td>{{ pret.dateDebut|date('d/m/Y') }}</td>
+                <td>{{ pret.dateFin|date('d/m/Y') }}</td>
+                <td>{{ pret.attestationAssurance ? 'Oui' : 'Non' }}</td>
+                <td>{{ pret.etatDetailleDebut }}</td>
+                <td>{{ pret.etatDetailleRetour }}</td>
+                <td>{{ pret.intervention.descriptif }}</td>
+                <td>{{ pret.intervention.professionnel.nom }}</td>
+                <td>{{ pret.intervention.professionnel.metier.libelle }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endif %}
+{% endblock %}
