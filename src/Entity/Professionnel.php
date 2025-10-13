@@ -34,6 +34,10 @@ class Professionnel
     #[ORM\Column(length: 100)]
     private ?string $mail = null;
 
+    #[ORM\ManyToOne(inversedBy: 'professionnels')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Metier $metier = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -119,6 +123,18 @@ class Professionnel
     public function setMail(string $mail): static
     {
         $this->mail = $mail;
+
+        return $this;
+    }
+
+    public function getMetier(): ?Metier
+    {
+        return $this->metier;
+    }
+
+    public function setMetier(?Metier $metier): static
+    {
+        $this->metier = $metier;
 
         return $this;
     }
