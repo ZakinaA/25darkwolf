@@ -48,9 +48,16 @@ class Eleve
     #[ORM\ManyToOne(inversedBy: 'eleves')]
     private ?Tranche $tranche = null;
 
+    /**
+     * @var Collection<int, Inscription>
+     */
+    #[ORM\OneToMany(targetEntity: Inscription::class, mappedBy: 'eleve')]
+    private Collection $inscription;
+
     public function __construct()
     {
         $this->responsable = new ArrayCollection();
+        $this->inscription = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -186,6 +193,36 @@ class Eleve
     public function setTranche(?Tranche $tranche): static
     {
         $this->tranche = $tranche;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Inscription>
+     */
+    public function getInscription(): Collection
+    {
+        return $this->inscription;
+    }
+
+    public function addInscription(Inscription $inscription): static
+    {
+        if (!$this->inscription->contains($inscription)) {
+            $this->inscription->add($inscription);
+            $inscription->setEleve($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInscription(Inscription $inscription): static
+    {
+        if ($this->inscription->removeElement($inscription)) {
+            // set the owning side to null (unless already changed)
+            if ($inscription->getEleve() === $this) {
+                $inscription->setEleve(null);
+            }
+        }
 
         return $this;
     }
