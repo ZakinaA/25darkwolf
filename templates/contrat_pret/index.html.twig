@@ -1,0 +1,90 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des prêts{% endblock %}
+
+{% block body %}
+<style>
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f6f8;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    color: #1f3d7a;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+    background-color: #fff;
+    box-shadow: 0 0 8px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+table th, table td {
+    padding: 12px 15px;
+    text-align: left;
+}
+
+table th {
+    background-color: #1f3d7a;
+    color: #fff;
+    font-weight: bold;
+}
+
+table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+table tr:hover {
+    background-color: #dbe4f0;
+}
+
+a {
+    color: #1f3d7a;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+a:hover {
+    text-decoration: underline;
+    color: #ff5e5e;
+}
+</style>
+
+<h1>📋 Liste des Contrats de Prêt</h1>
+
+{% if prets is empty %}
+    <p>Aucun prêt enregistré.</p>
+{% else %}
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Date début</th>
+            <th>Date fin</th>
+            <th>Assurance</th>
+            <th>État début</th>
+            <th>État retour</th>
+            <th>Actions</th>
+        </tr>
+
+        {% for pret in prets %}
+            <tr>
+                <td>{{ pret.id }}</td>
+                <td>{{ pret.dateDebut|date('d/m/Y') }}</td>
+                <td>{{ pret.dateFin|date('d/m/Y') }}</td>
+                <td>{{ pret.attestationAssurance ? 'Oui' : 'Non' }}</td>
+                <td>{{ pret.etatDetailleDebut }}</td>
+                <td>{{ pret.etatDetailleRetour }}</td>
+                <td>
+                    <a href="{{ path('app_contrat_pret_show', {'id': pret.id}) }}">Voir</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endif %}
+{% endblock %}

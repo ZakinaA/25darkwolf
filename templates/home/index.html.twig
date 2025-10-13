@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil e-Music{% endblock %}
+
+{% block body %}
+<style>
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f6f8;
+    display: flex;
+}
+
+.sidebar {
+    width: 220px;
+    background-color: #1f3d7a;
+    min-height: 100vh;
+    padding: 20px;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar h2 {
+    margin-top: 0;
+    font-size: 1.5em;
+    margin-bottom: 20px;
+}
+
+.sidebar a {
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 0;
+    display: block;
+    font-weight: 500;
+    border-radius: 5px;
+}
+
+.sidebar a:hover {
+    background-color: #3a5ca8;
+}
+
+.main-content {
+    flex-grow: 1;
+    padding: 40px;
+}
+
+h1 {
+    color: #1f3d7a;
+}
+</style>
+
+<div class="sidebar">
+    <h2>e-Music</h2>
+    <a href="{{ path('app_contrat_pret') }}">📋 Lister les prêts</a>
+    <!-- Tu peux ajouter d'autres liens ici -->
+</div>
+
+<div class="main-content">
+    <h1>Bienvenue sur l'application e-Music !</h1>
+    <p>Utilisez la barre de navigation à gauche pour accéder aux différentes sections.</p>
+</div>
+{% endblock %}

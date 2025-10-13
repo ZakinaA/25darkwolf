@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails du prêt{% endblock %}
+
+{% block body %}
+<style>
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f6f8;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    color: #1f3d7a;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+ul li {
+    padding: 8px 0;
+}
+
+a {
+    color: #1f3d7a;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+a:hover {
+    text-decoration: underline;
+    color: #ff5e5e;
+}
+</style>
+
+<h1>📄 Détails du Contrat de Prêt #{{ pret.id }}</h1>
+
+<ul>
+    <li><strong>Date début :</strong> {{ pret.dateDebut|date('d/m/Y') }}</li>
+    <li><strong>Date fin :</strong> {{ pret.dateFin|date('d/m/Y') }}</li>
+    <li><strong>Assurance :</strong> {{ pret.attestationAssurance ? 'Oui' : 'Non' }}</li>
+    <li><strong>État au début :</strong> {{ pret.etatDetailleDebut }}</li>
+    <li><strong>État au retour :</strong> {{ pret.etatDetailleRetour }}</li>
+</ul>
+
+<a href="{{ path('app_contrat_pret') }}">⬅ Retour à la liste des prêts</a>
+{% endblock %}
