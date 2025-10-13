@@ -43,9 +43,16 @@ class Instrument
     #[ORM\ManyToOne(inversedBy: 'instruments')]
     private ?Marque $marque = null;
 
+    /**
+     * @var Collection<int, Accessoire>
+     */
+    #[ORM\OneToMany(targetEntity: Accessoire::class, mappedBy: 'instrument')]
+    private Collection $accessoires;
+
     public function __construct()
     {
         $this->couleurs = new ArrayCollection();
+        $this->accessoires = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -157,6 +164,36 @@ class Instrument
     public function setMarque(?Marque $marque): static
     {
         $this->marque = $marque;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Accessoire>
+     */
+    public function getAccessoires(): Collection
+    {
+        return $this->accessoires;
+    }
+
+    public function addAccessoire(Accessoire $accessoire): static
+    {
+        if (!$this->accessoires->contains($accessoire)) {
+            $this->accessoires->add($accessoire);
+            $accessoire->setInstrument($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAccessoire(Accessoire $accessoire): static
+    {
+        if ($this->accessoires->removeElement($accessoire)) {
+            // set the owning side to null (unless already changed)
+            if ($accessoire->getInstrument() === $this) {
+                $accessoire->setInstrument(null);
+            }
+        }
 
         return $this;
     }
