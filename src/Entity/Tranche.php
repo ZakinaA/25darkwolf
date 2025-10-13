@@ -33,10 +33,17 @@ class Tranche
     #[ORM\OneToMany(targetEntity: Responsable::class, mappedBy: 'tranche')]
     private Collection $responsables;
 
+    /**
+     * @var Collection<int, Type>
+     */
+    #[ORM\ManyToMany(targetEntity: Type::class, inversedBy: 'tranches')]
+    private Collection $type;
+
     public function __construct()
     {
         $this->eleves = new ArrayCollection();
         $this->responsables = new ArrayCollection();
+        $this->type = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -124,6 +131,30 @@ class Tranche
                 $responsable->setTranche(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Type>
+     */
+    public function getType(): Collection
+    {
+        return $this->type;
+    }
+
+    public function addType(Type $type): static
+    {
+        if (!$this->type->contains($type)) {
+            $this->type->add($type);
+        }
+
+        return $this;
+    }
+
+    public function removeType(Type $type): static
+    {
+        $this->type->removeElement($type);
 
         return $this;
     }
