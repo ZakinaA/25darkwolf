@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\EleveRepository;
+use App\Repository\ResponsableRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: EleveRepository::class)]
-class Eleve
+#[ORM\Entity(repositoryClass: ResponsableRepository::class)]
+class Responsable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -24,7 +24,7 @@ class Eleve
     #[ORM\Column(nullable: true)]
     private ?int $numRue = null;
 
-    #[ORM\Column(length: 60, nullable: true)]
+    #[ORM\Column(length: 50, nullable: true)]
     private ?string $rue = null;
 
     #[ORM\Column(nullable: true)]
@@ -40,14 +40,14 @@ class Eleve
     private ?string $mail = null;
 
     /**
-     * @var Collection<int, Responsable>
+     * @var Collection<int, Eleve>
      */
-    #[ORM\ManyToMany(targetEntity: Responsable::class, inversedBy: 'eleves')]
-    private Collection $responsable;
+    #[ORM\ManyToMany(targetEntity: Eleve::class, mappedBy: 'responsable')]
+    private Collection $eleves;
 
     public function __construct()
     {
-        $this->responsable = new ArrayCollection();
+        $this->eleves = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -152,25 +152,28 @@ class Eleve
     }
 
     /**
-     * @return Collection<int, Responsable>
+     * @return Collection<int, Eleve>
      */
-    public function getResponsable(): Collection
+    public function getEleves(): Collection
     {
-        return $this->responsable;
+        return $this->eleves;
     }
 
-    public function addResponsable(Responsable $responsable): static
+    public function addElefe(Eleve $elefe): static
     {
-        if (!$this->responsable->contains($responsable)) {
-            $this->responsable->add($responsable);
+        if (!$this->eleves->contains($elefe)) {
+            $this->eleves->add($elefe);
+            $elefe->addResponsable($this);
         }
 
         return $this;
     }
 
-    public function removeResponsable(Responsable $responsable): static
+    public function removeElefe(Eleve $elefe): static
     {
-        $this->responsable->removeElement($responsable);
+        if ($this->eleves->removeElement($elefe)) {
+            $elefe->removeResponsable($this);
+        }
 
         return $this;
     }
