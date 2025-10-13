@@ -27,9 +27,16 @@ class Tranche
     #[ORM\OneToMany(targetEntity: Eleve::class, mappedBy: 'tranche')]
     private Collection $eleves;
 
+    /**
+     * @var Collection<int, Responsable>
+     */
+    #[ORM\OneToMany(targetEntity: Responsable::class, mappedBy: 'tranche')]
+    private Collection $responsables;
+
     public function __construct()
     {
         $this->eleves = new ArrayCollection();
+        $this->responsables = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -85,6 +92,36 @@ class Tranche
             // set the owning side to null (unless already changed)
             if ($elefe->getTranche() === $this) {
                 $elefe->setTranche(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Responsable>
+     */
+    public function getResponsables(): Collection
+    {
+        return $this->responsables;
+    }
+
+    public function addResponsable(Responsable $responsable): static
+    {
+        if (!$this->responsables->contains($responsable)) {
+            $this->responsables->add($responsable);
+            $responsable->setTranche($this);
+        }
+
+        return $this;
+    }
+
+    public function removeResponsable(Responsable $responsable): static
+    {
+        if ($this->responsables->removeElement($responsable)) {
+            // set the owning side to null (unless already changed)
+            if ($responsable->getTranche() === $this) {
+                $responsable->setTranche(null);
             }
         }
 
