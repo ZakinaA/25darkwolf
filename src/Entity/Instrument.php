@@ -40,6 +40,9 @@ class Instrument
     #[ORM\ManyToMany(targetEntity: Couleur::class, inversedBy: 'instruments')]
     private Collection $couleurs;
 
+    #[ORM\ManyToOne(inversedBy: 'instruments')]
+    private ?Marque $marque = null;
+
     public function __construct()
     {
         $this->couleurs = new ArrayCollection();
@@ -142,6 +145,18 @@ class Instrument
     public function removeCouleur(Couleur $couleur): static
     {
         $this->couleurs->removeElement($couleur);
+
+        return $this;
+    }
+
+    public function getMarque(): ?Marque
+    {
+        return $this->marque;
+    }
+
+    public function setMarque(?Marque $marque): static
+    {
+        $this->marque = $marque;
 
         return $this;
     }
