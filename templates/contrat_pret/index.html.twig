@@ -3,12 +3,75 @@
 {% block title %}Liste des prêts{% endblock %}
 
 {% block body %}
+<style>
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f6f8;
+    margin: 0;
+    padding: 20px;
+}
+
+h1, h2 {
+    color: #1f3d7a;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+    background-color: #fff;
+    box-shadow: 0 0 8px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+table th, table td {
+    padding: 12px 15px;
+    text-align: left;
+}
+
+table th {
+    background-color: #1f3d7a;
+    color: #fff;
+    font-weight: bold;
+}
+
+table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+table tr:hover {
+    background-color: #dbe4f0;
+    cursor: pointer;
+}
+
+a {
+    color: #1f3d7a;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+a:hover {
+    text-decoration: underline;
+    color: #ff5e5e;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+ul li {
+    padding: 5px 0;
+}
+</style>
+
 <h1>📋 Liste des Contrats de Prêt</h1>
 
 {% if prets is empty %}
     <p>Aucun prêt enregistré.</p>
 {% else %}
-    <table border="1" cellspacing="0" cellpadding="6">
+    <table>
         <tr>
             <th>ID</th>
             <th>Date début</th>
@@ -19,6 +82,7 @@
             <th>Intervention</th>
             <th>Professionnel</th>
             <th>Métier</th>
+            <th>Actions</th>
         </tr>
 
         {% for pret in prets %}
@@ -29,9 +93,16 @@
                 <td>{{ pret.attestationAssurance ? 'Oui' : 'Non' }}</td>
                 <td>{{ pret.etatDetailleDebut }}</td>
                 <td>{{ pret.etatDetailleRetour }}</td>
-                <td>{{ pret.intervention.descriptif }}</td>
+                <td>
+                    <a href="{{ path('app_intervention_show', {'id': pret.intervention.id}) }}">
+                        {{ pret.intervention.descriptif }}
+                    </a>
+                </td>
                 <td>{{ pret.intervention.professionnel.nom }}</td>
                 <td>{{ pret.intervention.professionnel.metier.libelle }}</td>
+                <td>
+                    <a href="{{ path('app_contrat_pret_show', {'id': pret.id}) }}">Voir</a>
+                </td>
             </tr>
         {% endfor %}
     </table>

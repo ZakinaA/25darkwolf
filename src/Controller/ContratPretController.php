@@ -13,12 +13,24 @@ class ContratPretController extends AbstractController
     #[Route('/prets', name: 'app_contrat_pret')]
     public function index(EntityManagerInterface $em): Response
     {
-        // Récupérer tous les contrats de prêt
         $prets = $em->getRepository(ContratPret::class)->findAll();
 
-        // Envoyer à la vue Twig
         return $this->render('contrat_pret/index.html.twig', [
             'prets' => $prets,
+        ]);
+    }
+
+    #[Route('/prets/{id}', name: 'app_contrat_pret_show')]
+    public function show(EntityManagerInterface $em, int $id): Response
+    {
+        $pret = $em->getRepository(ContratPret::class)->find($id);
+
+        if (!$pret) {
+            throw $this->createNotFoundException('Le contrat de prêt n\'existe pas.');
+        }
+
+        return $this->render('contrat_pret/show.html.twig', [
+            'pret' => $pret,
         ]);
     }
 }
