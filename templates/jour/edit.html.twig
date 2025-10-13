@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Jour{% endblock %}
+
+{% block body %}
+    <h1>Edit Jour</h1>
+
+    {{ include('jour/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_jour_index') }}">back to list</a>
+
+    {{ include('jour/_delete_form.html.twig') }}
+{% endblock %}

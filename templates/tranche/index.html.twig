@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tranche index{% endblock %}
+
+{% block body %}
+    <h1>Tranche index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Libelle</th>
+                <th>QuotientMini</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for tranche in tranches %}
+            <tr>
+                <td>{{ tranche.id }}</td>
+                <td>{{ tranche.libelle }}</td>
+                <td>{{ tranche.quotientMini }}</td>
+                <td>
+                    <a href="{{ path('app_tranche_show', {'id': tranche.id}) }}">show</a>
+                    <a href="{{ path('app_tranche_edit', {'id': tranche.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_tranche_new') }}">Create new</a>
+{% endblock %}
