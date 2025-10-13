@@ -26,6 +26,9 @@ class Cours
     #[ORM\Column(type: Types::TIME_MUTABLE, nullable: true)]
     private ?\DateTime $heureFin = null;
 
+    #[ORM\ManyToOne(inversedBy: 'cours')]
+    private ?Type $type = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -75,6 +78,18 @@ class Cours
     public function setHeureFin(?\DateTime $heureFin): static
     {
         $this->heureFin = $heureFin;
+
+        return $this;
+    }
+
+    public function getType(): ?Type
+    {
+        return $this->type;
+    }
+
+    public function setType(?Type $type): static
+    {
+        $this->type = $type;
 
         return $this;
     }
