@@ -41,9 +41,16 @@ class Intervention
     #[ORM\OneToMany(targetEntity: ContratPret::class, mappedBy: 'intervention')]
     private Collection $no;
 
+    /**
+     * @var Collection<int, Instrument>
+     */
+    #[ORM\OneToMany(targetEntity: Instrument::class, mappedBy: 'intervention')]
+    private Collection $professeur;
+
     public function __construct()
     {
         $this->no = new ArrayCollection();
+        $this->professeur = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -147,6 +154,36 @@ class Intervention
             // set the owning side to null (unless already changed)
             if ($no->getIntervention() === $this) {
                 $no->setIntervention(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Instrument>
+     */
+    public function getProfesseur(): Collection
+    {
+        return $this->professeur;
+    }
+
+    public function addProfesseur(Instrument $professeur): static
+    {
+        if (!$this->professeur->contains($professeur)) {
+            $this->professeur->add($professeur);
+            $professeur->setIntervention($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProfesseur(Instrument $professeur): static
+    {
+        if ($this->professeur->removeElement($professeur)) {
+            // set the owning side to null (unless already changed)
+            if ($professeur->getIntervention() === $this) {
+                $professeur->setIntervention(null);
             }
         }
 
