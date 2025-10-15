@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\ProfesseurRepository;
+use App\Repository\ResponsableRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: ProfesseurRepository::class)]
-class Professeur
+#[ORM\Entity(repositoryClass: ResponsableRepository::class)]
+class Responsable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -36,25 +36,21 @@ class Professeur
     #[ORM\Column(nullable: true)]
     private ?int $tel = null;
 
-    #[ORM\Column(length: 100, nullable: true)]
+    #[ORM\Column(length: 50, nullable: true)]
     private ?string $mail = null;
 
     /**
-     * @var Collection<int, TypeInstrument>
+     * @var Collection<int, Eleve>
      */
-    #[ORM\ManyToMany(targetEntity: TypeInstrument::class, inversedBy: 'professeurs')]
-    private Collection $typeInstrument;
+    #[ORM\ManyToMany(targetEntity: Eleve::class, mappedBy: 'responsable')]
+    private Collection $eleves;
 
-    /**
-     * @var Collection<int, Cours>
-     */
-    #[ORM\OneToMany(targetEntity: Cours::class, mappedBy: 'professeur')]
-    private Collection $cours;
+    #[ORM\ManyToOne(inversedBy: 'responsables')]
+    private ?Tranche $tranche = null;
 
     public function __construct()
     {
-        $this->typeInstrument = new ArrayCollection();
-        $this->cours = new ArrayCollection();
+        $this->eleves = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -159,55 +155,40 @@ class Professeur
     }
 
     /**
-     * @return Collection<int, TypeInstrument>
+     * @return Collection<int, Eleve>
      */
-    public function getTypeInstrument(): Collection
+    public function getEleves(): Collection
     {
-        return $this->typeInstrument;
+        return $this->eleves;
     }
 
-    public function addTypeInstrument(TypeInstrument $typeInstrument): static
+    public function addElefe(Eleve $elefe): static
     {
-        if (!$this->typeInstrument->contains($typeInstrument)) {
-            $this->typeInstrument->add($typeInstrument);
+        if (!$this->eleves->contains($elefe)) {
+            $this->eleves->add($elefe);
+            $elefe->addResponsable($this);
         }
 
         return $this;
     }
 
-    public function removeTypeInstrument(TypeInstrument $typeInstrument): static
+    public function removeElefe(Eleve $elefe): static
     {
-        $this->typeInstrument->removeElement($typeInstrument);
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Cours>
-     */
-    public function getCours(): Collection
-    {
-        return $this->cours;
-    }
-
-    public function addCour(Cours $cour): static
-    {
-        if (!$this->cours->contains($cour)) {
-            $this->cours->add($cour);
-            $cour->setProfesseur($this);
+        if ($this->eleves->removeElement($elefe)) {
+            $elefe->removeResponsable($this);
         }
 
         return $this;
     }
 
-    public function removeCour(Cours $cour): static
+    public function getTranche(): ?Tranche
     {
-        if ($this->cours->removeElement($cour)) {
-            // set the owning side to null (unless already changed)
-            if ($cour->getProfesseur() === $this) {
-                $cour->setProfesseur(null);
-            }
-        }
+        return $this->tranche;
+    }
+
+    public function setTranche(?Tranche $tranche): static
+    {
+        $this->tranche = $tranche;
 
         return $this;
     }
