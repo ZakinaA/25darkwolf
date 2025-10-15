@@ -1,20 +1,21 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Instrument index{% endblock %}
+{% block title %}Liste des Instruments{% endblock %}
 
 {% block body %}
-    <h1>Instrument index</h1>
+    <h1>Liste des Instruments</h1>
 
-    <table class="table">
+    <table class="table table-hover"> {# J'ai ajouté table-hover pour un meilleur effet visuel #}
         <thead>
             <tr>
                 <th>Id</th>
-                <th>NumSerie</th>
-                <th>DateAchat</th>
-                <th>PrixAchat</th>
-                <th>Utilisation</th>
-                <th>CheminImage</th>
-                <th>actions</th>
+                {# On peut masquer l'ID et afficher l'image à la place, voir suggestions plus bas #}
+                <th>Numéro de Série</th>
+                <th>Marque</th>      {# NOUVELLE COLONNE #}
+                <th>Type</th>        {# NOUVELLE COLONNE #}
+                <th>Date d'achat</th>
+                <th>Prix d'achat</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -22,22 +23,27 @@
             <tr>
                 <td>{{ instrument.id }}</td>
                 <td>{{ instrument.numSerie }}</td>
-                <td>{{ instrument.dateAchat ? instrument.dateAchat|date('Y-m-d') : '' }}</td>
-                <td>{{ instrument.prixAchat }}</td>
-                <td>{{ instrument.utilisation }}</td>
-                <td>{{ instrument.cheminImage }}</td>
+                {# On accède au libellé de la marque via l'objet instrument #}
+                <td>{{ instrument.marque ? instrument.marque.libelle : 'N/A' }}</td>
+                
+                {# On fait de même pour le type d'instrument #}
+                <td>{{ instrument.typeInstrument ? instrument.typeInstrument.libelle : 'N/A' }}</td>
+
+                <td>{{ instrument.dateAchat ? instrument.dateAchat|date('d/m/Y') : '' }}</td> {# Format de date français #}
+                <td>{{ instrument.prixAchat ? instrument.prixAchat|number_format(2, ',', ' ') ~ ' €' : '' }}</td> {# Formatage du prix #}
                 <td>
-                    <a href="{{ path('app_instrument_show', {'id': instrument.id}) }}">show</a>
-                    <a href="{{ path('app_instrument_edit', {'id': instrument.id}) }}">edit</a>
+                    <a href="{{ path('app_instrument_show', {'id': instrument.id}) }}" class="btn btn-info btn-sm">Voir</a>
+                    <a href="{{ path('app_instrument_edit', {'id': instrument.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="7">no records found</td>
+                {# On met à jour le colspan pour correspondre au nouveau nombre de colonnes #}
+                <td colspan="7" class="text-center">Aucun instrument trouvé.</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('app_instrument_new') }}">Create new</a>
+    <a href="{{ path('app_instrument_new') }}" class="btn btn-primary">Ajouter un nouvel instrument</a>
 {% endblock %}
