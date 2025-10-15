@@ -49,6 +49,14 @@ class Instrument
     #[ORM\OneToMany(targetEntity: Accessoire::class, mappedBy: 'instrument')]
     private Collection $accessoires;
 
+    #[ORM\ManyToOne(inversedBy: 'professeur')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Intervention $intervention = null;
+
+    #[ORM\ManyToOne(inversedBy: 'instrument')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?ContratPret $contratPret = null;
+
     public function __construct()
     {
         $this->couleurs = new ArrayCollection();
@@ -194,6 +202,30 @@ class Instrument
                 $accessoire->setInstrument(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getIntervention(): ?Intervention
+    {
+        return $this->intervention;
+    }
+
+    public function setIntervention(?Intervention $intervention): static
+    {
+        $this->intervention = $intervention;
+
+        return $this;
+    }
+
+    public function getContratPret(): ?ContratPret
+    {
+        return $this->contratPret;
+    }
+
+    public function setContratPret(?ContratPret $contratPret): static
+    {
+        $this->contratPret = $contratPret;
 
         return $this;
     }
