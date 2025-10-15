@@ -33,6 +33,9 @@ class ContratPret
     #[ORM\JoinColumn(nullable: false)]
     private ?Intervention $intervention = null;
 
+    #[ORM\ManyToOne(inversedBy: 'contratPret')]
+    private ?Eleve $eleve = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -106,6 +109,18 @@ class ContratPret
     public function setIntervention(?Intervention $intervention): static
     {
         $this->intervention = $intervention;
+
+        return $this;
+    }
+
+    public function getEleve(): ?Eleve
+    {
+        return $this->eleve;
+    }
+
+    public function setEleve(?Eleve $eleve): static
+    {
+        $this->eleve = $eleve;
 
         return $this;
     }

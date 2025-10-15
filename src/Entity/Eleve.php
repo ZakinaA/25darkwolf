@@ -54,10 +54,17 @@ class Eleve
     #[ORM\OneToMany(targetEntity: Inscription::class, mappedBy: 'eleve')]
     private Collection $inscription;
 
+    /**
+     * @var Collection<int, ContratPret>
+     */
+    #[ORM\OneToMany(targetEntity: ContratPret::class, mappedBy: 'eleve')]
+    private Collection $contratPret;
+
     public function __construct()
     {
         $this->responsable = new ArrayCollection();
         $this->inscription = new ArrayCollection();
+        $this->contratPret = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -221,6 +228,36 @@ class Eleve
             // set the owning side to null (unless already changed)
             if ($inscription->getEleve() === $this) {
                 $inscription->setEleve(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ContratPret>
+     */
+    public function getContratPret(): Collection
+    {
+        return $this->contratPret;
+    }
+
+    public function addContratPret(ContratPret $contratPret): static
+    {
+        if (!$this->contratPret->contains($contratPret)) {
+            $this->contratPret->add($contratPret);
+            $contratPret->setEleve($this);
+        }
+
+        return $this;
+    }
+
+    public function removeContratPret(ContratPret $contratPret): static
+    {
+        if ($this->contratPret->removeElement($contratPret)) {
+            // set the owning side to null (unless already changed)
+            if ($contratPret->getEleve() === $this) {
+                $contratPret->setEleve(null);
             }
         }
 
