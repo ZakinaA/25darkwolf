@@ -3,47 +3,46 @@
 {% block title %}Liste des Instruments{% endblock %}
 
 {% block body %}
-    <h1>Liste des Instruments</h1>
+    <h1 class="text-3xl font-bold mb-6">Liste des Instruments</h1>
 
-    <table class="table table-hover"> {# J'ai ajouté table-hover pour un meilleur effet visuel #}
+    <table class="table min-w-full bg-white shadow-md rounded-lg overflow-hidden">
         <thead>
-            <tr>
-                <th>Id</th>
-                {# On peut masquer l'ID et afficher l'image à la place, voir suggestions plus bas #}
-                <th>Numéro de Série</th>
-                <th>Marque</th>      {# NOUVELLE COLONNE #}
-                <th>Type</th>        {# NOUVELLE COLONNE #}
-                <th>Date d'achat</th>
-                <th>Prix d'achat</th>
-                <th>Actions</th>
+            <tr class="bg-gray-100 border-b">
+                <th class="py-3 px-4 text-left">Id</th>
+                <th class="py-3 px-4 text-left">N° Série</th>
+                <th class="py-3 px-4 text-left">Type</th>
+                <th class="py-3 px-4 text-left">Actions</th>
             </tr>
         </thead>
         <tbody>
+        {# C'est ici que l'erreur est corrigée : nous itérons sur 'instruments' #}
         {% for instrument in instruments %}
-            <tr>
-                <td>{{ instrument.id }}</td>
-                <td>{{ instrument.numSerie }}</td>
-                {# On accède au libellé de la marque via l'objet instrument #}
-                <td>{{ instrument.marque ? instrument.marque.libelle : 'N/A' }}</td>
-                
-                {# On fait de même pour le type d'instrument #}
-                <td>{{ instrument.typeInstrument ? instrument.typeInstrument.libelle : 'N/A' }}</td>
+            <tr class="hover:bg-gray-50 border-b">
+                <td class="py-3 px-4">{{ instrument.id }}</td>
+                <td class="py-3 px-4">{{ instrument.numSerie }}</td>
+                <td class="py-3 px-4">
+                    {# Accès à la relation ManyToOne TypeInstrument #}
+                    {{ instrument.typeInstrument ? instrument.typeInstrument.libelle : 'N/A' }}
+                </td>
+                {# La cellule de la Marque est retirée pour l'instant #}
+                {# <td class="py-3 px-4">
+                </td> #}
 
-                <td>{{ instrument.dateAchat ? instrument.dateAchat|date('d/m/Y') : '' }}</td> {# Format de date français #}
-                <td>{{ instrument.prixAchat ? instrument.prixAchat|number_format(2, ',', ' ') ~ ' €' : '' }}</td> {# Formatage du prix #}
-                <td>
-                    <a href="{{ path('app_instrument_show', {'id': instrument.id}) }}" class="btn btn-info btn-sm">Voir</a>
-                    <a href="{{ path('app_instrument_edit', {'id': instrument.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
+                <td class="py-3 px-4">
+                    <a href="{{ path('app_instrument_show', {'id': instrument.id}) }}" class="text-blue-600 hover:text-blue-800 mr-2">Voir</a>
+                    <a href="{{ path('app_instrument_edit', {'id': instrument.id}) }}" class="text-yellow-600 hover:text-yellow-800">Modifier</a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                {# On met à jour le colspan pour correspondre au nouveau nombre de colonnes #}
-                <td colspan="7" class="text-center">Aucun instrument trouvé.</td>
+                {# Le colspan est ajusté de 5 à 4 #}
+                <td colspan="4" class="py-3 px-4 text-center text-gray-500">Aucun instrument trouvé.</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('app_instrument_new') }}" class="btn btn-primary">Ajouter un nouvel instrument</a>
+    <div class="mt-6">
+        <a href="{{ path('app_instrument_new') }}" class="bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 transition duration-150">Créer un nouvel instrument</a>
+    </div>
 {% endblock %}

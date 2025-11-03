@@ -57,14 +57,16 @@ class Eleve
     /**
      * @var Collection<int, ContratPret>
      */
+    // Ajout de l'annotation OrderBy pour trier les ContratPret par 'id' croissant
     #[ORM\OneToMany(targetEntity: ContratPret::class, mappedBy: 'eleve')]
-    private Collection $contratPret;
+    #[ORM\OrderBy(['id' => 'ASC'])] // Tri par ID croissant
+    private Collection $contratPrets;
 
     public function __construct()
     {
         $this->responsable = new ArrayCollection();
         $this->inscription = new ArrayCollection();
-        $this->contratPret = new ArrayCollection();
+        $this->contratPrets = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -237,15 +239,15 @@ class Eleve
     /**
      * @return Collection<int, ContratPret>
      */
-    public function getContratPret(): Collection
+    public function getContratPrets(): Collection
     {
-        return $this->contratPret;
+        return $this->contratPrets;
     }
 
     public function addContratPret(ContratPret $contratPret): static
     {
-        if (!$this->contratPret->contains($contratPret)) {
-            $this->contratPret->add($contratPret);
+        if (!$this->contratPrets->contains($contratPret)) {
+            $this->contratPrets->add($contratPret);
             $contratPret->setEleve($this);
         }
 
@@ -254,7 +256,7 @@ class Eleve
 
     public function removeContratPret(ContratPret $contratPret): static
     {
-        if ($this->contratPret->removeElement($contratPret)) {
+        if ($this->contratPrets->removeElement($contratPret)) {
             // set the owning side to null (unless already changed)
             if ($contratPret->getEleve() === $this) {
                 $contratPret->setEleve(null);

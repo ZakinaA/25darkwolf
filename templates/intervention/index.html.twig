@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Intervention index{% endblock %}
+
+{% block body %}
+    <h1 class="text-3xl font-bold mb-6">Liste des Interventions</h1>
+
+    <table class="table min-w-full bg-white shadow-md rounded-lg overflow-hidden">
+        <thead>
+            <tr class="bg-gray-100 border-b">
+                <th class="py-3 px-4 text-left">Id</th>
+                <th class="py-3 px-4 text-left">Date Début</th>
+                <th class="py-3 px-4 text-left">Date Fin</th>
+                <th class="py-3 px-4 text-left">Descriptif</th>
+                <th class="py-3 px-4 text-left">Prix</th>
+                <th class="py-3 px-4 text-left">Quotité</th>
+                
+                {# NOUVELLES COLONNES AJOUTÉES #}
+                <th class="py-3 px-4 text-left">Instrument (N° Série)</th>
+                <th class="py-3 px-4 text-left">Type Instrument</th>
+
+                <th class="py-3 px-4 text-left">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for intervention in interventions %}
+            <tr class="hover:bg-gray-50 border-b">
+                <td class="py-3 px-4">{{ intervention.id }}</td>
+                <td class="py-3 px-4">{{ intervention.dateDebut ? intervention.dateDebut|date('Y-m-d H:i:s') : '' }}</td>
+                <td class="py-3 px-4">{{ intervention.dateFin ? intervention.dateFin|date('Y-m-d H:i:s') : '' }}</td>
+                <td class="py-3 px-4">{{ intervention.descriptif }}</td>
+                <td class="py-3 px-4">{{ intervention.prix }}</td>
+                <td class="py-3 px-4">{{ intervention.quotite }}</td>
+                
+                {# AFFICHAGE DES RELATIONS #}
+                <td class="py-3 px-4">
+                    {{ intervention.instrument ? intervention.instrument.numSerie : 'Non lié' }}
+                </td>
+                <td class="py-3 px-4">
+                    {# On accède au type via l'instrument, puis au libelle #}
+                    {{ intervention.instrument and intervention.instrument.typeInstrument ? intervention.instrument.typeInstrument.libelle : 'N/A' }}
+                </td>
+
+                <td class="py-3 px-4">
+                    <a href="{{ path('app_intervention_show', {'id': intervention.id}) }}" class="text-blue-600 hover:text-blue-800 mr-2">Voir</a>
+                    <a href="{{ path('app_intervention_edit', {'id': intervention.id}) }}" class="text-yellow-600 hover:text-yellow-800">Modifier</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                {# Le colspan est mis à jour pour englober toutes les colonnes #}
+                <td colspan="9" class="py-3 px-4 text-center text-gray-500">Aucun enregistrement trouvé.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="mt-6">
+        <a href="{{ path('app_intervention_new') }}" class="bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 transition duration-150">Créer une nouvelle intervention</a>
+    </div>
+{% endblock %}

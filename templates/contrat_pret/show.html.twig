@@ -1,50 +1,155 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Détails du prêt{% endblock %}
+{% block title %}Contrat de Prêt #{{ contratPret.id }}{% endblock %}
 
 {% block body %}
-<style>
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f4f6f8;
-    margin: 0;
-    padding: 20px;
-}
+    <div class="container mx-auto p-6 max-w-4xl">
+        <h1 class="text-4xl font-extrabold text-gray-900 mb-8 border-b pb-2">Détails du Contrat de Prêt #{{ contratPret.id }}</h1>
 
-h1 {
-    color: #1f3d7a;
-}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            
+            {# ================================= #}
+            {# Informations du Contrat de Prêt #}
+            {# ================================= #}
+            <div class="bg-white shadow-xl rounded-xl p-6 border border-gray-100">
+                <h2 class="text-2xl font-semibold text-indigo-700 mb-4 border-b pb-2">Contrat</h2>
+                
+                <dl class="space-y-3 text-gray-700">
+                    <div>
+                        <dt class="font-medium text-gray-500">Numéro :</dt>
+                        <dd class="text-lg font-bold">{{ contratPret.numContrat }}</dd>
+                    </div>
+                    <div>
+                        <dt class="font-medium text-gray-500">Date de Début :</dt>
+                        <dd class="text-lg font-bold">{{ contratPret.dateDebut ? contratPret.dateDebut|date('d/m/Y') : 'N/A' }}</dd>
+                    </div>
+                    <div>
+                        <dt class="font-medium text-gray-500">Date de Fin Prévue :</dt>
+                        <dd class="text-lg font-bold text-red-600">{{ contratPret.dateFin ? contratPret.dateFin|date('d/m/Y') : 'N/A' }}</dd>
+                    </div>
+                    <div>
+                        <dt class="font-medium text-gray-500">Assurance Fournie :</dt>
+                        <dd class="text-lg font-bold">
+                            {% if contratPret.isAttestationAssurance %}
+                                <span class="text-green-600">Oui</span>
+                            {% else %}
+                                <span class="text-red-600">Non</span>
+                            {% endif %}
+                        </dd>
+                    </div>
+                </dl>
+                
+                <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3">États</h3>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="p-3 bg-gray-50 rounded">
+                        <dt class="font-medium text-gray-500">Début du Prêt :</dt>
+                        <dd class="text-sm italic text-gray-700">{{ contratPret.etatDetailleDebut|nl2br }}</dd>
+                    </div>
+                    <div class="p-3 bg-gray-50 rounded">
+                        <dt class="font-medium text-gray-500">Retour (Si renseigné) :</dt>
+                        <dd class="text-sm italic text-gray-700">
+                            {% if contratPret.etatDetailleRetour %}
+                                {{ contratPret.etatDetailleRetour|nl2br }}
+                            {% else %}
+                                Non renseigné
+                            {% endif %}
+                        </dd>
+                    </div>
+                </div>
+            </div>
 
-ul {
-    list-style-type: none;
-    padding: 0;
-}
+            {# ================================= #}
+            {# Informations sur l'Élève #}
+            {# ================================= #}
+            {% if contratPret.eleve %}
+                <div class="bg-white shadow-xl rounded-xl p-6 border border-gray-100">
+                    <h2 class="text-2xl font-semibold text-indigo-700 mb-4 border-b pb-2">Élève Emprunteur</h2>
+                    
+                    {% set eleve = contratPret.eleve %}
+                    <dl class="space-y-3 text-gray-700">
+                        <div>
+                            <dt class="font-medium text-gray-500">Nom Complet :</dt>
+                            <dd class="text-lg font-bold">{{ eleve.prenom }} {{ eleve.nom }}</dd>
+                        </div>
+                        <div>
+                            <dt class="font-medium text-gray-500">Contact :</dt>
+                            <dd>{{ eleve.mail }} / {{ eleve.tel }}</dd>
+                        </div>
+                        <div>
+                            <dt class="font-medium text-gray-500">Adresse :</dt>
+                            <dd>{{ eleve.numRue }} {{ eleve.rue }}, {{ eleve.copos }} {{ eleve.ville }}</dd>
+                        </div>
+                        <div>
+                            <dt class="font-medium text-gray-500">Tranche d'Âge :</dt>
+                            <dd>{{ eleve.tranche ? eleve.tranche.libelle : 'N/A' }}</dd>
+                        </div>
+                    </dl>
+                    {# Lien vers le show de l'élève si vous en avez un : #}
+                    {# <div class="mt-4"><a href="{{ path('app_eleve_show', {'id': eleve.id}) }}" class="text-sm text-indigo-600 hover:text-indigo-800 font-medium">Voir le profil complet</a></div> #}
+                </div>
+            {% endif %}
+        </div>
+        
+        {# ================================= #}
+        {# Informations sur l'Instrument #}
+        {# La section 'Marque' a été retirée pour éviter l'erreur. #}
+        {# ================================= #}
+        {% if contratPret.instrument %}
+            <div class="mt-8 bg-white shadow-xl rounded-xl p-6 border border-gray-100">
+                <h2 class="text-2xl font-semibold text-indigo-700 mb-4 border-b pb-2">Instrument Prêté</h2>
+                
+                {% set instrument = contratPret.instrument %}
+                {# Mise en page ajustée suite au retrait du champ Marque (maintenant 3 colonnes) #}
+                <dl class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-3 text-gray-700">
+                    <div>
+                        <dt class="font-medium text-gray-500">Type :</dt>
+                        <dd class="text-lg font-bold">{{ instrument.typeInstrument ? instrument.typeInstrument.libelle : 'N/A' }}</dd>
+                    </div>
+                    <div>
+                        <dt class="font-medium text-gray-500">Numéro de Série :</dt>
+                        <dd class="font-mono">{{ instrument.numSerie }}</dd>
+                    </div>
+                    <div>
+                        <dt class="font-medium text-gray-500">Prix d'Achat :</dt>
+                        <dd>{{ instrument.prixAchat|number_format(2, ',', ' ') }} €</dd>
+                    </div>
+                    <div>
+                        <dt class="font-medium text-gray-500">Couleurs :</dt>
+                        <dd>
+                            {% for couleur in instrument.couleurs %}
+                                <span class="inline-block bg-gray-200 text-gray-800 text-xs px-2 py-0.5 rounded-full">{{ couleur.libelle }}</span>
+                            {% else %}
+                                Aucune
+                            {% endfor %}
+                        </dd>
+                    </div>
+                    <div>
+                        <dt class="font-medium text-gray-500">Date d'Achat :</dt>
+                        <dd>{{ instrument.dateAchat ? instrument.dateAchat|date('d/m/Y') : 'N/A' }}</dd>
+                    </div>
+                    {# Laissez le dernier slot vide ou remplissez-le si d'autres champs existent #}
+                    <div>
+                        {# Espace réservé si besoin d'alignement #}
+                    </div>
+                </dl>
+            </div>
+        {% else %}
+            <p class="mt-8 p-4 bg-red-100 text-red-800 rounded-lg">⚠ Aucune information d'instrument liée à ce contrat.</p>
+        {% endif %}
 
-ul li {
-    padding: 8px 0;
-}
+        {# ================================= #}
+        {# Actions #}
+        {# ================================= #}
+        <div class="mt-8 flex space-x-4">
+            {# Assurez-vous que la route 'app_contrat_pret_edit' existe dans votre contrôleur #}
+            <a href="{{ path('app_contrat_pret_edit', {'id': contratPret.id}) }}" class="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-150">
+                Modifier le contrat
+            </a>
+            {# Assurez-vous que la route 'app_contrat_pret_index' existe dans votre contrôleur #}
+            <a href="{{ path('app_contrat_pret_index') }}" class="bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded-lg hover:bg-gray-300 transition duration-150">
+                Retour à la liste
+            </a>
+        </div>
 
-a {
-    color: #1f3d7a;
-    text-decoration: none;
-    font-weight: 500;
-}
-
-a:hover {
-    text-decoration: underline;
-    color: #ff5e5e;
-}
-</style>
-
-<h1>📄 Détails du Contrat de Prêt #{{ pret.id }}</h1>
-
-<ul>
-    <li><strong>Date début :</strong> {{ pret.dateDebut|date('d/m/Y') }}</li>
-    <li><strong>Date fin :</strong> {{ pret.dateFin|date('d/m/Y') }}</li>
-    <li><strong>Assurance :</strong> {{ pret.attestationAssurance ? 'Oui' : 'Non' }}</li>
-    <li><strong>État au début :</strong> {{ pret.etatDetailleDebut }}</li>
-    <li><strong>État au retour :</strong> {{ pret.etatDetailleRetour }}</li>
-</ul>
-
-<a href="{{ path('app_contrat_pret') }}">⬅ Retour à la liste des prêts</a>
+    </div>
 {% endblock %}
