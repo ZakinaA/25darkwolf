@@ -3,8 +3,8 @@
 namespace App\Form;
 
 use App\Entity\Professeur;
-use App\Entity\TypeInstrument;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use App\Entity\TypeInstrument; 
+use Symfony\Bridge\Doctrine\Form\Type\EntityType; 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -22,10 +22,14 @@ class ProfesseurType extends AbstractType
             ->add('ville')
             ->add('tel')
             ->add('mail')
+
+
             ->add('typeInstrument', EntityType::class, [
                 'class' => TypeInstrument::class,
-                'choice_label' => 'id',
+                'choice_label' => 'libelle',
                 'multiple' => true,
+                'expanded' => true, 
+                'label' => 'Spécialités (types d\'instruments)'
             ])
         ;
     }
