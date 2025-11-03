@@ -1,90 +1,60 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Liste des prêts{% endblock %}
+{% block title %}Liste des Contrats de Prêt{% endblock %}
 
 {% block body %}
-<style>
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f4f6f8;
-    margin: 0;
-    padding: 20px;
-}
+    <h1 class="text-3xl font-bold mb-6">Liste des Contrats de Prêt</h1>
 
-h1 {
-    color: #1f3d7a;
-}
+    <table class="table min-w-full bg-white shadow-md rounded-lg overflow-hidden">
+        <thead>
+            <tr class="bg-gray-100 border-b">
+                <th class="py-3 px-4 text-left">Id</th>
+                <th class="py-3 px-4 text-left">Élève Emprunteur</th>
+                <th class="py-3 px-4 text-left">Instrument (Nom)</th>
+                <th class="py-3 px-4 text-left">Type d'Instrument</th>
+                <th class="py-3 px-4 text-left">Date Début</th>
+                <th class="py-3 px-4 text-left">Date Fin</th>
+                <th class="py-3 px-4 text-left">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for contratPret in contratsPret %}
+            <tr class="hover:bg-gray-50 border-b">
+                <td class="py-3 px-4">{{ contratPret.id }}</td>
+                
+                {# MODIF : Affichage de l'élève #}
+                <td class="py-3 px-4">
+                    {{ contratPret.eleve.prenom }} {{ contratPret.eleve.nom }}
+                </td>
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 30px;
-    background-color: #fff;
-    box-shadow: 0 0 8px rgba(0,0,0,0.1);
-    border-radius: 8px;
-    overflow: hidden;
-}
-
-table th, table td {
-    padding: 12px 15px;
-    text-align: left;
-}
-
-table th {
-    background-color: #1f3d7a;
-    color: #fff;
-    font-weight: bold;
-}
-
-table tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
-
-table tr:hover {
-    background-color: #dbe4f0;
-}
-
-a {
-    color: #1f3d7a;
-    text-decoration: none;
-    font-weight: 500;
-}
-
-a:hover {
-    text-decoration: underline;
-    color: #ff5e5e;
-}
-</style>
-
-<h1>📋 Liste des Contrats de Prêt</h1>
-
-{% if prets is empty %}
-    <p>Aucun prêt enregistré.</p>
-{% else %}
-    <table>
-        <tr>
-            <th>ID</th>
-            <th>Date début</th>
-            <th>Date fin</th>
-            <th>Assurance</th>
-            <th>État début</th>
-            <th>État retour</th>
-            <th>Actions</th>
-        </tr>
-
-        {% for pret in prets %}
-            <tr>
-                <td>{{ pret.id }}</td>
-                <td>{{ pret.dateDebut|date('d/m/Y') }}</td>
-                <td>{{ pret.dateFin|date('d/m/Y') }}</td>
-                <td>{{ pret.attestationAssurance ? 'Oui' : 'Non' }}</td>
-                <td>{{ pret.etatDetailleDebut }}</td>
-                <td>{{ pret.etatDetailleRetour }}</td>
-                <td>
-                    <a href="{{ path('app_contrat_pret_show', {'id': pret.id}) }}">Voir</a>
+                {# MODIF : Affichage du Nom de l'Instrument #}
+                <td class="py-3 px-4">
+                    {{ contratPret.instrument.numSerie }} 
+                    {# J'utilise numSerie car c'est un identifiant souvent unique, à ajuster si vous avez un champ 'nom' dans Instrument #}
+                </td>
+                
+                {# MODIF : Affichage du Type d'Instrument #}
+                <td class="py-3 px-4">
+                    {{ contratPret.instrument.typeInstrument.libelle }}
+                </td>
+                
+                <td class="py-3 px-4">{{ contratPret.dateDebut ? contratPret.dateDebut|date('Y-m-d') : '' }}</td>
+                <td class="py-3 px-4">{{ contratPret.dateFin ? contratPret.dateFin|date('Y-m-d') : '' }}</td>
+                
+                <td class="py-3 px-4">
+                    <a href="{{ path('app_contrat_pret_show', {'id': contratPret.id}) }}" class="text-blue-600 hover:text-blue-800 mr-2">Voir</a>
+                    <a href="{{ path('app_contrat_pret_edit', {'id': contratPret.id}) }}" class="text-yellow-600 hover:text-yellow-800">Modifier</a>
                 </td>
             </tr>
+        {% else %}
+            <tr>
+                <td colspan="7" class="py-3 px-4 text-center text-gray-500">Aucun contrat de prêt trouvé.</td>
+            </tr>
         {% endfor %}
+        </tbody>
     </table>
-{% endif %}
+
+    <div class="mt-6">
+        <a href="{{ path('app_contrat_pret_new') }}" class="bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 transition duration-150">Créer un nouveau contrat de prêt</a>
+    </div>
 {% endblock %}

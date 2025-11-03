@@ -35,15 +35,20 @@ class Intervention
     #[ORM\JoinColumn(nullable: false)]
     private ?Professionnel $professionnel = null;
 
-    /**
-     * @var Collection<int, ContratPret>
-     */
-    #[ORM\OneToMany(targetEntity: ContratPret::class, mappedBy: 'intervention')]
-    private Collection $no;
+    // RELATION MANY-TO-ONE VERS CONTRATPRET
+    // Le commentaire DocBlock trompeur a été retiré.
+    #[ORM\ManyToOne(inversedBy: 'interventions')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?ContratPret $contratPret = null; 
+
+    // RELATION MANY-TO-ONE VERS INSTRUMENT
+    #[ORM\ManyToOne(inversedBy: 'interventions')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Instrument $instrument = null; 
 
     public function __construct()
     {
-        $this->no = new ArrayCollection();
+        // La collection n'est plus nécessaire ici car la relation est ManyToOne
     }
 
     public function getId(): ?int
@@ -59,7 +64,6 @@ class Intervention
     public function setDateDebut(\DateTime $dateDebut): static
     {
         $this->dateDebut = $dateDebut;
-
         return $this;
     }
 
@@ -71,7 +75,6 @@ class Intervention
     public function setDateFin(\DateTime $dateFin): static
     {
         $this->dateFin = $dateFin;
-
         return $this;
     }
 
@@ -83,7 +86,6 @@ class Intervention
     public function setDescriptif(string $descriptif): static
     {
         $this->descriptif = $descriptif;
-
         return $this;
     }
 
@@ -95,7 +97,6 @@ class Intervention
     public function setPrix(float $prix): static
     {
         $this->prix = $prix;
-
         return $this;
     }
 
@@ -107,7 +108,6 @@ class Intervention
     public function setQuotite(float $quotite): static
     {
         $this->quotite = $quotite;
-
         return $this;
     }
 
@@ -119,37 +119,28 @@ class Intervention
     public function setProfessionnel(?Professionnel $professionnel): static
     {
         $this->professionnel = $professionnel;
-
         return $this;
     }
 
-    /**
-     * @return Collection<int, ContratPret>
-     */
-    public function getNo(): Collection
+    public function getContratPret(): ?ContratPret
     {
-        return $this->no;
+        return $this->contratPret;
     }
 
-    public function addNo(ContratPret $no): static
+    public function setContratPret(?ContratPret $contratPret): static
     {
-        if (!$this->no->contains($no)) {
-            $this->no->add($no);
-            $no->setIntervention($this);
-        }
-
+        $this->contratPret = $contratPret;
         return $this;
     }
-
-    public function removeNo(ContratPret $no): static
+    
+    public function getInstrument(): ?Instrument
     {
-        if ($this->no->removeElement($no)) {
-            // set the owning side to null (unless already changed)
-            if ($no->getIntervention() === $this) {
-                $no->setIntervention(null);
-            }
-        }
+        return $this->instrument;
+    }
 
+    public function setInstrument(?Instrument $instrument): static
+    {
+        $this->instrument = $instrument;
         return $this;
     }
 }
