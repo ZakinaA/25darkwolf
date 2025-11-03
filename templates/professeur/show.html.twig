@@ -1,0 +1,111 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détail de {{ professeur.prenom }} {{ professeur.nom }}{% endblock %}
+
+{% block body %}
+    <h1>Détail du professeur : {{ professeur.prenom }} {{ professeur.nom }}</h1>
+
+    {# --- BLOC 1: DÉTAILS DU PROFESSEUR (EXISTANT) --- #}
+    <div class="row mt-4">
+        
+        {# Image du professeur #}
+        <div class="col-md-4">
+            <img src="{{ asset('img/professeurs/' ~ professeur.id ~ '.png') }}" 
+                 alt="Photo de {{ professeur.prenom }} {{ professeur.nom }}" 
+                 style="width: 200px; height: 200px;"
+                 class="img-fluid rounded shadow-sm">
+        </div>
+        
+        {# Tableau des détails #}
+        <div class="col-md-8">
+            <table class="table table-striped">
+                <tbody>
+                    <tr>
+                        <th style="width: 30%;">Nom complet</th>
+                        <td>{{ professeur.prenom }} {{ professeur.nom }}</td>
+                    </tr>
+                    <tr>
+                        <th>Adresse</th>
+                        <td>
+                            {{ professeur.numRue }} {{ professeur.rue }}<br>
+                            {{ professeur.copos }} {{ professeur.ville }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Contact</th>
+                        <td>
+                            Téléphone : {{ professeur.tel }}<br>
+                            Mail : {{ professeur.mail }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Spécialités</th>
+                        <td>
+                            {% if professeur.typeInstrument is not empty %}
+                                {% for type in professeur.typeInstrument %}
+                                    <span class="badge bg-primary">{{ type.libelle }}</span>
+                                {% endfor %}
+                            {% else %}
+                                <span class="text-muted">Aucune spécialité renseignée</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {# --- BLOC 2: LISTE DES COURS (NOUVEAU) --- #}
+    <div class="row mt-5">
+        <div class="col-md-12">
+            <h3>Cours dispensés par {{ professeur.prenom }}</h3>
+            
+            {# On vérifie si la collection 'cours' du professeur n'est pas vide #}
+            {% if professeur.cours is not empty %}
+                <table class="table table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Libellé du cours</th>
+                            <th>Instrument</th>
+                            <th>Jour</th>
+                            <th>Horaires</th>
+                            <th>Âge minimum</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {# On boucle sur chaque cours associé au professeur #}
+                        {% for cours in professeur.cours %}
+                            <tr>
+                                <td>{{ cours.libelle }}</td>
+                                {# On accède aux propriétés des entités liées au cours #}
+                                <td>{{ cours.typeInstrument ? cours.typeInstrument.libelle : 'N/A' }}</td>
+                                <td>{{ cours.jour ? cours.jour.libelle : 'N/A' }}</td>
+                                <td>
+                                    {{ cours.heureDebut ? cours.heureDebut|date('H:i') : '?' }} 
+                                    - 
+                                    {{ cours.heureFin ? cours.heureFin|date('H:i') : '?' }}
+                                </td>
+                                <td>{{ cours.ageMini ? cours.ageMini ~ ' ans' : 'N/A' }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                {# Message si le professeur n'a aucun cours #}
+                <div class="alert alert-info">
+                    Ce professeur ne dispense aucun cours pour le moment.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    {# --- FIN DU NOUVEAU BLOC --- #}
+
+    <hr>
+
+    <a href="{{ path('app_professeur_index') }}" class="btn btn-secondary">Retour à la liste</a>
+    <a href="{{ path('app_professeur_edit', {'id': professeur.id}) }}" class="btn btn-warning">Modifier</a>
+
+    <div style="display: inline-block;">
+        {{ include('professeur/_delete_form.html.twig') }}
+    </div>
+{% endblock %}
