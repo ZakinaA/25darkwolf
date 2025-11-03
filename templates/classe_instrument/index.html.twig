@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ClasseInstrument index{% endblock %}
+
+{% block body %}
+    <h1>ClasseInstrument index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Libelle</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for classe_instrument in classe_instruments %}
+            <tr>
+                <td>{{ classe_instrument.id }}</td>
+                <td>{{ classe_instrument.libelle }}</td>
+                <td>
+                    <a href="{{ path('app_classe_instrument_show', {'id': classe_instrument.id}) }}">show</a>
+                    <a href="{{ path('app_classe_instrument_edit', {'id': classe_instrument.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_classe_instrument_new') }}">Create new</a>
+{% endblock %}
