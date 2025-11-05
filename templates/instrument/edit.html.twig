@@ -1,13 +1,48 @@
+{% extends 'base.html.twig' %}
 
-{% block title %}Edit Instrument{% endblock %}
+{% block title %}Liste des Instruments{% endblock %}
 
 {% block body %}
+    <h1 class="text-3xl font-bold mb-6">Liste des Instruments</h1>
 
-    <h1>Edit Instrument</h1>
+    <table class="table min-w-full bg-white shadow-md rounded-lg overflow-hidden">
+        <thead>
+            <tr class="bg-gray-100 border-b">
+                <th class="py-3 px-4 text-left">Id</th>
+                <th class="py-3 px-4 text-left">N° Série</th>
+                <th class="py-3 px-4 text-left">Type</th>
+                <th class="py-3 px-4 text-left">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {# C'est ici que l'erreur est corrigée : nous itérons sur 'instruments' #}
+        {% for instrument in instruments %}
+            <tr class="hover:bg-gray-50 border-b">
+                <td class="py-3 px-4">{{ instrument.id }}</td>
+                <td class="py-3 px-4">{{ instrument.numSerie }}</td>
+                <td class="py-3 px-4">
+                    {# Accès à la relation ManyToOne TypeInstrument #}
+                    {{ instrument.typeInstrument ? instrument.typeInstrument.libelle : 'N/A' }}
+                </td>
+                {# La cellule de la Marque est retirée pour l'instant #}
+                {# <td class="py-3 px-4">
+                </td> #}
 
-    {{ include('instrument/_form.html.twig', {'button_label': 'Update'}) }}
+                <td class="py-3 px-4">
+                    <a href="{{ path('app_instrument_show', {'id': instrument.id}) }}" class="text-blue-600 hover:text-blue-800 mr-2">Voir</a>
+                    <a href="{{ path('app_instrument_edit', {'id': instrument.id}) }}" class="text-yellow-600 hover:text-yellow-800">Modifier</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                {# Le colspan est ajusté de 5 à 4 #}
+                <td colspan="4" class="py-3 px-4 text-center text-gray-500">Aucun instrument trouvé.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 
-    <a href="{{ path('app_instrument_index') }}">back to list</a>
-
-    {{ include('instrument/_delete_form.html.twig') }}
+    <div class="mt-6">
+        <a href="{{ path('app_instrument_new') }}" class="bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 transition duration-150">Créer un nouvel instrument</a>
+    </div>
 {% endblock %}
