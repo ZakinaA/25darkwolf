@@ -5,25 +5,15 @@
 {% block body %}
     <h1>Détail de l'instrument : {{ instrument.typeInstrument ? instrument.typeInstrument.libelle : '' }} {{ instrument.marque ? instrument.marque.libelle : '' }}</h1>
 
+    {# --- BLOC 1: DÉTAILS DE L'INSTRUMENT (EXISTANT) --- #}
     <div class="row mt-4">
         
-        {# --- BLOC D'AFFICHAGE DE L'IMAGE --- #}
         <div class="col-md-4">
-            {#
-               LA SOLUTION FINALE :
-               - On part du dossier 'public/img/instruments/'.
-               - On prend l'ID de l'instrument (ex: 1).
-               - On ajoute l'extension '.jpg'.
-               - Le tout est géré par la fonction asset() pour créer une URL propre.
-            #}
             <img src="{{ asset('img/instruments/' ~ instrument.id ~ '.jpg') }}" 
                  alt="Photo de l'instrument {{ instrument.numSerie }}" 
                  style="width: 200px; height: 200px;"
                  class="img-fluid rounded shadow-sm">
-                 
-            
         </div>
-        {# --- FIN DU BLOC IMAGE --- #}
 
         <div class="col-md-8">
             <table class="table table-striped">
@@ -48,7 +38,7 @@
                         <th>Prix d'achat</th>
                         <td>{{ instrument.prixAchat ? instrument.prixAchat|number_format(2, ',', ' ') ~ ' €' : '' }}</td>
                     </tr>
-                     <tr>
+                    <tr>
                         <th>Couleurs</th>
                         <td>
                             {% if instrument.couleurs is not empty %}
@@ -79,7 +69,78 @@
         </div>
     </div>
 
-    <hr>
+    {# --- BLOC 2: HISTORIQUE DES CONTRATS DE PRÊT (NOUVEAU) --- #}
+    <div class="row mt-5">
+        <div class="col-md-12">
+            <h3>Historique des prêts</h3>
+            
+            {% if instrument.contratsPret is not empty %}
+                <table class="table table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>N° Contrat</th>
+                            <th>Élève</th>
+                            <th>Date de début</th>
+                            <th>Date de fin</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for contrat in instrument.contratsPret %}
+                            <tr>
+                                <td>{{ contrat.numContrat }}</td>
+                                {# On accède à l'élève lié au contrat #}
+                                <td>{{ contrat.eleve ? contrat.eleve.prenom ~ ' ' ~ contrat.eleve.nom : 'N/A' }}</td>
+                                <td>{{ contrat.dateDebut ? contrat.dateDebut|date('d/m/Y') : 'N/A' }}</td>
+                                <td>{{ contrat.dateFin ? contrat.dateFin|date('d/m/Y') : 'N/A' }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="alert alert-info">
+                    Cet instrument n'a jamais été prêté.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    {# --- BLOC 3: HISTORIQUE DES INTERVENTIONS (NOUVEAU) --- #}
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <h3>Historique des interventions</h3>
+            
+            {% if instrument.interventions is not empty %}
+                <table class="table table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Date de début</th>
+                            <th>Date de fin</th>
+                            <th>Professionnel</th>
+                            <th>Descriptif</th>
+                            <th>Coût</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for intervention in instrument.interventions %}
+                            <tr>
+                                <td>{{ intervention.dateDebut ? intervention.dateDebut|date('d/m/Y') : 'N/A' }}</td>
+                                <td>{{ intervention.dateFin ? intervention.dateFin|date('d/m/Y') : 'N/A' }}</td>
+                                <td>{{ intervention.professionnel ? intervention.professionnel.nom : 'N/A' }}</td>
+                                <td>{{ intervention.descriptif }}</td>
+                                <td>{{ intervention.prix ? intervention.prix|number_format(2, ',', ' ') ~ ' €' : 'N/A' }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="alert alert-info">
+                    Cet instrument n'a subi aucune intervention.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <hr class="mt-4">
 
     <a href="{{ path('app_instrument_index') }}" class="btn btn-secondary">Retour à la liste</a>
     <a href="{{ path('app_instrument_edit', {'id': instrument.id}) }}" class="btn btn-warning">Modifier</a>
