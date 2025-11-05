@@ -19,8 +19,6 @@ class InstrumentType extends AbstractType
             ->add('numSerie')
             ->add('dateAchat')
             ->add('prixAchat')
-            ->add('utilisation')
-            ->add('cheminImage')
 
             ->add('typeInstrument', EntityType::class, [
                 'class' => TypeInstrument::class,
