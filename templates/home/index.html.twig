@@ -1,64 +1,178 @@
-{% extends 'base.html.twig' %}
-
-{% block title %}Accueil e-Music{% endblock %}
+{% block title %}Accueil | E-Music{% endblock %}
 
 {% block body %}
+
 <style>
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f6f8;
-    display: flex;
-}
+    :root {
+        --primary: #37A297;
+        --light: #F2FAF8;
+        --gray: #212529;
+        --white: #ffffff;
+    }
 
-.sidebar {
-    width: 220px;
-    background-color: #1f3d7a;
-    min-height: 100vh;
-    padding: 20px;
-    color: #fff;
-    display: flex;
-    flex-direction: column;
-}
+    body {
+        background-color: var(--light);
+        font-family: 'Poppins', sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        min-height: 100vh;
+    }
 
-.sidebar h2 {
-    margin-top: 0;
-    font-size: 1.5em;
-    margin-bottom: 20px;
-}
+    .sidebar {
+        width: 220px;
+        background-color: var(--white);
+        box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+        padding: 2rem 1rem;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+    }
 
-.sidebar a {
-    color: #fff;
-    text-decoration: none;
-    padding: 10px 0;
-    display: block;
-    font-weight: 500;
-    border-radius: 5px;
-}
+    .sidebar h2 {
+        color: var(--primary);
+        font-size: 1.4rem;
+        margin-bottom: 2rem;
+        text-transform: uppercase;
+        font-weight: 700;
+    }
 
-.sidebar a:hover {
-    background-color: #3a5ca8;
-}
+    .sidebar a {
+        text-decoration: none;
+        color: var(--gray);
+        font-weight: 500;
+        padding: 0.5rem 0;
+        width: 100%;
+        display: block;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
 
-.main-content {
-    flex-grow: 1;
-    padding: 40px;
-}
+    .sidebar a:hover {
+        background-color: var(--primary);
+        color: white;
+        padding-left: 10px;
+    }
 
-h1 {
-    color: #1f3d7a;
-}
+    .top-bar {
+        position: fixed;
+        top: 0;
+        right: 0;
+        height: 70px;
+        left: 220px;
+        background-color: var(--white);
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        padding: 0 2rem;
+        z-index: 10;
+    }
+
+    .top-bar .btn {
+        border: 1px solid var(--primary);
+        color: var(--primary);
+        background: transparent;
+        border-radius: 25px;
+        font-weight: 600;
+        padding: 0.4rem 1rem;
+        margin-left: 0.5rem;
+        transition: all 0.3s ease;
+    }
+
+    .top-bar .btn:hover {
+        background-color: var(--primary);
+        color: white;
+    }
+
+    .main-content {
+        margin-left: 220px;
+        margin-top: 70px;
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        text-align: center;
+        position: relative;
+        background: linear-gradient(var(--overlay), var(--overlay)),
+                    url('https://images.unsplash.com/photo-1508780709619-79562169bc64?auto=format&fit=crop&w=1600&q=80');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        animation: fadeIn 1s ease forwards;
+    }
+
+    .welcome-box {
+        max-width: 700px;
+        background: var(--white);
+        border-radius: 20px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+        padding: 3rem 2rem;
+        animation: fadeIn 1s ease forwards;
+    }
+
+    .welcome-box h1 {
+        color: var(--primary);
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        font-weight: 700;
+    }
+
+    .welcome-box p {
+        color: #555;
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: none; }
+    }
+
+    @media (max-width: 768px) {
+        .sidebar {
+            display: none;
+        }
+        .top-bar {
+            left: 0;
+        }
+        .main-content {
+            margin-left: 0;
+        }
+    }
 </style>
 
+<!-- Barre latérale gauche -->
 <div class="sidebar">
-    <h2>e-Music</h2>
-    <a href="{{ path('app_contrat_pret') }}">📋 Lister les prêts</a>
-    <!-- Tu peux ajouter d'autres liens ici -->
+    <h2>E-Music</h2>
+    <a href="{{ path('app_instrument_index') }}">🎻 Instruments</a>
+</div>
+
+<!-- Barre du haut droite -->
+<div class="top-bar">
+    <a href="{{ path('app_login') }}" class="btn">Connexion</a>
+    {% if path('app_register') is defined %}
+        <a href="{{ path('app_register') }}" class="btn">Créer un compte</a>
+    {% else %}
+        <a href="#" class="btn">Créer un compte</a>
+    {% endif %}
 </div>
 
 <div class="main-content">
-    <h1>Bienvenue sur l'application e-Music !</h1>
-    <p>Utilisez la barre de navigation à gauche pour accéder aux différentes sections.</p>
+    <div class="welcome-box">
+        <h1>Bienvenue à E-Music</h1>
+        <p>
+            Découvrez une école de musique ouverte à tous les âges et à tous les niveaux.<br>
+            Nous cultivons la passion musicale à travers l'apprentissage des instruments,<br>
+            la pratique collective et le plaisir de partager la musique ensemble.<br><br>
+            Rejoignez-nous et laissez la musique rythmer votre quotidien 🎶
+        </p>
+    </div>
 </div>
+
 {% endblock %}
