@@ -6,7 +6,7 @@ use App\Entity\Couleur;
 use App\Entity\Instrument;
 use App\Entity\Marque;
 use App\Entity\TypeInstrument;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType; // <-- IMPORTANT : Ajouter ce "use"
+use Symfony\Bridge\Doctrine\Form\Type\EntityType; 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;

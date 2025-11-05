@@ -1,0 +1,98 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Type : {{ type_instrument.libelle }}{% endblock %}
+
+{% block body %}
+    <h1>Type d'instrument : {{ type_instrument.libelle }}</h1>
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-striped">
+                <tbody>
+                    <tr>
+                        <th style="width: 20%;">Id</th>
+                        <td>{{ type_instrument.id }}</td>
+                    </tr>
+                    <tr>
+                        <th>Libellé</th>
+                        <td>{{ type_instrument.libelle }}</td>
+                    </tr>
+                    <tr>
+                        <th>Classe</th>
+                        {# On affiche la classe parente, c'est une info utile #}
+                        <td>{{ type_instrument.classeInstrument ? type_instrument.classeInstrument.libelle : 'Non classé' }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <h3>Instruments de ce type</h3>
+            
+            {% if type_instrument.instruments is not empty %}
+                <table class="table table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Numéro de série</th>
+                            <th>Marque</th>
+                            <th>Prix d'achat</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for instrument in type_instrument.instruments %}
+                            <tr>
+                                <td>{{ instrument.numSerie }}</td>
+                                <td>{{ instrument.marque ? instrument.marque.libelle : 'N/A' }}</td>
+                                <td>{{ instrument.prixAchat ? instrument.prixAchat|number_format(2, ',', ' ') ~ ' €' : 'N/A' }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="alert alert-info">
+                    Aucun instrument de ce type n'est actuellement enregistré.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <h3>Professeurs enseignant ce type</h3>
+
+            {% if type_instrument.professeurs is not empty %}
+                <table class="table table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Nom</th>
+                            <th>Email</th>
+                            <th>Téléphone</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for prof in type_instrument.professeurs %}
+                            <tr>
+                                <td>{{ prof.prenom }} {{ prof.nom }}</td>
+                                <td>{{ prof.mail }}</td>
+                                <td>{{ prof.tel }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="alert alert-info">
+                    Aucun professeur n'enseigne ce type d'instrument pour le moment.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <hr class="mt-4">
+
+    <a href="{{ path('app_type_instrument_index') }}" class="btn btn-secondary">Retour à la liste</a>
+    <a href="{{ path('app_type_instrument_edit', {'id': type_instrument.id}) }}" class="btn btn-warning">Modifier</a>
+
+    <div style="display: inline-block;">
+        {{ include('type_instrument/_delete_form.html.twig') }}
+    </div>
+{% endblock %}
