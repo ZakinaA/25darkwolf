@@ -27,6 +27,11 @@
                 <th>HeureFin</th>
                 <td>{{ cour.heureFin ? cour.heureFin|date('H:i:s') : '' }}</td>
             </tr>
+            <tr>
+                <th>Professeur</th>
+                <td>{{ cour.professeur.prenom }} {{ cour.professeur.nom }}
+                </td>
+            </tr>
         </tbody>
     </table>
 

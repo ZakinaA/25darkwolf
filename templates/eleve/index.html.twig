@@ -17,6 +17,7 @@
                 <th>Ville</th>
                 <th>Tel</th>
                 <th>Mail</th>
+                <th>Responsable</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -32,6 +33,10 @@
                 <td>{{ eleve.ville }}</td>
                 <td>{{ eleve.tel }}</td>
                 <td>{{ eleve.mail }}</td>
+                <td>{% for responsable in eleve.responsable %}
+                    {{ responsable.prenom}}
+                {%endfor%}
+                </td>
                 <td>
                     <a href="{{ path('app_eleve_show', {'id': eleve.id}) }}">show</a>
                     <a href="{{ path('app_eleve_edit', {'id': eleve.id}) }}">edit</a>
