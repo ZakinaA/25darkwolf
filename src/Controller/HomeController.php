@@ -8,9 +8,12 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class HomeController extends AbstractController
 {
-    #[Route('/home', name: 'app_home')]
+    #[Route('/', name: 'app_home')]
     public function index(): Response
     {
-        return $this->render('home/index.html.twig');
+        // On passe le nom de l'école à la vue pour qu'il soit dynamique
+        return $this->render('home/index.html.twig', [
+            'school_name' => 'e-Music',
+        ]);
     }
 }

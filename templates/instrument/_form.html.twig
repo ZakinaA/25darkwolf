@@ -1,4 +1,64 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
-{{ form_end(form) }}
+<form method="post">
+    {# Démarrage du formulaire (gère le CSRF et l'action) #}
+    {{ form_start(form) }}
+
+    <div class="form-grid">
+        
+        {# Groupe de champs sur deux colonnes pour le Numéro de Série et la Date d'Achat #}
+        <div class="field-group two-cols">
+            <div class="field-item">
+                {{ form_label(form.numSerie) }}
+                {{ form_widget(form.numSerie) }}
+                <div class="form-error">{{ form_errors(form.numSerie) }}</div>
+            </div>
+            <div class="field-item">
+                {{ form_label(form.dateAchat) }}
+                {{ form_widget(form.dateAchat) }}
+                <div class="form-error">{{ form_errors(form.dateAchat) }}</div>
+            </div>
+        </div>
+        
+        {# Groupe de champs sur deux colonnes pour le Type et la Marque #}
+        <div class="field-group two-cols">
+            <div class="field-item">
+                {{ form_label(form.typeInstrument) }}
+                {{ form_widget(form.typeInstrument) }}
+                <div class="form-error">{{ form_errors(form.typeInstrument) }}</div>
+            </div>
+            <div class="field-item">
+                {{ form_label(form.marque) }}
+                {{ form_widget(form.marque) }}
+                <div class="form-error">{{ form_errors(form.marque) }}</div>
+            </div>
+        </div>
+
+        {# Prix d'Achat (colonne entière) #}
+        <div class="field-group single-col">
+            <div class="field-item">
+                {{ form_label(form.prixAchat) }}
+                {{ form_widget(form.prixAchat) }}
+                <div class="form-error">{{ form_errors(form.prixAchat) }}</div>
+            </div>
+        </div>
+
+        {# Couleurs (Relation Many-to-Many, colonne entière) #}
+        <div class="field-group single-col">
+            {{ form_label(form.couleurs) }}
+            <div class="checkbox-group">
+                {{ form_widget(form.couleurs) }}
+            </div>
+            <div class="form-error">{{ form_errors(form.couleurs) }}</div>
+        </div>
+
+        {# Rendu des champs restants (par exemple, le token CSRF non rendu par form_start) #}
+        {{ form_rest(form) }}
+    </div>
+
+    <div class="flex justify-end" style="margin-top: 1.5rem;">
+        <button type="submit" class="btn-action {{ button_class|default('btn-save') }}">
+            {{ button_label|default('Enregistrer') }}
+        </button>
+    </div>
+
+    {{ form_end(form, {'render_rest': false}) }}
+</form>

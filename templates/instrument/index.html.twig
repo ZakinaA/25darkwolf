@@ -3,46 +3,195 @@
 {% block title %}Liste des Instruments{% endblock %}
 
 {% block body %}
-    <h1 class="text-3xl font-bold mb-6">Liste des Instruments</h1>
+<style>
+    /* ------------------- PALETTE (Repris du Canvas d'Accueil) ------------------- */
+    :root {
+        --primary: #37A297;
+        --light: #F2FAF8;
+        --gray: #212529;
+        --white: #ffffff;
+    }
 
-    <table class="table min-w-full bg-white shadow-md rounded-lg overflow-hidden">
+    /* ------------------- Global Styling ------------------- */
+    body {
+        background-color: var(--light);
+        font-family: 'Poppins', sans-serif;
+        color: var(--gray);
+        padding: 0; 
+        margin: 0;
+        /* NOUVEAU : Centrage vertical sur toute la page */
+        min-height: 100vh;
+        display: flex;
+        justify-content: center; /* Centrage horizontal */
+        align-items: center; /* Centrage vertical */
+    }
+
+    /* ------------------- Table Styling ------------------- */
+    .table-container {
+        /* NOUVEAU : Réduction de la largeur maximale pour un centrage plus visible (650px) */
+        max-width: 650px; 
+        /* Marches auto toujours là, mais Flexbox gère le centrage principal */
+        margin: 0 auto; 
+        /* Rétablissement du padding autour du conteneur */
+        padding: 2rem; 
+        /* Suppression du padding-top car le centrage vertical est géré par body */
+        padding-top: 0; 
+    }
+    
+    .table {
+        /* NOUVEAU : Coins plus arrondis et ombre plus prononcée */
+        border-radius: 1rem;
+        box-shadow: 0 12px 35px rgba(0,0,0,0.10); /* Ombre légèrement plus forte */
+        border-collapse: separate; 
+        border-spacing: 0;
+        width: 100%; /* Assure que le tableau utilise la max-width de son conteneur */
+    }
+
+    .table th {
+        /* Applique la couleur primaire au fond de l'entête */
+        background-color: var(--primary);
+        color: var(--white);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        border-bottom: 2px solid #2e8b7d; /* Bordure plus foncée */
+        text-align: center; /* Centrage des en-têtes (th) */
+    }
+
+    .table td {
+        /* Centrage du texte dans les cellules de données (td) */
+        text-align: center; 
+    }
+    
+    /* Colonnes individuelles spécifiques */
+    .table th.actions-col, .table td.actions-col {
+        text-align: center; 
+    }
+    .table th.id-col, .table td.id-col {
+        width: 10%; 
+    }
+
+
+    .table th, .table td {
+        border-right: 1px solid #e9f5f2; 
+        padding: 0.85rem 1rem; 
+    }
+    .table th:last-child, .table td:last-child {
+        border-right: none;
+    }
+    
+    /* Coins arrondis pour la tête du tableau */
+    .table th:first-child { border-top-left-radius: 1rem; }
+    .table th:last-child { border-top-right-radius: 1rem; }
+
+
+    .table tbody tr:nth-child(even) {
+        /* Alternance des couleurs de lignes pour la lisibilité */
+        background-color: #f8fcfb; 
+    }
+
+    .table tbody tr:hover {
+        /* Effet hover discret */
+        background-color: #e6f7f3;
+        transition: background-color 0.2s;
+    }
+
+    /* Dernières lignes sans bordures */
+    .table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+
+    /* ------------------- Button Styling (Créer un nouvel instrument) ------------------- */
+    .btn-primary {
+        display: inline-block;
+        background-color: var(--primary);
+        color: var(--white);
+        font-weight: 600;
+        padding: 0.75rem 2rem; 
+        border-radius: 0.75rem; 
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .btn-primary:hover {
+        background-color: #2e8b7d; 
+        box-shadow: 0 6px 10px rgba(0,0,0,0.15);
+    }
+
+    /* ------------------- Action Links ------------------- */
+    .action-link {
+        font-weight: 600; 
+        margin-right: 1rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.25rem;
+        text-decoration: none;
+        transition: color 0.2s;
+        transform: translateY(0);
+        transition: transform 0.1s ease-out;
+    }
+    .action-link:hover {
+        transform: translateY(-1px);
+    }
+
+
+    .action-link.view {
+        color: #1e40af; 
+    }
+    .action-link.view:hover {
+        color: #3b82f6;
+    }
+
+    .action-link.edit {
+        color: #b45309; 
+    }
+    .action-link.edit:hover {
+        color: #f59e0b;
+    }
+
+    /* ------------------- Titre ------------------- */
+    .title-instrument {
+        margin-bottom: 2rem; /* Légère réduction d'espace */
+        font-size: 2.25rem; 
+    }
+</style>
+
+<div class="table-container">
+    <h1 class="font-bold title-instrument" style="color: var(--primary); text-align: center;">Liste des Instruments</h1>
+
+    <table class="table bg-white shadow-xl overflow-hidden border border-gray-200">
         <thead>
-            <tr class="bg-gray-100 border-b">
-                <th class="py-3 px-4 text-left">Id</th>
-                <th class="py-3 px-4 text-left">N° Série</th>
-                <th class="py-3 px-4 text-left">Type</th>
-                <th class="py-3 px-4 text-left">Actions</th>
+            <tr>
+                <th class="py-3 px-4 id-col">Id</th>
+                <th class="py-3 px-4">N° Série</th>
+                <th class="py-3 px-4">Type</th>
+                <th class="py-3 px-4 actions-col">Actions</th>
             </tr>
         </thead>
         <tbody>
-        {# C'est ici que l'erreur est corrigée : nous itérons sur 'instruments' #}
         {% for instrument in instruments %}
-            <tr class="hover:bg-gray-50 border-b">
-                <td class="py-3 px-4">{{ instrument.id }}</td>
+            <tr class="border-b border-gray-100">
+                <td class="py-3 px-4 id-col">{{ instrument.id }}</td>
                 <td class="py-3 px-4">{{ instrument.numSerie }}</td>
                 <td class="py-3 px-4">
-                    {# Accès à la relation ManyToOne TypeInstrument #}
                     {{ instrument.typeInstrument ? instrument.typeInstrument.libelle : 'N/A' }}
                 </td>
-                {# La cellule de la Marque est retirée pour l'instant #}
-                {# <td class="py-3 px-4">
-                </td> #}
-
-                <td class="py-3 px-4">
-                    <a href="{{ path('app_instrument_show', {'id': instrument.id}) }}" class="text-blue-600 hover:text-blue-800 mr-2">Voir</a>
-                    <a href="{{ path('app_instrument_edit', {'id': instrument.id}) }}" class="text-yellow-600 hover:text-yellow-800">Modifier</a>
+                <td class="py-3 px-4 actions-col">
+                    <a href="{{ path('app_instrument_show', {'id': instrument.id}) }}" class="action-link view">Voir</a>
+                    <a href="{{ path('app_instrument_edit', {'id': instrument.id}) }}" class="action-link edit">Modifier</a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                {# Le colspan est ajusté de 5 à 4 #}
                 <td colspan="4" class="py-3 px-4 text-center text-gray-500">Aucun instrument trouvé.</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <div class="mt-6">
-        <a href="{{ path('app_instrument_new') }}" class="bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 transition duration-150">Créer un nouvel instrument</a>
+    <div class="mt-10 text-center" style="margin-top: 2rem;">
+        <a href="{{ path('app_instrument_new') }}" class="btn-primary">Créer un nouvel instrument</a>
     </div>
+</div>
 {% endblock %}

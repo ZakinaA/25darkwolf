@@ -1,11 +1,116 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Instrument{% endblock %}
+{% block title %}Créer un Instrument{% endblock %}
 
 {% block body %}
-    <h1>Create new Instrument</h1>
+<style>
+    /* ------------------- PALETTE (Reprise des styles cohérents) ------------------- */
+    :root {
+        --primary: #37A297;
+        --light: #F2FAF8;
+        --gray: #212529;
+        --white: #ffffff;
+    }
 
-    {{ include('instrument/_form.html.twig') }}
+    /* ------------------- Global Styling ------------------- */
+    body {
+        background-color: var(--light);
+        font-family: 'Poppins', sans-serif;
+        color: var(--gray);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        padding: 2rem;
+    }
 
-    <a href="{{ path('app_instrument_index') }}">back to list</a>
+    /* ------------------- Card / Conteneur du Formulaire ------------------- */
+    .form-container {
+        max-width: 700px;
+        width: 100%;
+        background: var(--white);
+        border-radius: 1rem;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        padding: 2rem;
+        margin-top: 2rem;
+    }
+
+    .form-container h1 {
+        color: var(--primary);
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        border-bottom: 2px solid var(--primary);
+        padding-bottom: 0.5rem;
+    }
+
+    /* ------------------- Formulaire Twig Styling ------------------- */
+    form div { margin-bottom: 1rem; }
+    label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 0.3rem;
+        color: #444;
+    }
+    input:not([type="checkbox"]):not([type="radio"]), select, textarea {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 1px solid #ddd;
+        border-radius: 0.5rem;
+        box-sizing: border-box;
+        transition: border-color 0.3s;
+    }
+    input:focus, select:focus, textarea:focus {
+        border-color: var(--primary);
+        outline: none;
+    }
+
+    /* Styles spécifiques aux Checkboxes (Couleurs) */
+    .form-check {
+        display: flex;
+        align-items: center;
+        margin-right: 1rem;
+        margin-top: 0.5rem;
+    }
+    .form-check input { width: auto; margin-right: 0.5rem; }
+    .form-check label { font-weight: 400; margin-bottom: 0; }
+    .checkbox-group { display: flex; flex-wrap: wrap; border: 1px solid #eee; padding: 0.75rem; border-radius: 0.5rem;}
+
+
+    /* ------------------- Bouton d'Action ------------------- */
+    .btn-action {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        padding: 0.6rem 1.25rem;
+        border-radius: 0.5rem;
+        text-decoration: none;
+        transition: transform 0.1s, box-shadow 0.1s;
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+    }
+    .btn-action:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+    }
+    .btn-save { background-color: var(--primary); color: var(--white); }
+    .btn-save:hover { background-color: #2e8b7d; }
+    .btn-back { background-color: #6c757d; color: var(--white); margin-left: 1rem; }
+    .btn-back:hover { background-color: #5a6268; }
+
+</style>
+
+<div class="form-container">
+    <h1>Créer un Nouvel Instrument</h1>
+
+    {{ include('instrument/_form.html.twig', {'button_label': 'Créer', 'button_class': 'btn-save'}) }}
+
+    <div class="mt-4 flex justify-content-start" style="margin-top: 1.5rem; text-align: right;">
+        <a href="{{ path('app_instrument_index') }}" class="btn-action btn-back" style="margin-left: 0;">
+            Retour à la liste
+        </a>
+    </div>
+
+</div>
 {% endblock %}

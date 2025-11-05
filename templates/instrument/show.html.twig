@@ -3,33 +3,258 @@
 {% block title %}Détail de l'Instrument{% endblock %}
 
 {% block body %}
-    <h1>Détail de l'instrument : {{ instrument.typeInstrument ? instrument.typeInstrument.libelle : '' }} {{ instrument.marque ? instrument.marque.libelle : '' }}</h1>
+<style>
+    /* ------------------- PALETTE & Global Styling (Identique à l'index) ------------------- */
+    :root {
+        --primary: #37A297;
+        --light: #F2FAF8;
+        --gray: #212529;
+        --white: #ffffff;
+        --danger: #990000; /* Rouge sombre / Cramoisi (Pas vif du tout) */
+    }
 
-    <div class="row mt-4">
+    body {
+        background-color: var(--light);
+        font-family: 'Poppins', sans-serif;
+        color: var(--gray);
+        padding: 0; 
+        margin: 0;
+        /* Centrage vertical et horizontal de la page */
+        min-height: 100vh;
+        display: flex;
+        justify-content: center; 
+        align-items: center; 
+    }
+
+    /* ------------------- Conteneur principal (La Carte) ------------------- */
+    .detail-card {
+        max-width: 900px; /* Un peu plus large pour la disposition en deux colonnes */
+        width: 90%;
+        background-color: var(--white);
+        border-radius: 1.5rem; /* Coins plus arrondis */
+        box-shadow: 0 15px 40px rgba(0,0,0,0.15); /* Ombre élégante */
+        padding: 2.5rem;
+    }
+
+    /* ------------------- Titre ------------------- */
+    .title-detail {
+        color: #000000;
+        font-weight: 700;
+        font-size: 2rem;
+        margin-bottom: 2rem;
+        text-align: center;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid var(--light);
+    }
+    
+    /* ------------------- Disposition du Contenu (Image et Tableau) ------------------- */
+    .content-layout {
+        display: flex;
+        gap: 2rem; /* Espace entre l'image et le tableau */
+    }
+
+    .image-container {
+        flex-shrink: 0; /* Empêche l'image de se compresser */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 1rem;
+    }
+    
+    .detail-table-wrapper {
+        flex-grow: 1;
+    }
+
+    /* ------------------- Image Styling ------------------- */
+    .instrument-img {
+        width: 100%;
+        max-width: 250px;
+        height: auto;
+        border-radius: 1.rem;
+        object-fit: cover;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    /* ------------------- Tableau de Détails ------------------- */
+    .table-detail {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+    .table-detail th, .table-detail td {
+        padding: 0.8rem 0;
+        border-bottom: 1px solid #eee;
+        font-size: 1rem;
+    }
+
+    .table-detail th {
+        background-color: var(--light); /* Fond très clair pour l'en-tête de ligne */
+        color: #000000;
+        font-weight: 600;
+        text-align: left;
+        padding-left: 1rem;
+        border-right: 1px solid var(--white); /* Ligne de séparation blanche */
+    }
+
+    .table-detail td {
+        text-align: left;
+        padding-left: 1rem;
+        font-weight: 500;
+    }
+    
+    .table-detail tr:last-child th, .table-detail tr:last-child td {
+        border-bottom: none;
+    }
+
+
+    /* ------------------- Accessoires & Couleurs ------------------- */
+    .badge-couleur {
+        display: inline-block;
+        color: #000000;
+        padding: 0.3rem 0.6rem;
+        border-radius: 0.5rem;
+        font-size: 0.85rem;
+        font-weight: 500;
+        margin-right: 0.5rem;
+    }
+    .accessory-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    .accessory-list li {
+        margin-bottom: 0.2rem;
+        padding-left: 0.5rem;
+        position: relative;
+    }
+    .accessory-list li::before {
+        content: '•';
+        color: var(--primary);
+        font-weight: bold;
+        display: inline-block;
+        width: 1em;
+        margin-left: -1em;
+    }
+
+    /* ------------------- Actions & Boutons ------------------- */
+    .actions-section {
+        margin-top: 2rem;
+        padding-top: 1.5rem;
+        border-top: 2px solid var(--light);
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* Style général des boutons d'action (forme et effet) */
+    .btn-action {
+        text-decoration: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.75rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        border: none;
+        cursor: pointer;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        display: inline-block; /* Pour les liens <a> et les boutons <button> */
+    }
+    
+    .btn-action:hover {
+        transform: translateY(-2px); /* Soulèvement sur tous les boutons */
+        box-shadow: 0 6px 10px rgba(0,0,0,0.15);
+    }
+    
+    .btn-back {
+        background-color: #6c757d; /* Gris */
+        color: var(--white);
+    }
+    .btn-back:hover {
+        background-color: #5a6268;
+    }
+
+    .btn-edit {
+        background-color: #0acf04ff ; 
+        color: var(--white);
+    }
+    .btn-edit:hover {
+        background-color: #0acf04ff; 
+    }
+    
+    /* Style du bouton de suppression - Utilise la forme de .btn-action et la couleur sombre */
+    .btn-delete {
+        background-color: var(--danger); /* Rouge sombre/cramoisi */
+        color: var(--white);
+    }
+    
+    .btn-delete:hover {
+        background-color: #7a0000; /* Rouge encore plus foncé au survol */
+    }
+
+    .delete-form-inline {
+        /* Assure l'alignement correct du formulaire dans le flexbox */
+        display: inline-block; 
+        margin: 0;
+    }
+    
+    /* ------------------- RESPONSIVE ------------------- */
+    @media (max-width: 768px) {
+        .detail-card {
+            padding: 1.5rem;
+            width: 95%;
+            margin: 1rem 0; 
+        }
+        .content-layout {
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        .image-container {
+            width: 100%;
+            padding-top: 0;
+        }
+        .instrument-img {
+            max-width: 100%;
+        }
+        .actions-section {
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        /* Appliquer la largeur de 100% à tous les types de boutons/liens d'action */
+        .btn-action, .delete-form-inline, .delete-form-inline .btn-action {
+            width: 100%;
+            text-align: center;
+        }
+    }
+
+</style>
+
+<div class="detail-card">
+    <h1 class="title-detail">
+        Détail de l'instrument : 
+        {{ instrument.typeInstrument ? instrument.typeInstrument.libelle : '' }} 
+        {{ instrument.marque ? instrument.marque.libelle : '' }}
+    </h1>
+
+    <div class="content-layout">
         
         {# --- BLOC D'AFFICHAGE DE L'IMAGE --- #}
-        <div class="col-md-4">
-            {#
-               LA SOLUTION FINALE :
-               - On part du dossier 'public/img/instruments/'.
-               - On prend l'ID de l'instrument (ex: 1).
-               - On ajoute l'extension '.jpg'.
-               - Le tout est géré par la fonction asset() pour créer une URL propre.
-            #}
+        <div class="image-container">
+            {# Utilisation d'un placeholder simple pour l'image si le chemin est cassé #}
             <img src="{{ asset('img/instruments/' ~ instrument.id ~ '.jpg') }}" 
                  alt="Photo de l'instrument {{ instrument.numSerie }}" 
-                 style="width: 200px; height: 200px;"
-                 class="img-fluid rounded shadow-sm">
-                 
-            
+                 class="instrument-img"
+                 onerror="this.onerror=null; this.src='https://placehold.co/250x250/37A297/FFFFFF?text=INSTRUMENT';">
         </div>
         {# --- FIN DU BLOC IMAGE --- #}
 
-        <div class="col-md-8">
-            <table class="table table-striped">
+        <div class="detail-table-wrapper">
+            <table class="table-detail">
                 <tbody>
                     <tr>
-                        <th style="width: 30%;">Numéro de Série</th>
+                        <th style="width: 35%;">Numéro de Série</th>
                         <td>{{ instrument.numSerie }}</td>
                     </tr>
                     <tr>
@@ -48,12 +273,12 @@
                         <th>Prix d'achat</th>
                         <td>{{ instrument.prixAchat ? instrument.prixAchat|number_format(2, ',', ' ') ~ ' €' : '' }}</td>
                     </tr>
-                     <tr>
+                    <tr>
                         <th>Couleurs</th>
                         <td>
                             {% if instrument.couleurs is not empty %}
                                 {% for couleur in instrument.couleurs %}
-                                    <span class="badge bg-secondary">{{ couleur.nom }}</span>
+                                    <span class="badge-couleur">{{ couleur.nom }}</span>
                                 {% endfor %}
                             {% else %}
                                 Aucune
@@ -63,8 +288,8 @@
                     <tr>
                         <th>Accessoires</th>
                         <td>
-                             {% if instrument.accessoires is not empty %}
-                                <ul>
+                            {% if instrument.accessoires is not empty %}
+                                <ul class="accessory-list">
                                 {% for accessoire in instrument.accessoires %}
                                     <li>{{ accessoire.libelle }}</li>
                                 {% endfor %}
@@ -79,12 +304,13 @@
         </div>
     </div>
 
-    <hr>
-
-    <a href="{{ path('app_instrument_index') }}" class="btn btn-secondary">Retour à la liste</a>
-    <a href="{{ path('app_instrument_edit', {'id': instrument.id}) }}" class="btn btn-warning">Modifier</a>
-    
-    <div style="display: inline-block;">
-        {{ include('instrument/_delete_form.html.twig') }}
+    <div class="actions-section">
+        <a href="{{ path('app_instrument_index') }}" class="btn-action btn-back">Retour à la liste</a>
+        <a href="{{ path('app_instrument_edit', {'id': instrument.id}) }}" class="btn-action btn-edit">Modifier</a>
+        
+        <div class="delete-form-inline">
+            {{ include('instrument/_delete_form.html.twig') }}
+        </div>
     </div>
+</div>
 {% endblock %}

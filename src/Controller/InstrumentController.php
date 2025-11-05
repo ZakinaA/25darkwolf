@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Instrument;
+use App\Form\InstrumentType;
 use App\Repository\InstrumentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -30,7 +31,7 @@ final class InstrumentController extends AbstractController
     {
         // TODO: Implémenter le formulaire et la logique d'ajout
         // Placeholder pour l'exemple
-        return $this->redirectToRoute('app_instrument_index');
+        return $this->render('instrument/new.html.twig');
     }
 
     #[Route('/{id}', name: 'app_instrument_show', methods: ['GET'])]
@@ -45,9 +46,25 @@ final class InstrumentController extends AbstractController
     #[Route('/{id}/edit', name: 'app_instrument_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Instrument $instrument, EntityManagerInterface $entityManager): Response
     {
-        // TODO: Implémenter le formulaire et la logique d'édition
-        // Placeholder pour l'exemple
-        return $this->redirectToRoute('app_instrument_index', [], Response::HTTP_SEE_OTHER);
+        // 1. Création du formulaire (InstrumentType est maintenant connu)
+        $form = $this->createForm(InstrumentType::class, $instrument);
+        
+        // 2. Gestion de la requête (Soumission du formulaire)
+        $form->handleRequest($request);
+
+        // 3. Logique de soumission
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+            
+            $this->addFlash('success', 'L\'instrument a été mis à jour avec succès.');
+            return $this->redirectToRoute('app_instrument_show', ['id' => $instrument->getId()], Response::HTTP_SEE_OTHER);
+        }
+
+        // 4. Rendu de la vue
+        return $this->render('instrument/edit.html.twig', [
+            'instrument' => $instrument,
+            'form' => $form,
+        ]);
     }
 
     #[Route('/{id}', name: 'app_instrument_delete', methods: ['POST'])]

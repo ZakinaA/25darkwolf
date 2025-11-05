@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New TypeInstrument{% endblock %}
+
+{% block body %}
+    <h1>Create new TypeInstrument</h1>
+
+    {{ include('type_instrument/_form.html.twig') }}
+
+    <a href="{{ path('app_type_instrument_index') }}">back to list</a>
+{% endblock %}

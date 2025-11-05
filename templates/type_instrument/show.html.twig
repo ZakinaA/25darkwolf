@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}TypeInstrument{% endblock %}
+
+{% block body %}
+    <h1>TypeInstrument</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ type_instrument.id }}</td>
+            </tr>
+            <tr>
+                <th>Libelle</th>
+                <td>{{ type_instrument.libelle }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_type_instrument_index') }}">back to list</a>
+
+    <a href="{{ path('app_type_instrument_edit', {'id': type_instrument.id}) }}">edit</a>
+
+    {{ include('type_instrument/_delete_form.html.twig') }}
+{% endblock %}

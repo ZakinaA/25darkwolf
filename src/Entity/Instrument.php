@@ -121,7 +121,27 @@ class Instrument
         return $this->contratsPret;
     }
 
-    // ... addContratPret / removeContratPret methods omitted for brevity
+    public function addContratPret(ContratPret $contratsPret): static
+    {
+        if (!$this->contratsPret->contains($contratsPret)) {
+            $this->contratsPret->add($contratsPret);
+            $contratsPret->setInstrument($this);
+        }
+
+        return $this;
+    }
+
+    public function removeContratPret(ContratPret $contratsPret): static
+    {
+        if ($this->contratsPret->removeElement($contratsPret)) {
+            // set the owning side to null (unless already changed)
+            if ($contratsPret->getInstrument() === $this) {
+                $contratsPret->setInstrument(null);
+            }
+        }
+
+        return $this;
+    }
 
     public function getMarque(): ?Marque
     {
@@ -167,5 +187,25 @@ class Instrument
         return $this->accessoires;
     }
     
-    // ... addAccessoire / removeAccessoire methods omitted for brevity
+    public function addAccessoire(Accessoire $accessoire): static
+    {
+        if (!$this->accessoires->contains($accessoire)) {
+            $this->accessoires->add($accessoire);
+            $accessoire->setInstrument($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAccessoire(Accessoire $accessoire): static
+    {
+        if ($this->accessoires->removeElement($accessoire)) {
+            // set the owning side to null (unless already changed)
+            if ($accessoire->getInstrument() === $this) {
+                $accessoire->setInstrument(null);
+            }
+        }
+
+        return $this;
+    }
 }
