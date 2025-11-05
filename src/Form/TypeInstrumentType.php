@@ -18,12 +18,20 @@ class TypeInstrumentType extends AbstractType
             ->add('libelle')
             ->add('professeurs', EntityType::class, [
                 'class' => Professeur::class,
-                'choice_label' => 'id',
+
+                'choice_label' => function(Professeur $professeur) {
+                    return $professeur->getPrenom() . ' ' . $professeur->getNom();
+                },
+                
                 'multiple' => true,
+                'expanded' => true,
+                'label' => 'Professeurs'
             ])
             ->add('classeInstrument', EntityType::class, [
                 'class' => ClasseInstrument::class,
-                'choice_label' => 'id',
+                'choice_label' => 'libelle',
+                
+                'label' => 'Classe d\'instrument'
             ])
         ;
     }
