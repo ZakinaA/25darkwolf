@@ -43,6 +43,13 @@
                 <th>Mail</th>
                 <td>{{ eleve.mail }}</td>
             </tr>
+             <tr>
+                <th>Responsable</th>
+                <td>{% for responsable in eleve.responsable %}
+                    {{ responsable.prenom }}
+                {%endfor%}
+                </td>
+            </tr>
         </tbody>
     </table>
 
