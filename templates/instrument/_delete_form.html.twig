@@ -1,4 +1,7 @@
-<form method="post" action="{{ path('app_instrument_delete', {'id': instrument.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+<form method="post" action="{{ path('app_instrument_delete', {'id': instrument.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet instrument ?');" class="delete-form-inline">
+    {# L'identifiant 'delete' ~ instrument.id est utilisé ici, pas d'accès à 'utilisation' #}
     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ instrument.id) }}">
-    <button class="btn">Delete</button>
+    
+    {# La classe btn-action est nécessaire pour le style CSS défini dans show.html.twig/edit.html.twig #}
+    <button class="btn-action btn-delete">Supprimer</button>
 </form>
