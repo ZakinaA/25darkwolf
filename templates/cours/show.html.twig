@@ -7,10 +7,7 @@
 
     <table class="table">
         <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ cour.id }}</td>
-            </tr>
+          
             <tr>
                 <th>Libelle</th>
                 <td>{{ cour.libelle }}</td>
@@ -30,6 +27,18 @@
             <tr>
                 <th>Professeur</th>
                 <td>{{ cour.professeur.prenom }} {{ cour.professeur.nom }}
+                </td>
+            </tr>
+            <tr>
+                <th>Élèves inscrits</th>
+                <td>
+                    <ul>
+                        {% for inscription in cour.inscription %}
+                            <li>{{ inscription.eleve.prenom }} {{ inscription.eleve.nom }}</li>
+                        {% else %}
+                            <li>Aucun élève inscrit pour ce cours.</li>
+                        {% endfor %}
+                    </ul>
                 </td>
             </tr>
         </tbody>
