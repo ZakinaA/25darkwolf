@@ -147,42 +147,42 @@
 </style>
 
 <div class="show-container">
-    <h1>Détails de l'Instrument #{{ instrument.id }}</h1>
+    <h1>Détails de l'Instrument #{{ instruments.id }}</h1>
 
     <div class="info-grid">
 
         {# Colonne 1 : Généralités #}
         <div class="info-item">
             <span class="info-label">Numéro de Série</span>
-            <span class="info-value">{{ instrument.numSerie }}</span>
+            <span class="info-value">{{ instruments.numSerie }}</span>
         </div>
         <div class="info-item">
             <span class="info-label">Type</span>
-            <span class="info-value">{{ instrument.typeInstrument.libelle ?? 'N/A' }}</span>
+            <span class="info-value">{{ instruments.typeInstrument.libelle ?? 'N/A' }}</span>
         </div>
 
         {# Colonne 2 : Achat #}
         <div class="info-item">
             <span class="info-label">Date d'Achat</span>
-            <span class="info-value">{{ instrument.dateAchat ? instrument.dateAchat|date('d/m/Y') : 'N/A' }}</span>
+            <span class="info-value">{{ instruments.dateAchat ? instruments.dateAchat|date('d/m/Y') : 'N/A' }}</span>
         </div>
         <div class="info-item">
             <span class="info-label">Prix d'Achat</span>
-            <span class="info-value">{{ instrument.prixAchat ? (instrument.prixAchat|number_format(2, ',', ' ') ~ ' €') : 'N/A' }}</span>
+            <span class="info-value">{{ instruments.prixAchat ? (instruments.prixAchat|number_format(2, ',', ' ') ~ ' €') : 'N/A' }}</span>
         </div>
         
         {# Ligne complète pour la Marque #}
         <div class="info-item" style="grid-column: 1 / 3;">
             <span class="info-label">Marque</span>
-            <span class="info-value">{{ instrument.marque.libelle ?? 'N/A' }}</span>
+            <span class="info-value">{{ instruments.marque.libelle ?? 'N/A' }}</span>
         </div>
 
         {# Ligne complète pour les Couleurs (Utilisation des Chips) #}
         <div class="info-item" style="grid-column: 1 / 3;">
             <span class="info-label">Couleurs</span>
             <div class="info-value list-chips">
-                {% if instrument.couleurs is not empty %}
-                    {% for couleur in instrument.couleurs %}
+                {% if instruments.couleurs is not empty %}
+                    {% for couleur in instruments.couleurs %}
                         <span class="chip">{{ couleur.nom }}</span>
                     {% endfor %}
                 {% else %}
@@ -202,7 +202,7 @@
         </a>
 
         {# Bouton Modifier #}
-        <a href="{{ path('app_instrument_edit', {'id': instrument.id}) }}" class="btn-action btn-edit">
+        <a href="{{ path('app_instrument_edit', {'id': instruments.id}) }}" class="btn-action btn-edit">
             Modifier
         </a>
 

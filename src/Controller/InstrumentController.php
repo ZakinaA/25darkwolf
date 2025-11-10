@@ -61,7 +61,7 @@ final class InstrumentController extends AbstractController
     {
         // Votre code existant est parfait
         return $this->render('instrument/show.html.twig', [
-            'instrument' => $instrument,
+            'instruments' => $instrument,
         ]);
     }
 

@@ -1,48 +1,171 @@
-{% extends 'base.html.twig' %}
-
-{% block title %}Liste des Instruments{% endblock %}
+{% block title %}Modifier Instrument{% endblock %}
 
 {% block body %}
-    <h1 class="text-3xl font-bold mb-6">Liste des Instruments</h1>
+<style>
+    /* ------------------- PALETTE (Reprise des styles cohérents) ------------------- */
+    :root {
+        --primary: #37A297;
+        --light: #F2FAF8;
+        --gray: #212529;
+        --white: #ffffff;
+        --danger: #dc2626; /* Rouge pour les actions de suppression */
+    }
 
-    <table class="table min-w-full bg-white shadow-md rounded-lg overflow-hidden">
-        <thead>
-            <tr class="bg-gray-100 border-b">
-                <th class="py-3 px-4 text-left">Id</th>
-                <th class="py-3 px-4 text-left">N° Série</th>
-                <th class="py-3 px-4 text-left">Type</th>
-                <th class="py-3 px-4 text-left">Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {# C'est ici que l'erreur est corrigée : nous itérons sur 'instruments' #}
-        {% for instrument in instruments %}
-            <tr class="hover:bg-gray-50 border-b">
-                <td class="py-3 px-4">{{ instrument.id }}</td>
-                <td class="py-3 px-4">{{ instrument.numSerie }}</td>
-                <td class="py-3 px-4">
-                    {# Accès à la relation ManyToOne TypeInstrument #}
-                    {{ instrument.typeInstrument ? instrument.typeInstrument.libelle : 'N/A' }}
-                </td>
-                {# La cellule de la Marque est retirée pour l'instant #}
-                {# <td class="py-3 px-4">
-                </td> #}
+    /* ------------------- Global Styling ------------------- */
+    body {
+        background-color: var(--light);
+        font-family: 'Poppins', sans-serif;
+        color: var(--gray);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        padding: 2rem;
+    }
 
-                <td class="py-3 px-4">
-                    <a href="{{ path('app_instrument_show', {'id': instrument.id}) }}" class="text-blue-600 hover:text-blue-800 mr-2">Voir</a>
-                    <a href="{{ path('app_instrument_edit', {'id': instrument.id}) }}" class="text-yellow-600 hover:text-yellow-800">Modifier</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                {# Le colspan est ajusté de 5 à 4 #}
-                <td colspan="4" class="py-3 px-4 text-center text-gray-500">Aucun instrument trouvé.</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    /* ------------------- Card / Conteneur du Formulaire (Identique au show.html.twig) ------------------- */
+    .form-container {
+        max-width: 800px; /* Plus large pour ressembler au show */
+        width: 100%;
+        background: var(--white);
+        border-radius: 1rem;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        padding: 2.5rem; /* Plus de padding pour ressembler au show */
+        margin-top: 2rem;
+    }
 
-    <div class="mt-6">
-        <a href="{{ path('app_instrument_new') }}" class="bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 transition duration-150">Créer un nouvel instrument</a>
+    .form-container h1 {
+        color: var(--primary);
+        font-size: 2rem; /* Taille du titre alignée sur le show */
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        border-bottom: 2px solid var(--primary);
+        padding-bottom: 0.5rem;
+    }
+
+    /* ------------------- Formulaire Layout (NOUVEAU - Imite la structure du show) ------------------- */
+    .form-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem; /* Espace entre les groupes de champs */
+    }
+    
+    .field-group.two-cols {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+    }
+
+    /* ------------------- Formulaire Twig Styling (Champs) ------------------- */
+    form div { margin-bottom: 0; } /* Supprimer la marge par défaut pour utiliser le gap du grid */
+
+    label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 0.3rem;
+        color: #444;
+    }
+
+    input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="hidden"]), 
+    select, 
+    textarea {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 1px solid #ddd;
+        border-radius: 0.5rem;
+        box-sizing: border-box;
+        transition: border-color 0.3s;
+    }
+
+    input:focus, select:focus, textarea:focus {
+        border-color: var(--primary);
+        outline: none;
+    }
+
+    /* Styles spécifiques aux Checkboxes (Couleurs) */
+    .checkbox-group { 
+        display: flex; 
+        flex-wrap: wrap; 
+        padding: 0.75rem 0;
+        border: none; /* Look plus propre */
+    }
+    .form-check {
+        /* Styles appliqués par Twig pour chaque checkbox */
+        display: flex;
+        align-items: center;
+        margin-right: 1.5rem;
+        margin-top: 0;
+        margin-bottom: 0.5rem;
+    }
+    .form-check input { width: auto; margin-right: 0.5rem; }
+    .form-check label { font-weight: 400; margin-bottom: 0; }
+    
+
+    /* ------------------- Boutons d'Action (Identique au Show) ------------------- */
+    .actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+    .btn-action {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        padding: 0.6rem 1.25rem;
+        border-radius: 0.5rem;
+        text-decoration: none;
+        transition: transform 0.1s, box-shadow 0.1s;
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+    }
+    .btn-action:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+    }
+    
+    .btn-save { background-color: var(--primary); color: var(--white); }
+    .btn-save:hover { background-color: #2e8b7d; }
+    
+    .btn-back { background-color: #6c757d; color: var(--white); }
+    .btn-back:hover { background-color: #5a6268; }
+    
+    .btn-edit { background-color: #f59e0b; color: var(--white); } /* Pour le bouton "Voir Détail" */
+    .btn-edit:hover { background-color: #d97706; }
+
+    .btn-delete { background-color: var(--danger); color: var(--white); } 
+    .btn-delete:hover { background-color: #b91c1c; }
+    
+    .delete-form-inline { display: inline-block; } /* Pour que le bouton soit en ligne avec les autres actions */
+
+    /* ------------------- RESPONSIVE ------------------- */
+    @media (max-width: 600px) {
+        .field-group.two-cols {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+        .form-container {
+            padding: 1.5rem;
+        }
+    }
+</style>
+
+<div class="form-container">
+    <h1>Modification de l'Instrument #{{ instruments.id }}</h1>
+
+    {# Le formulaire lui-même est inclus ici, maintenant avec un rendu structuré #}
+    {{ include('instrument/_form.html.twig', {'button_label': 'Mettre à Jour', 'button_class': 'btn-save'}) }}
+
+    <div class="actions">
+        <a href="{{ path('app_instrument_index') }}" class="btn-action btn-back">
+            Retour à la liste
+        </a>
+        <a href="{{ path('app_instrument_show', {'id': instruments.id}) }}" class="btn-action btn-edit">
+            Voir Détail
+        </a>
+        {# Inclusion du bouton de suppression #}
+        {{ include('instrument/_delete_form.html.twig') }}
     </div>
+
+</div>
 {% endblock %}
