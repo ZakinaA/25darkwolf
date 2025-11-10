@@ -95,6 +95,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    #[ORM\OneToOne(mappedBy: 'user', targetEntity: Professeur::class, cascade: ['persist', 'remove'])]
+private ?Professeur $professeur = null;
+
+public function getProfesseur(): ?Professeur
+{
+    return $this->professeur;
+}
+
+public function setProfesseur(?Professeur $professeur): static
+{
+    // set the owning side of the relation if necessary
+    if ($professeur && $professeur->getUser() !== $this) {
+        $professeur->setUser($this);
+    }
+
+    $this->professeur = $professeur;
+
+    return $this;
+}
+
     /**
      * Ensure the session doesn't contain actual password hashes by CRC32C-hashing them, as supported since Symfony 7.3.
      */
@@ -111,4 +131,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // @deprecated, to be removed when upgrading to Symfony 8
     }
+
+    
 }

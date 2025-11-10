@@ -28,15 +28,17 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 
     public function authenticate(Request $request): Passport
     {
-        $email = $request->getPayload()->getString('email');
+        // ✅ Corrigé : on récupère les champs d'un formulaire HTML classique
+        $email = $request->request->get('email', '');
+        $password = $request->request->get('password', '');
+        $csrfToken = $request->request->get('_csrf_token');
 
         $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $email);
-
         return new Passport(
             new UserBadge($email),
-            new PasswordCredentials($request->getPayload()->getString('password')),
+            new PasswordCredentials($password),
             [
-                new CsrfTokenBadge('authenticate', $request->getPayload()->getString('_csrf_token')),
+                new CsrfTokenBadge('authenticate', $csrfToken),
                 new RememberMeBadge(),
             ]
         );
@@ -44,13 +46,21 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
+        // 1️⃣ Redirige vers la page demandée avant connexion
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
             return new RedirectResponse($targetPath);
         }
 
-        // For example:
-        // return new RedirectResponse($this->urlGenerator->generate('some_route'));
-        throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
+        // 2️⃣ Redirection selon le rôle
+        $user = $token->getUser();
+
+        if (in_array('ROLE_PROF', $user->getRoles(), true)) {
+             $professeur = $user->getProfesseur();
+            return new RedirectResponse($this->urlGenerator->generate('app_professeur_dashboard',['id'=>$professeur->getId()]));
+        }
+
+        // 3️⃣ Redirection par défaut
+        return new RedirectResponse($this->urlGenerator->generate('app_home'));
     }
 
     protected function getLoginUrl(Request $request): string
