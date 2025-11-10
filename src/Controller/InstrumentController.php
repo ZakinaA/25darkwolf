@@ -85,7 +85,7 @@ final class InstrumentController extends AbstractController
 
         // 6. Affiche la page d'édition
         return $this->render('instrument/edit.html.twig', [
-            'instrument' => $instrument,
+            'instruments' => $instrument,
             'form' => $form->createView(),
         ]);
     }
