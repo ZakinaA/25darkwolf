@@ -6,6 +6,7 @@ use App\Repository\EleveRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\User;
 
 #[ORM\Entity(repositoryClass: EleveRepository::class)]
 class Eleve
@@ -60,6 +61,25 @@ class Eleve
     // Ajout de l'annotation OrderBy pour trier les ContratPret par 'id' croissant
     #[ORM\OneToMany(targetEntity: ContratPret::class, mappedBy: 'eleve')]
     #[ORM\OrderBy(['id' => 'ASC'])] // Tri par ID croissant
+
+
+    #[ORM\OneToOne(targetEntity: User::class, cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)] // Mettez "false" si un élève DOIT avoir un compte
+    private ?User $user = null;
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
+        return $this;
+    }
+    // --- FIN DES MÉTHODES ---
+
+
     private Collection $contratPrets;
 
     public function __construct()
@@ -68,6 +88,7 @@ class Eleve
         $this->inscription = new ArrayCollection();
         $this->contratPrets = new ArrayCollection();
     }
+
 
     public function getId(): ?int
     {

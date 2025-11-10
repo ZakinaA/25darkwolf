@@ -6,6 +6,7 @@ use App\Repository\ProfesseurRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\User;
 
 #[ORM\Entity(repositoryClass: ProfesseurRepository::class)]
 class Professeur
@@ -50,6 +51,22 @@ class Professeur
      */
     #[ORM\OneToMany(targetEntity: Cours::class, mappedBy: 'professeur')]
     private Collection $cours;
+
+
+    #[ORM\OneToOne(targetEntity: User::class, cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)] // Mettez "false" si un élève DOIT avoir un compte
+    private ?User $user = null;
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
+        return $this;
+    }
 
     public function __construct()
     {
