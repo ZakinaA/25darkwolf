@@ -28,12 +28,12 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 
     public function authenticate(Request $request): Passport
     {
-        // ✅ Corrigé : on récupère les champs d'un formulaire HTML classique
         $email = $request->request->get('email', '');
         $password = $request->request->get('password', '');
         $csrfToken = $request->request->get('_csrf_token');
 
         $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $email);
+
         return new Passport(
             new UserBadge($email),
             new PasswordCredentials($password),
@@ -55,9 +55,40 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
         $user = $token->getUser();
 
         if (in_array('ROLE_PROF', $user->getRoles(), true)) {
-             $professeur = $user->getProfesseur();
-            return new RedirectResponse($this->urlGenerator->generate('app_professeur_dashboard',['id'=>$professeur->getId()]));
+            $professeur = $user->getProfesseur();
+            if ($professeur) {
+                return new RedirectResponse($this->urlGenerator->generate('app_professeur_dashboard', [
+                    'id' => $professeur->getId(),
+                ]));
+            }
         }
+
+        if (in_array('ROLE_ELEVE', $user->getRoles(), true)) {
+            $eleve = $user->getEleve();
+            if ($eleve) {
+                return new RedirectResponse($this->urlGenerator->generate('app_eleve_dashboard', [
+                    'id' => $eleve->getId(),
+                ]));
+            }
+        }
+
+        if (in_array('ROLE_ADMIN', $user->getRoles(), true)) {
+            $admin = $user->getAdmin();
+            if ($admin) {
+                return new RedirectResponse($this->urlGenerator->generate('app_admin_dashboard', [
+                    'id' => $admin->getId(),
+                ]));
+            }
+        }
+
+        else if (in_array('ROLE_GESTIONNAIRE', $user->getRoles(), true)) {
+    $gestionnaire = $user->getGestionnaire();
+    if ($gestionnaire) {
+        return new RedirectResponse($this->urlGenerator->generate('app_gestionnaire_dashboard', [
+            'id' => $gestionnaire->getId(),
+        ]));
+    }
+}
 
         // 3️⃣ Redirection par défaut
         return new RedirectResponse($this->urlGenerator->generate('app_home'));

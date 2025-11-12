@@ -115,6 +115,65 @@ public function setProfesseur(?Professeur $professeur): static
     return $this;
 }
 
+#[ORM\OneToOne(mappedBy: 'user', targetEntity: Eleve::class, cascade: ['persist', 'remove'])]
+private ?Eleve $eleve = null;
+
+public function getEleve(): ?Eleve
+{
+    return $this->eleve;
+}
+
+public function setEleve(?Eleve $eleve): static
+{
+    // set the owning side of the relation if necessary
+    if ($eleve && $eleve->getUser() !== $this) {
+        $eleve->setUser($this);
+    }
+
+    $this->eleve = $eleve;
+
+    return $this;
+}
+
+#[ORM\OneToOne(mappedBy: 'user', targetEntity: Admin::class, cascade: ['persist', 'remove'])]
+private ?Admin $admin = null;
+
+public function getAdmin(): ?Admin
+{
+    return $this->admin;
+}
+
+public function setAdmin(?Admin $admin): static
+{
+    // set the owning side of the relation if necessary
+    if ($admin && $admin->getUser() !== $this) {
+        $admin->setUser($this);
+    }
+
+    $this->admin = $admin;
+
+    return $this;
+}
+
+#[ORM\OneToOne(mappedBy: 'user', targetEntity: Gestionnaire::class, cascade: ['persist', 'remove'])]
+private ?Gestionnaire $gestionnaire = null;
+
+public function getGestionnaire(): ?Gestionnaire
+{
+    return $this->gestionnaire;
+}
+
+public function setGestionnaire(?Gestionnaire $gestionnaire): static
+{
+    if ($gestionnaire && $gestionnaire->getUser() !== $this) {
+        $gestionnaire->setUser($this);
+    }
+
+    $this->gestionnaire = $gestionnaire;
+
+    return $this;
+}
+
     /**
      * Ensure the session doesn't contain actual password hashes by CRC32C-hashing them, as supported since Symfony 7.3.
      */
