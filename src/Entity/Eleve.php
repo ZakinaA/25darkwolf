@@ -59,8 +59,14 @@ class Eleve
      */
     // Ajout de l'annotation OrderBy pour trier les ContratPret par 'id' croissant
     #[ORM\OneToMany(targetEntity: ContratPret::class, mappedBy: 'eleve')]
-    #[ORM\OrderBy(['id' => 'ASC'])] // Tri par ID croissant
+    #[ORM\OrderBy(['id' => 'ASC'])] // Tri par ID croissant//
+
+
     private Collection $contratPrets;
+
+    #[ORM\OneToOne(inversedBy: 'eleve', cascade: ['persist', 'remove'])]
+        #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null; 
 
     public function __construct()
     {
@@ -265,4 +271,17 @@ class Eleve
 
         return $this;
     }
+
+    
+    public function getUser(): ?User
+{
+    return $this->user;
+}
+
+    public function setUser(User $user): static
+{
+    $this->user = $user;
+
+    return $this;
+}
 }

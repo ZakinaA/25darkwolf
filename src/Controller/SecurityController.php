@@ -31,4 +31,13 @@ final class SecurityController extends AbstractController
 
         return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
     }
+
+    #[Route(path: '/logout', name: 'app_logout')]
+    public function logout(): void
+    {
+        // Cette méthode peut être vide.
+        // Elle sera interceptée par le composant de sécurité de Symfony
+        // (grâce à la configuration dans security.yaml)
+        throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
+    }
 }
