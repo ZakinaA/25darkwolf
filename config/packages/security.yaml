@@ -2,41 +2,48 @@ security:
     # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
+    
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     providers:
-        # used to reload user from session & other features (e.g. switch_user)
+        # --- C'EST LA CORRECTION PRINCIPALE ---
+        # On dit à Symfony d'utiliser la base de données (Doctrine)
         app_user_provider:
             entity:
-                class: App\Entity\Gestionnaire
+                class: App\Entity\User
                 property: email
-        # used to reload user from session & other features (e.g. switch_user)
-        # used to reload user from session & other features (e.g. switch_user)
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
             lazy: true
+            
+            # --- CORRECTION ICI ---
+            # On dit au firewall d'utiliser le provider de la base de données
             provider: app_user_provider
+            # --- FIN CORRECTION ---
+
             custom_authenticator: App\Security\LoginFormAuthenticator
 
             remember_me:
                 secret: '%kernel.secret%'
-                lifetime: 604800
+                lifetime: 604800 # 1 semaine
                 path: /
-                always_remember_me: true
+                # always_remember_me: true # Décommentez si vous ne voulez pas de case à cocher
 
-            # activate different ways to authenticate
-            # https://symfony.com/doc/current/security.html#the-firewall
-
-            # https://symfony.com/doc/current/security/impersonating_user.html
-            # switch_user: true
+            # J'ai ajouté la section de déconnexion que vous n'aviez pas
+            logout:
+                path: app_logout
+                target: app_home # Redirige vers la page d'accueil après la déconnexion
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
+        # Décommentez et adaptez ces lignes pour protéger vos sections
         # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/professeur/dashboard, roles: ROLE_PROF }
+        # - { path: ^/eleve/dashboard, roles: ROLE_ELEVE }
+        # - { path: ^/instrument, roles: ROLE_GESTIONNAIRE }
 
 when@test:
     security:

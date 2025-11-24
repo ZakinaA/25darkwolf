@@ -78,4 +78,25 @@ final class EleveController extends AbstractController
 
         return $this->redirectToRoute('app_eleve_index', [], Response::HTTP_SEE_OTHER);
     }
+    #[Route('/dashboard/{id}', name: 'app_eleve_dashboard', methods: ['GET'])]
+    #[IsGranted('ROLE_ELEVE')]
+    public function dashboard(EleveRepository $eleveRepository): Response
+    {
+        // Récupérer les données nécessaires pour le tableau de bord
+        $user = $this->getUser();
+        
+        // On cherche par l'ID de l'utilisateur (plus robuste)
+        $eleve = $eleveRepository->findOneBy(['user' => $user->getId()]);
+
+        if (!$eleve) {
+            $this->addFlash('error', 'Elève non trouvé.');
+            // (Assurez-vous que la route 'app_home' existe !)
+            return $this->redirectToRoute('app_home'); 
+        }
+
+        // C'est ici qu'on affiche votre template
+        return $this->render('eleve/dashboard.html.twig', [
+            'eleve' => $eleve,
+        ]);
+    }
 }

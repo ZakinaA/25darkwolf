@@ -74,6 +74,7 @@ class Professeur
         $this->cours = new ArrayCollection();
     }
 
+    
     public function getId(): ?int
     {
         return $this->id;
