@@ -2,6 +2,7 @@
 
 namespace App\Security;
 
+use App\Entity\User;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -46,24 +47,29 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
-        // 1️⃣ Redirige vers la page demandée avant connexion
+        // 1. Redirection vers la page demandée avant la connexion (si elle existe)
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
             return new RedirectResponse($targetPath);
         }
 
-        // 2️⃣ Redirection selon le rôle
+        // 2. Récupération de l'utilisateur et de ses rôles
+        /** @var User $user */
         $user = $token->getUser();
+        $roles = $user->getRoles();
 
-        if (in_array('ROLE_PROF', $user->getRoles(), true)) {
+        // --- GESTION PROFESSEUR ---
+        if (in_array('ROLE_PROF', $roles, true)) {
             $professeur = $user->getProfesseur();
             if ($professeur) {
+                // Vérifiez bien que la route 'app_professeur_dashboard' existe dans ProfesseurController
                 return new RedirectResponse($this->urlGenerator->generate('app_professeur_dashboard', [
                     'id' => $professeur->getId(),
                 ]));
             }
         }
 
-        if (in_array('ROLE_ELEVE', $user->getRoles(), true)) {
+        // --- GESTION ELEVE ---
+        if (in_array('ROLE_ELEVE', $roles, true)) {
             $eleve = $user->getEleve();
             if ($eleve) {
                 return new RedirectResponse($this->urlGenerator->generate('app_eleve_dashboard', [
@@ -72,25 +78,29 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
             }
         }
 
-        if (in_array('ROLE_ADMIN', $user->getRoles(), true)) {
+        // --- GESTION ADMIN ---
+        if (in_array('ROLE_ADMIN', $roles, true)) {
             $admin = $user->getAdmin();
             if ($admin) {
                 return new RedirectResponse($this->urlGenerator->generate('app_admin_dashboard', [
                     'id' => $admin->getId(),
                 ]));
             }
+            // Fallback si pas d'objet Admin lié mais qu'il a le rôle
+            return new RedirectResponse($this->urlGenerator->generate('app_admin_index')); // Route générique admin
         }
 
-        else if (in_array('ROLE_GESTIONNAIRE', $user->getRoles(), true)) {
-    $gestionnaire = $user->getGestionnaire();
-    if ($gestionnaire) {
-        return new RedirectResponse($this->urlGenerator->generate('app_gestionnaire_dashboard', [
-            'id' => $gestionnaire->getId(),
-        ]));
-    }
-}
+        // --- GESTION GESTIONNAIRE ---
+        if (in_array('ROLE_GESTIONNAIRE', $roles, true)) {
+            $gestionnaire = $user->getGestionnaire();
+            if ($gestionnaire) {
+                return new RedirectResponse($this->urlGenerator->generate('app_gestionnaire_dashboard', [
+                    'id' => $gestionnaire->getId(),
+                ]));
+            }
+        }
 
-        // 3️⃣ Redirection par défaut
+        // 3. Redirection par défaut (Accueil)
         return new RedirectResponse($this->urlGenerator->generate('app_home'));
     }
 
