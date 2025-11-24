@@ -1,17 +1,8 @@
-{% block body %}
-    <div class="container">
-        <h1 class="mt-4">
-            {# Voici votre message de bienvenue ! #}
-            Bienvenue Admin !
-        </h1>
-        
-        <p>C'est votre tableau de bord personnel.</p>
+{% extends 'base.html.twig' %}
 
-        {# Ici, vous pouvez ajouter des liens vers leurs cours, etc. #}
-        <ul>
-            <li><a href="#">Mes cours</a></li>
-            <li><a href="#">Mes élèves</a></li>
-            <li><a href="{{ path('app_logout') }}">Se déconnecter</a></li>
-        </ul>
+{% block title %}Tableau de bord Admin{% endblock %}
+
+{% block body %}
+
     </div>
 {% endblock %}
