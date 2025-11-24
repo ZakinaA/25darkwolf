@@ -6,7 +6,7 @@
         {# Favicon musicale #}
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>🎵</text></svg>">
         
-        {# Chargement FontAwesome pour les icones (optionnel si tu préfères les émojis) #}
+        {# Chargement FontAwesome pour les icones #}
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
         {% block stylesheets %}
@@ -173,7 +173,7 @@
 
             <a href="{{ path('app_home') }}">🏠 Accueil</a>
 
-            {# Menu visible uniquement pour les administrateurs #}
+            {# --- MENU ADMINISTRATEUR --- #}
             {% if is_granted('ROLE_ADMIN') %}
                 <div class="sidebar-section">Parc Instrumental</div>
                 <a href="{{ path('app_instrument_index') }}">🎸 Instruments</a>
@@ -194,13 +194,24 @@
                 <div class="sidebar-section">Finance</div>
                 <a href="{{ path('app_inscription_index') }}">📋 Inscriptions</a>
                 <a href="{{ path('app_paiement_index') }}">💰 Paiements</a>
-            {% endif %}
 
-            {# Menu visible pour tous ou autres rôles (optionnel) #}
-            {% if not is_granted('ROLE_ADMIN') %}
+            {# --- MENU GESTIONNAIRE --- #}
+            {% elseif is_granted('ROLE_GESTIONNAIRE') %}
+                <div class="sidebar-section">Pédagogie</div>
+                <a href="{{ path('app_eleve_index') }}">🎓 Élèves</a>
+                <a href="{{ path('app_responsable_index') }}">👪 Responsables</a>
+                <a href="{{ path('app_professeur_index') }}">👨‍🏫 Professeurs</a>
+                <a href="{{ path('app_cours_index') }}">📅 Cours</a>
+
+                <div class="sidebar-section">Matériel & Locations</div>
+                <a href="{{ path('app_instrument_index') }}">🎸 Instruments</a>
+                <a href="{{ path('app_contrat_pret_index') }}">📝 Contrats Prêt</a>
+                <a href="{{ path('app_intervention_index') }}">🔧 Interventions</a>
+
+            {# --- MENU AUTRES ROLES (Eleve, Prof...) --- #}
+            {% else %}
                 <div class="sidebar-section">Mon Espace</div>
                 <a href="#">📅 Mon Planning</a>
-                <!-- Ajoute ici des liens pour élèves/profs non admins -->
             {% endif %}
         </div>
 
@@ -212,7 +223,11 @@
                 <div class="user-info">
                     {% if app.user %}
                         Bonjour, {{ app.user.email }}
-                        {% if is_granted('ROLE_ADMIN') %} <span style="color: #009879;">(Admin)</span> {% endif %}
+                        {% if is_granted('ROLE_ADMIN') %} 
+                            <span style="color: #009879;">(Admin)</span> 
+                        {% elseif is_granted('ROLE_GESTIONNAIRE') %}
+                            <span style="color: #e67e22;">(Gestionnaire)</span>
+                        {% endif %}
                     {% else %}
                         Bienvenue sur E-Music
                     {% endif %}
@@ -223,7 +238,6 @@
                         <a href="{{ path('app_logout') }}" class="btn btn-logout">Se déconnecter</a>
                     {% else %}
                         <a href="{{ path('app_login') }}" class="btn btn-login">Connexion</a>
-                        {# On vérifie si la route register existe pour éviter une erreur #}
                         <a href="{{ path('app_register') is defined ? path('app_register') : '#' }}" class="btn btn-register">Créer un compte</a>
                     {% endif %}
                 </div>
