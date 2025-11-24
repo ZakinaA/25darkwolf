@@ -38,17 +38,17 @@ class ContratPret
     // car elle n'existe pas en base de données.
     
     // RELATION AVEC ELEVE (MANY TO ONE)
-    #[ORM\ManyToOne(inversedBy: 'contratPrets')]
+    #[ORM\ManyToOne(inversedBy: 'contratsPret')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Eleve $eleve = null;
     
     // NOUVELLE RELATION AVEC INSTRUMENT (MANY TO ONE) - CORRECTION DE L'ERREUR SÉMANTIQUE
-    #[ORM\ManyToOne(inversedBy: 'contratPrets')]
+    #[ORM\ManyToOne(inversedBy: 'contratsPret')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Instrument $instrument = null;
 
     // RELATION AVEC INTERVENTION (ONE TO MANY)
-    #[ORM\OneToMany(targetEntity: Intervention::class, mappedBy: 'contratPret', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Intervention::class, mappedBy: 'contratsPret', orphanRemoval: true)]
     private Collection $interventions;
 
     public function __construct()

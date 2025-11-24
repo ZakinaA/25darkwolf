@@ -14,11 +14,11 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/contratpret')]
 final class ContratPretController extends AbstractController
 {
-    #[Route(name: 'app_contrat_pret', methods: ['GET'])]
+    #[Route(name: 'app_contrat_pret_index', methods: ['GET'])]
     public function index(ContratPretRepository $contratPretRepository): Response
     {
         // MODIFICATION ICI : Utilisation de la nouvelle méthode optimisée
-        $contratsPret = $contratPretRepository->findAllForIndex(); 
+        $contratsPret = $contratPretRepository->findAll();
 
         return $this->render('contrat_pret/index.html.twig', [
             'contratsPret' => $contratsPret, 
