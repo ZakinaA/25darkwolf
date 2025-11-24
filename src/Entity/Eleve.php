@@ -6,6 +6,7 @@ use App\Repository\EleveRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\User;
 
 #[ORM\Entity(repositoryClass: EleveRepository::class)]
 class Eleve
@@ -59,9 +60,7 @@ class Eleve
      */
     // Ajout de l'annotation OrderBy pour trier les ContratPret par 'id' croissant
     #[ORM\OneToMany(targetEntity: ContratPret::class, mappedBy: 'eleve')]
-    #[ORM\OrderBy(['id' => 'ASC'])] // Tri par ID croissant//
-
-
+    #[ORM\OrderBy(['id' => 'ASC'])] // Tri par ID croissant
     private Collection $contratPrets;
 
     #[ORM\OneToOne(inversedBy: 'eleve', cascade: ['persist', 'remove'])]
@@ -74,6 +73,7 @@ class Eleve
         $this->inscription = new ArrayCollection();
         $this->contratPrets = new ArrayCollection();
     }
+
 
     public function getId(): ?int
     {

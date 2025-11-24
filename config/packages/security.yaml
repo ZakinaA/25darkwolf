@@ -9,10 +9,8 @@ security:
         # On dit à Symfony d'utiliser la base de données (Doctrine)
         app_user_provider:
             entity:
-                class: App\Entity\User  # 1. Utiliser l'entité User
-                property: email         # 2. L'identifiant est la colonne 'email'
-        # --- FIN CORRECTION ---
-
+                class: App\Entity\User
+                property: email
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/

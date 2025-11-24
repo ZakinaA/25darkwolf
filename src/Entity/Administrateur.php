@@ -2,14 +2,14 @@
 
 namespace App\Entity;
 
-use App\Repository\GestionnaireRepository;
+use App\Repository\AdministrateurRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-#[ORM\Entity(repositoryClass: GestionnaireRepository::class)]
+#[ORM\Entity(repositoryClass: AdministrateurRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
-class Gestionnaire implements UserInterface, PasswordAuthenticatedUserInterface
+class Administrateur implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -30,12 +30,6 @@ class Gestionnaire implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column]
     private ?string $password = null;
-
-    // 👇 AJOUT DE LA RELATION USER ICI 👇
-    #[ORM\OneToOne(inversedBy: 'gestionnaire', targetEntity: User::class, cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $user = null;
-    // 👆 FIN AJOUT 👆
 
     public function getId(): ?int
     {
@@ -100,20 +94,6 @@ class Gestionnaire implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
-
-    // 👇 AJOUT DES GETTERS/SETTERS POUR USER 👇
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(User $user): static
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-    // 👆 FIN AJOUT 👆
 
     /**
      * Ensure the session doesn't contain actual password hashes by CRC32C-hashing them, as supported since Symfony 7.3.
