@@ -1,47 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Instruments{% endblock %}
+
 {% block body %}
 
 <div class="list-container">
     <h1>Liste des Instruments</h1>
 
     <div class="action-bar">
-        <a href="{{ path('app_instrument_new') }}" class="btn-action btn-primary">Créer un nouvel instrument</a>
+        <a href="{{ path('app_instrument_new') }}">Créer un nouvel instrument</a>
     </div>
 
     {% if instruments is empty %}
-        <p>Aucun instrument trouvé. Ajoutez-en un nouveau !</p>
+        <p style="text-align: center; color: #666; margin-top: 20px;">
+            Aucun instrument trouvé. Ajoutez-en un nouveau !
+        </p>
     {% else %}
-        <table class="instrument-table">
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Numéro de Série</th>
-                    <th>Date d'Achat</th>
-                    <th>Prix d'Achat</th>
-                    <th>Type</th>
-                    <th>Marque</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-            {% for instrument in instruments %}
-                <tr>
-                    <td data-label="Id">{{ instrument.id }}</td>
-                    <td data-label="Numéro de Série">{{ instrument.numSerie }}</td>
-                    <td data-label="Date d'Achat">{{ instrument.dateAchat ? instrument.dateAchat|date('d/m/Y') : '' }}</td>
-                    <td data-label="Prix d'Achat">{{ instrument.prixAchat ? (instrument.prixAchat|number_format(2, ',', ' ') ~ ' €') : '' }}</td>
-                    <td data-label="Type">{{ instrument.typeInstrument.libelle ?? 'N/A' }}</td>
-                    <td data-label="Marque">{{ instrument.marque.libelle ?? 'N/A' }}</td>
-                    <td data-label="Actions" class="table-actions">
-                        <a href="{{ path('app_instrument_show', {'id': instrument.id}) }}" class="btn-action btn-detail">Voir</a>
-                    </td>
-                </tr>
-            {% else %}
-                <tr>
-                    <td colspan="7">Aucun enregistrement trouvé</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+        <div style="overflow-x:auto;">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Numéro de Série</th>
+                        <th>Date d'Achat</th>
+                        <th>Prix d'Achat</th>
+                        <th>Type</th>
+                        <th>Marque</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for instrument in instruments %}
+                    <tr>
+                        <td>{{ instrument.id }}</td>
+                        <td>{{ instrument.numSerie }}</td>
+                        <td>{{ instrument.dateAchat ? instrument.dateAchat|date('d/m/Y') : '' }}</td>
+                        <td>{{ instrument.prixAchat ? (instrument.prixAchat|number_format(2, ',', ' ') ~ ' €') : '' }}</td>
+                        <td>{{ instrument.typeInstrument.libelle ?? 'N/A' }}</td>
+                        <td>{{ instrument.marque.libelle ?? 'N/A' }}</td>
+                        <td>
+                            <a href="{{ path('app_instrument_show', {'id': instrument.id}) }}">Voir</a>
+                            {# Tu peux ajouter le bouton edit ici si tu veux #}
+                            {# <a href="{{ path('app_instrument_edit', {'id': instrument.id}) }}">Editer</a> #}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
     {% endif %}
 
 </div>
