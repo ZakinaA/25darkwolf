@@ -1,0 +1,306 @@
+﻿=== SYMFONY ABOUT ===
+ -------------------- --------------------------------- 
+  Symfony                                               
+ -------------------- --------------------------------- 
+  Version              7.3.4                            
+  Long-Term Support    No                               
+  End of maintenance   01/2026 (in +66 days)            
+  End of life          01/2026 (in +66 days)            
+ -------------------- --------------------------------- 
+  Kernel                                                
+ -------------------- --------------------------------- 
+  Type                 App\Kernel                       
+  Environment          dev                              
+  Debug                true                             
+  Charset              UTF-8                            
+  Cache directory      ./var/cache/dev (30.3 MiB)       
+  Build directory      ./var/cache/dev (30.3 MiB)       
+  Log directory        ./var/log (12.7 MiB)             
+ -------------------- --------------------------------- 
+  PHP                                                   
+ -------------------- --------------------------------- 
+  Version              8.2.18                           
+  Architecture         64 bits                          
+  Intl locale          fr_FR                            
+  Timezone             UTC (2025-11-26T09:02:19+00:00)  
+  OPcache              Enabled                          
+  APCu                 Not installed                    
+  Xdebug               Enabled (develop)                
+ -------------------- --------------------------------- 
+
+
+=== COMPOSER (PACKAGES) ===
+composer/semver                     3.4.4   Semver library that offers utilities, version constraint parsing and validation.
+doctrine/collections                2.3.0   PHP Doctrine Collections library that adds additional functionality on top of PHP arrays.
+doctrine/dbal                       3.10.3  Powerful PHP database abstraction layer (DBAL) with many features for database schema introspection and management.
+doctrine/deprecations               1.1.5   A small layer on top of trigger_error(E_USER_DEPRECATED) or PSR-3 logging with options to disable all deprecations or selectively for packages.
+doctrine/doctrine-bundle            2.18.0  Symfony DoctrineBundle
+doctrine/doctrine-migrations-bundle 3.5.0   Symfony DoctrineMigrationsBundle
+doctrine/event-manager              2.0.1   The Doctrine Event Manager is a simple PHP event system that was built to be used with the various Doctrine projects.
+doctrine/inflector                  2.1.0   PHP Doctrine Inflector is a small library that can perform string manipulations with regard to upper/lowercase and singular/plural forms of words.
+doctrine/instantiator               2.0.0   A small, lightweight utility to instantiate objects in PHP without invoking their constructors
+doctrine/lexer                      3.0.1   PHP Doctrine Lexer parser library that can be used in Top-Down, Recursive Descent Parsers.
+doctrine/migrations                 3.9.4   PHP Doctrine Migrations project offer additional functionality on top of the database abstraction layer (DBAL) for versioning your database schema and e...
+doctrine/orm                        3.5.2   Object-Relational-Mapper for PHP
+doctrine/persistence                4.1.0   The Doctrine Persistence project is a set of shared interfaces and functionality that the different Doctrine object mappers share.
+doctrine/sql-formatter              1.5.2   a PHP SQL highlighting library
+egulias/email-validator             4.0.4   A library for validating emails against several RFCs
+masterminds/html5                   2.10.0  An HTML5 parser and serializer.
+monolog/monolog                     3.9.0   Sends your logs to files, sockets, inboxes, databases and various web services
+myclabs/deep-copy                   1.13.4  Create deep copies (clones) of your objects
+nikic/php-parser                    5.6.1   A PHP parser written in PHP
+phar-io/manifest                    2.0.4   Component for reading phar.io manifest information from a PHP Archive (PHAR)
+phar-io/version                     3.2.1   Library for handling version information and constraints
+phpdocumentor/reflection-common     2.2.0   Common reflection classes used by phpdocumentor to reflect the code structure
+phpdocumentor/reflection-docblock   5.6.3   With this component, a library can provide support for annotations via DocBlocks or otherwise retrieve information that is embedded in a DocBlock.
+phpdocumentor/type-resolver         1.10.0  A PSR-5 based resolver of Class names, Types and Structural Element Names
+phpstan/phpdoc-parser               2.3.0   PHPDoc parser with support for nullable, intersection and generic types
+phpunit/php-code-coverage           11.0.11 Library that provides collection, processing, and rendering functionality for PHP code coverage information.
+phpunit/php-file-iterator           5.1.0   FilterIterator implementation that filters files based on a list of suffixes.
+phpunit/php-invoker                 5.0.1   Invoke callables with a timeout
+phpunit/php-text-template           4.0.1   Simple template engine.
+phpunit/php-timer                   7.0.1   Utility class for timing
+phpunit/phpunit                     11.5.42 The PHP Unit Testing framework.
+psr/cache                           3.0.0   Common interface for caching libraries
+psr/clock                           1.0.0   Common interface for reading the clock.
+psr/container                       2.0.2   Common Container Interface (PHP FIG PSR-11)
+psr/event-dispatcher                1.0.0   Standard interfaces for event handling.
+psr/link                            2.0.1   Common interfaces for HTTP links
+psr/log                             3.0.2   Common interface for logging libraries
+sebastian/cli-parser                3.0.2   Library for parsing CLI options
+sebastian/code-unit                 3.0.3   Collection of value objects that represent the PHP code units
+sebastian/code-unit-reverse-lookup  4.0.1   Looks up which function or method a line of code belongs to
+sebastian/comparator                6.3.2   Provides the functionality to compare PHP values for equality
+sebastian/complexity                4.0.1   Library for calculating the complexity of PHP code units
+sebastian/diff                      6.0.2   Diff implementation
+sebastian/environment               7.2.1   Provides functionality to handle HHVM/PHP environments
+sebastian/exporter                  6.3.2   Provides the functionality to export PHP variables for visualization
+sebastian/global-state              7.0.2   Snapshotting of global state
+sebastian/lines-of-code             3.0.1   Library for counting the lines of code in PHP source code
+sebastian/object-enumerator         6.0.1   Traverses array structures and object graphs to enumerate all referenced objects
+sebastian/object-reflector          4.0.1   Allows reflection of object attributes, including inherited and non-public ones
+sebastian/recursion-context         6.0.3   Provides functionality to recursively process PHP variables
+sebastian/type                      5.1.3   Collection of value objects that represent the types of the PHP type system
+sebastian/version                   5.0.2   Library that helps with managing the version number of Git-hosted PHP projects
+staabm/side-effects-detector        1.0.5   A static analysis tool to detect side effects in PHP code
+symfony/asset                       7.3.0   Manages URL generation and versioning of web assets such as CSS stylesheets, JavaScript files and image files
+symfony/asset-mapper                7.3.4   Maps directories of assets & makes them available in a public directory with versioned filenames.
+symfony/browser-kit                 7.3.2   Simulates the behavior of a web browser, allowing you to make requests, click on links and submit forms programmatically
+symfony/cache                       7.3.4   Provides extended PSR-6, PSR-16 (and tags) implementations
+symfony/cache-contracts             3.6.0   Generic abstractions related to caching
+symfony/clock                       7.3.0   Decouples applications from the system clock
+symfony/config                      7.3.4   Helps you find, load, combine, autofill and validate configuration values of any kind
+symfony/console                     7.3.4   Eases the creation of beautiful and testable command line interfaces
+symfony/css-selector                7.3.0   Converts CSS selectors to XPath expressions
+symfony/debug-bundle                7.3.4   Provides a tight integration of the Symfony VarDumper component and the ServerLogCommand from MonologBridge into the Symfony full-stack framework
+symfony/dependency-injection        7.3.4   Allows you to standardize and centralize the way objects are constructed in your application
+symfony/deprecation-contracts       3.6.0   A generic function and convention to trigger deprecation notices
+symfony/doctrine-bridge             7.3.4   Provides integration for Doctrine with various Symfony components
+symfony/doctrine-messenger          7.3.4   Symfony Doctrine Messenger Bridge
+symfony/dom-crawler                 7.3.3   Eases DOM navigation for HTML and XML documents
+symfony/dotenv                      7.3.2   Registers environment variables from a .env file
+symfony/error-handler               7.3.4   Provides tools to manage errors and ease debugging PHP code
+symfony/event-dispatcher            7.3.3   Provides tools that allow your application components to communicate with each other by dispatching events and listening to them
+symfony/event-dispatcher-contracts  3.6.0   Generic abstractions related to dispatching event
+symfony/expression-language         7.3.2   Provides an engine that can compile and evaluate expressions
+symfony/filesystem                  7.3.2   Provides basic utilities for the filesystem
+symfony/finder                      7.3.2   Finds files and directories via an intuitive fluent interface
+symfony/flex                        2.8.2   Composer plugin for Symfony
+symfony/form                        7.3.4   Allows to easily create, process and reuse HTML forms
+symfony/framework-bundle            7.3.4   Provides a tight integration between Symfony components and the Symfony full-stack framework
+symfony/http-client                 7.3.4   Provides powerful methods to fetch HTTP resources synchronously or asynchronously
+symfony/http-client-contracts       3.6.0   Generic abstractions related to HTTP clients
+symfony/http-foundation             7.3.4   Defines an object-oriented layer for the HTTP specification
+symfony/http-kernel                 7.3.4   Provides a structured process for converting a Request into a Response
+symfony/intl                        7.3.4   Provides access to the localization data of the ICU library
+symfony/mailer                      7.3.4   Helps sending emails
+symfony/maker-bundle                1.64.0  Symfony Maker helps you create empty commands, controllers, form classes, tests and more so you can forget about writing boilerplate code.
+symfony/messenger                   7.3.3   Helps applications send and receive messages to/from other applications or via message queues
+symfony/mime                        7.3.4   Allows manipulating MIME messages
+symfony/monolog-bridge              7.3.4   Provides integration for Monolog with various Symfony components
+symfony/monolog-bundle              3.10.0  Symfony MonologBundle
+symfony/notifier                    7.3.3   Sends notifications via one or more channels (email, SMS, ...)
+symfony/options-resolver            7.3.3   Provides an improved replacement for the array_replace PHP function
+symfony/password-hasher             7.3.0   Provides password hashing utilities
+symfony/polyfill-intl-grapheme      1.33.0  Symfony polyfill for intl's grapheme_* functions
+symfony/polyfill-intl-icu           1.33.0  Symfony polyfill for intl's ICU-related data and classes
+symfony/polyfill-intl-idn           1.33.0  Symfony polyfill for intl's idn_to_ascii and idn_to_utf8 functions
+symfony/polyfill-intl-normalizer    1.33.0  Symfony polyfill for intl's Normalizer class and related functions
+symfony/polyfill-mbstring           1.33.0  Symfony polyfill for the Mbstring extension
+symfony/polyfill-php83              1.33.0  Symfony polyfill backporting some PHP 8.3+ features to lower PHP versions
+symfony/polyfill-php84              1.33.0  Symfony polyfill backporting some PHP 8.4+ features to lower PHP versions
+symfony/process                     7.3.4   Executes commands in sub-processes
+symfony/property-access             7.3.3   Provides functions to read and write from/to an object or array using a simple string notation
+symfony/property-info               7.3.4   Extracts information about PHP class' properties using metadata of popular sources
+symfony/routing                     7.3.4   Maps an HTTP request to a set of configuration variables
+symfony/runtime                     7.3.4   Enables decoupling PHP applications from global state
+symfony/security-bundle             7.3.4   Provides a tight integration of the Security component into the Symfony full-stack framework
+symfony/security-core               7.3.4   Symfony Security Component - Core Library
+symfony/security-csrf               7.3.0   Symfony Security Component - CSRF Library
+symfony/security-http               7.3.4   Symfony Security Component - HTTP Integration
+symfony/serializer                  7.3.4   Handles serializing and deserializing data structures, including object graphs, into array structures or other formats like XML and JSON.
+symfony/service-contracts           3.6.0   Generic abstractions related to writing services
+symfony/stimulus-bundle             2.30.0  Integration with your Symfony app & Stimulus!
+symfony/stopwatch                   7.3.0   Provides a way to profile code
+symfony/string                      7.3.4   Provides an object-oriented API to strings and deals with bytes, UTF-8 code points and grapheme clusters in a unified way
+symfony/translation                 7.3.4   Provides tools to internationalize your application
+symfony/translation-contracts       3.6.0   Generic abstractions related to translation
+symfony/twig-bridge                 7.3.3   Provides integration for Twig with various Symfony components
+symfony/twig-bundle                 7.3.4   Provides a tight integration of Twig into the Symfony full-stack framework
+symfony/type-info                   7.3.4   Extracts PHP types information.
+symfony/ux-turbo                    2.30.0  Hotwire Turbo integration for Symfony
+symfony/validator                   7.3.4   Provides tools to validate values
+symfony/var-dumper                  7.3.4   Provides mechanisms for walking through any arbitrary PHP variable
+symfony/var-exporter                7.3.4   Allows exporting any serializable PHP data structure to plain PHP code
+symfony/web-link                    7.3.0   Manages links between resources
+symfony/web-profiler-bundle         7.3.4   Provides a development tool that gives detailed information about the execution of any request
+symfony/yaml                        7.3.3   Loads and dumps YAML files
+theseer/tokenizer                   1.2.3   A small library for converting tokenized PHP source code into XML and potentially other formats
+twig/extra-bundle                   3.21.0  A Symfony bundle for extra Twig extensions
+twig/twig                           3.21.1  Twig, the flexible, fast, and secure template language for PHP
+webmozart/assert                    1.11.0  Assertions to validate method input/output with nice error messages.
+
+=== DOCTRINE ENTITIES ===
+ Found 23 mapped entities:
+
+ [OK]   App\Entity\Accessoire
+ [OK]   App\Entity\Admin
+ [OK]   App\Entity\Administrateur
+ [OK]   App\Entity\ClasseInstrument
+ [OK]   App\Entity\ContratPret
+ [OK]   App\Entity\Couleur
+ [OK]   App\Entity\Cours
+ [OK]   App\Entity\Eleve
+ [OK]   App\Entity\Gestionnaire
+ [OK]   App\Entity\Inscription
+ [OK]   App\Entity\Instrument
+ [OK]   App\Entity\Intervention
+ [OK]   App\Entity\Jour
+ [OK]   App\Entity\Marque
+ [OK]   App\Entity\Metier
+ [OK]   App\Entity\Paiement
+ [OK]   App\Entity\Professeur
+ [OK]   App\Entity\Professionnel
+ [OK]   App\Entity\Responsable
+ [OK]   App\Entity\Tranche
+ [OK]   App\Entity\Type
+ [OK]   App\Entity\TypeInstrument
+ [OK]   App\Entity\User
+
+=== ROUTES LIST ===
+ ------------------------------ ---------- -------- ------ ----------------------------------- ------------------------------------------------------------- 
+  Name                           Method     Scheme   Host   Path                                Controller                                                   
+ ------------------------------ ---------- -------- ------ ----------------------------------- ------------------------------------------------------------- 
+  _preview_error                 ANY        ANY      ANY    /_error/{code}.{_format}            error_controller::preview()                                  
+  _wdt_stylesheet                ANY        ANY      ANY    /_wdt/styles                        web_profiler.controller.profiler::toolbarStylesheetAction()  
+  _wdt                           ANY        ANY      ANY    /_wdt/{token}                       web_profiler.controller.profiler::toolbarAction()            
+  _profiler_home                 ANY        ANY      ANY    /_profiler/                         web_profiler.controller.profiler::homeAction()               
+  _profiler_search               ANY        ANY      ANY    /_profiler/search                   web_profiler.controller.profiler::searchAction()             
+  _profiler_search_bar           ANY        ANY      ANY    /_profiler/search_bar               web_profiler.controller.profiler::searchBarAction()          
+  _profiler_phpinfo              ANY        ANY      ANY    /_profiler/phpinfo                  web_profiler.controller.profiler::phpinfoAction()            
+  _profiler_xdebug               ANY        ANY      ANY    /_profiler/xdebug                   web_profiler.controller.profiler::xdebugAction()             
+  _profiler_font                 ANY        ANY      ANY    /_profiler/font/{fontName}.woff2    web_profiler.controller.profiler::fontAction()               
+  _profiler_search_results       ANY        ANY      ANY    /_profiler/{token}/search/results   web_profiler.controller.profiler::searchResultsAction()      
+  _profiler_open_file            ANY        ANY      ANY    /_profiler/open                     web_profiler.controller.profiler::openAction()               
+  _profiler                      ANY        ANY      ANY    /_profiler/{token}                  web_profiler.controller.profiler::panelAction()              
+  _profiler_router               ANY        ANY      ANY    /_profiler/{token}/router           web_profiler.controller.router::panelAction()                
+  _profiler_exception            ANY        ANY      ANY    /_profiler/{token}/exception        web_profiler.controller.exception_panel::body()              
+  _profiler_exception_css        ANY        ANY      ANY    /_profiler/{token}/exception.css    web_profiler.controller.exception_panel::stylesheet()        
+  app_accessoire_index           GET        ANY      ANY    /accessoire                         App\Controller\AccessoireController::index()                 
+  app_accessoire_new             GET|POST   ANY      ANY    /accessoire/new                     App\Controller\AccessoireController::new()                   
+  app_accessoire_show            GET        ANY      ANY    /accessoire/{id}                    App\Controller\AccessoireController::show()                  
+  app_accessoire_edit            GET|POST   ANY      ANY    /accessoire/{id}/edit               App\Controller\AccessoireController::edit()                  
+  app_accessoire_delete          POST       ANY      ANY    /accessoire/{id}                    App\Controller\AccessoireController::delete()                
+  app_admin_index                GET        ANY      ANY    /admin                              App\Controller\AdminController::index()                      
+  app_admin_new                  GET|POST   ANY      ANY    /admin/new                          App\Controller\AdminController::new()                        
+  app_admin_show                 GET        ANY      ANY    /admin/{id}                         App\Controller\AdminController::show()                       
+  app_admin_edit                 GET|POST   ANY      ANY    /admin/{id}/edit                    App\Controller\AdminController::edit()                       
+  app_admin_delete               POST       ANY      ANY    /admin/{id}                         App\Controller\AdminController::delete()                     
+  app_admin_dashboard            GET        ANY      ANY    /admin/dashboard/{id}               App\Controller\AdminController::dashboard()                  
+  app_classe_instrument_index    GET        ANY      ANY    /classeInstrument                   App\Controller\ClasseInstrumentController::index()           
+  app_classe_instrument_new      GET|POST   ANY      ANY    /classeInstrument/new               App\Controller\ClasseInstrumentController::new()             
+  app_classe_instrument_show     GET        ANY      ANY    /classeInstrument/{id}              App\Controller\ClasseInstrumentController::show()            
+  app_classe_instrument_edit     GET|POST   ANY      ANY    /classeInstrument/{id}/edit         App\Controller\ClasseInstrumentController::edit()            
+  app_classe_instrument_delete   POST       ANY      ANY    /classeInstrument/{id}              App\Controller\ClasseInstrumentController::delete()          
+  app_contrat_pret_index         GET        ANY      ANY    /contratpret                        App\Controller\ContratPretController::index()                
+  app_contrat_pret_new           GET|POST   ANY      ANY    /contratpret/new                    App\Controller\ContratPretController::new()                  
+  app_contrat_pret_show          GET        ANY      ANY    /contratpret/{id}                   App\Controller\ContratPretController::show()                 
+  app_contrat_pret_edit          GET|POST   ANY      ANY    /contratpret/{id}/edit              App\Controller\ContratPretController::edit()                 
+  app_contrat_pret_delete        POST       ANY      ANY    /contratpret/{id}                   App\Controller\ContratPretController::delete()               
+  app_cours_index                GET        ANY      ANY    /cours                              App\Controller\CoursController::index()                      
+  app_cours_new                  GET|POST   ANY      ANY    /cours/new                          App\Controller\CoursController::new()                        
+  app_eleve_mes_cours            GET        ANY      ANY    /cours/mes-cours                    App\Controller\CoursController::mesCours()                   
+  app_cours_show                 GET        ANY      ANY    /cours/{id}                         App\Controller\CoursController::show()                       
+  app_cours_edit                 GET|POST   ANY      ANY    /cours/{id}/edit                    App\Controller\CoursController::edit()                       
+  app_cours_delete               POST       ANY      ANY    /cours/{id}                         App\Controller\CoursController::delete()                     
+  dashboard                      ANY        ANY      ANY    /dashboard                          App\Controller\DashboardController::index()                  
+  app_eleve_index                GET        ANY      ANY    /eleve                              App\Controller\EleveController::index()                      
+  app_eleve_new                  GET|POST   ANY      ANY    /eleve/new                          App\Controller\EleveController::new()                        
+  app_eleve_show                 GET        ANY      ANY    /eleve/{id}                         App\Controller\EleveController::show()                       
+  app_eleve_edit                 GET|POST   ANY      ANY    /eleve/{id}/edit                    App\Controller\EleveController::edit()                       
+  app_eleve_delete               POST       ANY      ANY    /eleve/{id}                         App\Controller\EleveController::delete()                     
+  app_eleve_dashboard            GET        ANY      ANY    /eleve/dashboard/{id}               App\Controller\EleveController::dashboard()                  
+  app_gestionnaire_index         GET        ANY      ANY    /gestionnaire                       App\Controller\GestionnaireController::index()               
+  app_gestionnaire_new           GET|POST   ANY      ANY    /gestionnaire/new                   App\Controller\GestionnaireController::new()                 
+  app_gestionnaire_show          GET        ANY      ANY    /gestionnaire/{id}                  App\Controller\GestionnaireController::show()                
+  app_gestionnaire_edit          GET|POST   ANY      ANY    /gestionnaire/{id}/edit             App\Controller\GestionnaireController::edit()                
+  app_gestionnaire_delete        POST       ANY      ANY    /gestionnaire/{id}                  App\Controller\GestionnaireController::delete()              
+  app_gestionnaire_dashboard     GET        ANY      ANY    /gestionnaire/dashboard/{id}        App\Controller\GestionnaireController::dashboard()           
+  app_home                       GET        ANY      ANY    /                                   App\Controller\HomeController::index()                       
+  app_inscription_index          GET        ANY      ANY    /inscription                        App\Controller\InscriptionController::index()                
+  app_inscription_new            GET|POST   ANY      ANY    /inscription/new                    App\Controller\InscriptionController::new()                  
+  app_inscription_show           GET        ANY      ANY    /inscription/{id}                   App\Controller\InscriptionController::show()                 
+  app_inscription_edit           GET|POST   ANY      ANY    /inscription/{id}/edit              App\Controller\InscriptionController::edit()                 
+  app_inscription_delete         POST       ANY      ANY    /inscription/{id}                   App\Controller\InscriptionController::delete()               
+  app_instrument_index           GET        ANY      ANY    /instrument                         App\Controller\InstrumentController::index()                 
+  app_instrument_new             GET|POST   ANY      ANY    /instrument/new                     App\Controller\InstrumentController::new()                   
+  app_instrument_show            GET        ANY      ANY    /instrument/{id}                    App\Controller\InstrumentController::show()                  
+  app_instrument_edit            GET|POST   ANY      ANY    /instrument/{id}/edit               App\Controller\InstrumentController::edit()                  
+  app_instrument_delete          POST       ANY      ANY    /instrument/{id}                    App\Controller\InstrumentController::delete()                
+  app_intervention_index         GET        ANY      ANY    /intervention                       App\Controller\InterventionController::index()               
+  app_intervention_new           GET|POST   ANY      ANY    /intervention/new                   App\Controller\InterventionController::new()                 
+  app_intervention_show          GET        ANY      ANY    /intervention/{id}                  App\Controller\InterventionController::show()                
+  app_intervention_edit          GET|POST   ANY      ANY    /intervention/{id}/edit             App\Controller\InterventionController::edit()                
+  app_intervention_delete        POST       ANY      ANY    /intervention/{id}                  App\Controller\InterventionController::delete()              
+  app_jour_index                 GET        ANY      ANY    /jour                               App\Controller\JourController::index()                       
+  app_jour_new                   GET|POST   ANY      ANY    /jour/new                           App\Controller\JourController::new()                         
+  app_jour_show                  GET        ANY      ANY    /jour/{id}                          App\Controller\JourController::show()                        
+  app_jour_edit                  GET|POST   ANY      ANY    /jour/{id}/edit                     App\Controller\JourController::edit()                        
+  app_jour_delete                POST       ANY      ANY    /jour/{id}                          App\Controller\JourController::delete()                      
+  app_paiement_index             GET        ANY      ANY    /paiement                           App\Controller\PaiementController::index()                   
+  app_paiement_new               GET|POST   ANY      ANY    /paiement/new                       App\Controller\PaiementController::new()                     
+  app_paiement_show              GET        ANY      ANY    /paiement/{id}                      App\Controller\PaiementController::show()                    
+  app_paiement_edit              GET|POST   ANY      ANY    /paiement/{id}/edit                 App\Controller\PaiementController::edit()                    
+  app_paiement_delete            POST       ANY      ANY    /paiement/{id}                      App\Controller\PaiementController::delete()                  
+  app_professeur_index           GET        ANY      ANY    /professeur                         App\Controller\ProfesseurController::index()                 
+  app_professeur_new             GET|POST   ANY      ANY    /professeur/new                     App\Controller\ProfesseurController::new()                   
+  app_professeur_show            GET        ANY      ANY    /professeur/{id}                    App\Controller\ProfesseurController::show()                  
+  app_professeur_edit            GET|POST   ANY      ANY    /professeur/{id}/edit               App\Controller\ProfesseurController::edit()                  
+  app_professeur_delete          POST       ANY      ANY    /professeur/{id}                    App\Controller\ProfesseurController::delete()                
+  app_professeur_dashboard       GET        ANY      ANY    /professeur/dashboard/{id}          App\Controller\ProfesseurController::dashboard()             
+  app_register                   ANY        ANY      ANY    /register                           App\Controller\RegistrationController::register()            
+  app_responsable_index          GET        ANY      ANY    /responsable                        App\Controller\ResponsableController::index()                
+  app_responsable_new            GET|POST   ANY      ANY    /responsable/new                    App\Controller\ResponsableController::new()                  
+  app_responsable_show           GET        ANY      ANY    /responsable/{id}                   App\Controller\ResponsableController::show()                 
+  app_responsable_edit           GET|POST   ANY      ANY    /responsable/{id}/edit              App\Controller\ResponsableController::edit()                 
+  app_responsable_delete         POST       ANY      ANY    /responsable/{id}                   App\Controller\ResponsableController::delete()               
+  app_login                      ANY        ANY      ANY    /login                              App\Controller\SecurityController::login()                   
+  app_logout                     ANY        ANY      ANY    /logout                             App\Controller\SecurityController::logout()                  
+  app_tranche_index              GET        ANY      ANY    /tranche                            App\Controller\TrancheController::index()                    
+  app_tranche_new                GET|POST   ANY      ANY    /tranche/new                        App\Controller\TrancheController::new()                      
+  app_tranche_show               GET        ANY      ANY    /tranche/{id}                       App\Controller\TrancheController::show()                     
+  app_tranche_edit               GET|POST   ANY      ANY    /tranche/{id}/edit                  App\Controller\TrancheController::edit()                     
+  app_tranche_delete             POST       ANY      ANY    /tranche/{id}                       App\Controller\TrancheController::delete()                   
+  app_type_index                 GET        ANY      ANY    /type                               App\Controller\TypeController::index()                       
+  app_type_new                   GET|POST   ANY      ANY    /type/new                           App\Controller\TypeController::new()                         
+  app_type_show                  GET        ANY      ANY    /type/{id}                          App\Controller\TypeController::show()                        
+  app_type_edit                  GET|POST   ANY      ANY    /type/{id}/edit                     App\Controller\TypeController::edit()                        
+  app_type_delete                POST       ANY      ANY    /type/{id}                          App\Controller\TypeController::delete()                      
+  app_type_instrument_index      GET        ANY      ANY    /typeInstrument                     App\Controller\TypeInstrumentController::index()             
+  app_type_instrument_new        GET|POST   ANY      ANY    /typeInstrument/new                 App\Controller\TypeInstrumentController::new()               
+  app_type_instrument_show       GET        ANY      ANY    /typeInstrument/{id}                App\Controller\TypeInstrumentController::show()              
+  app_type_instrument_edit       GET|POST   ANY      ANY    /typeInstrument/{id}/edit           App\Controller\TypeInstrumentController::edit()              
+  app_type_instrument_delete     POST       ANY      ANY    /typeInstrument/{id}                App\Controller\TypeInstrumentController::delete()            
+  app_user                       ANY        ANY      ANY    /user                               App\Controller\UserController::index()                       
+ ------------------------------ ---------- -------- ------ ----------------------------------- ------------------------------------------------------------- 
+

@@ -99,4 +99,22 @@ class CoursRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+    // src/Repository/CoursRepository.php
+
+    /**
+     * Récupère les cours associés à un élève via ses inscriptions
+     * @return Cours[]
+     */
+    public function findCoursByEleve($eleveId): array
+    {
+        return $this->createQueryBuilder('c')
+            // On joint l'entité Inscription (en supposant que Cours a une propriété "inscriptions")
+            // Si Cours n'a pas "inscriptions", on fait l'inverse :
+            ->innerJoin('App\Entity\Inscription', 'i', 'WITH', 'i.cours = c') 
+            ->andWhere('i.eleve = :val')
+            ->setParameter('val', $eleveId)
+            ->orderBy('c.id', 'ASC') // Optionnel : trier par ID
+            ->getQuery()
+            ->getResult();
+    }
 }

@@ -50,25 +50,22 @@ final class CoursController extends AbstractController
      */
     #[Route('/mes-cours', name: 'app_eleve_mes_cours', methods: ['GET'])]
     #[IsGranted('ROLE_ELEVE')]
-    public function mesCours(CoursRepository $coursRepository, EleveRepository $eleveRepository): Response
+    public function mesCours(CoursRepository $coursRepository): Response
     {
-        // 1. Récupérer l'utilisateur connecté
+        /** @var \App\Entity\User $user */
         $user = $this->getUser();
 
-        if (!$user) {
-             return $this->redirectToRoute('app_login');
-        }
+        // Grâce à ta relation OneToOne dans User.php, on accède directement à l'élève
+        $eleve = $user->getEleve();
 
-        // 2. Récupérer l'entité Élève liée à cet utilisateur
-        $eleve = $eleveRepository->findOneBy(['user' => $user]);
-
+        // Sécurité : Si l'utilisateur a le rôle mais pas de fiche élève associée
         if (!$eleve) {
-            $this->addFlash('danger', 'Profil élève non trouvé. Veuillez contacter l\'administration.');
+            $this->addFlash('danger', 'Votre compte utilisateur n\'est pas relié à une fiche élève.');
             return $this->redirectToRoute('app_home');
         }
 
-        // 3. Utiliser la requête personnalisée du Repository
-        $mesCours = $coursRepository->findByEleve($eleve->getId());
+        // On appelle la méthode qu'on vient de créer dans le Repository
+        $mesCours = $coursRepository->findCoursByEleve($eleve->getId());
 
         return $this->render('cours/mes_cours.html.twig', [
             'cours' => $mesCours,
