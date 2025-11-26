@@ -17,12 +17,13 @@
                     --color-primary-accent: #009879; /* Vert Émeraude */
                     --color-primary-dark: #007c64; /* Vert Émeraude Foncé */
                     --color-text-light: #bdc3c7;
-                    --color-bg-light-hover: #e6fff7; /* Vert clair 50 */
+                    --color-bg-light-hover: #e6fff7; 
                     
                     /* TES COULEURS PERSONNALISEES */
                     --btn-info: #009879;    /* Vert pour Voir */
                     --btn-warning: #000000; /* Noir pour Modifier */
                     --btn-danger: #e74c3c;  /* Rouge pour Supprimer/Logout */
+                    --btn-back: #7f8c8d;    /* Gris pour Retour */
                 }
 
 
@@ -82,13 +83,13 @@
                     border-radius: 5px;
                     font-size: 1rem;
                     display: block;
-                    /* J'ai retiré 'transition' pour supprimer l'animation */
+                    /* Pas de transition */
                 }
 
                 .sidebar a:hover {
                     background-color: var(--color-primary-accent); 
                     color: white;
-                    padding-left: 20px; /* Petit décalage instantané, pas d'animation */
+                    padding-left: 20px; 
                 }
 
                 .sidebar a.active {
@@ -130,7 +131,6 @@
                     font-weight: bold;
                     font-size: 0.9rem;
                     display: inline-block;
-                    /* Pas de transition */
                 }
                 
                 .btn-login {
@@ -156,7 +156,7 @@
                     padding: 30px;
                 }
 
-                /* --- STYLES TABLEAU COURS (PLANNING) --- */
+                /* --- STYLES TABLEAU --- */
                 .planning-table-container {
                     overflow-x: auto;
                     box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1); 
@@ -184,7 +184,6 @@
 
                 .planning-table tbody tr {
                     border-bottom: 1px solid #e5e7eb;
-                    /* Pas de transition ici non plus */
                 }
 
                 .planning-table tbody tr:hover {
@@ -208,9 +207,9 @@
                     font-weight: 500; 
                 }
 
-                /* --- NOUVEAUX STYLES POUR LES BOUTONS CRUD (CREATE, SHOW, EDIT) --- */
-                /* Ces classes sont utilisées par le script JS en bas de page */
+                /* --- STYLES DES BOUTONS GENERES AUTOMATIQUEMENT --- */
                 
+                /* Style de base pour tous les boutons d'action (a et button) */
                 .btn-action {
                     display: inline-flex;
                     align-items: center;
@@ -224,19 +223,16 @@
                     border: none;
                     cursor: pointer;
                     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-                    /* Suppression des transitions et transform */
+                    color: white; /* Texte blanc par défaut */
                 }
                 .btn-action i { margin-right: 5px; }
-                
-                /* Suppression de l'effet de saut (transform) au survol */
-                .btn-action:hover { box-shadow: 0 4px 6px rgba(0,0,0,0.15); }
+                .btn-action:hover { box-shadow: 0 4px 6px rgba(0,0,0,0.15); opacity: 0.9; }
 
-                /* Couleurs spécifiques (TES COULEURS) */
-                .btn-show { background-color: var(--btn-info); color: white; }
-                .btn-show:hover { background-color: #007c64; color: white; /* Légèrement plus foncé au survol */ }
-
-                .btn-edit { background-color: var(--btn-warning); color: white; }
-                .btn-edit:hover { background-color: #333333; color: white; /* Gris foncé au survol */ }
+                /* COULEURS SPECIFIQUES */
+                .btn-show { background-color: var(--btn-info); }     /* VERT */
+                .btn-edit { background-color: var(--btn-warning); }  /* NOIR */
+                .btn-delete { background-color: var(--btn-danger); } /* ROUGE */
+                .btn-back { background-color: var(--btn-back); }     /* GRIS */
 
                 /* Bouton Créer Nouveau */
                 .btn-create {
@@ -250,7 +246,6 @@
                     text-decoration: none;
                     margin-top: 20px;
                     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-                    /* Pas d'animation */
                 }
                 .btn-create i { margin-right: 8px; }
                 .btn-create:hover {
@@ -274,7 +269,7 @@
 
             <a href="{{ path('app_home') }}">🏠 Accueil</a>
 
-            {# --- MENU ADMINISTRATEUR --- #}
+            {# --- MENU ADMIN --- #}
             {% if is_granted('ROLE_ADMIN') %}
                 <div class="sidebar-section">Parc Instrumental</div>
                 <a href="{{ path('app_instrument_index') }}">🎸 Instruments</a>
@@ -294,7 +289,6 @@
 
                 <div class="sidebar-section">Finance</div>
                 <a href="{{ path('app_inscription_index') }}">📋 Inscriptions</a>
-                {# Ajout explicite de Paiements comme demandé #}
                 <a href="{{ path('app_paiement_index') }}">💰 Paiements</a>
 
             {# --- MENU GESTIONNAIRE --- #}
@@ -310,7 +304,7 @@
                 <a href="{{ path('app_contrat_pret_index') }}">📝 Contrats Prêt</a>
                 <a href="{{ path('app_intervention_index') }}">🔧 Interventions</a>
 
-            {# --- MENU PROFESSEUR --- #}
+            {# --- MENU PROF --- #}
             {% elseif is_granted('ROLE_PROF') %}
                 <div class="sidebar-section">Espace Professeur</div>
                 <a href="{{ path('app_cours_index') }}">📅 Cours</a>
@@ -320,7 +314,7 @@
                 <div class="sidebar-section">Mon Espace</div>
                 <a href="{{ path('app_cours_index') }}">📅 Cours</a>
 
-            {# --- MENU AUTRES ROLES (User...) --- #}
+            {# --- MENU AUTRE --- #}
             {% else %}
                 <div class="sidebar-section">Mon Espace</div>
             {% endif %}
@@ -360,7 +354,7 @@
 
             {# --- CONTENU --- #}
             <div class="content-container">
-                {# Affichage des messages flash (confirmation, erreurs) #}
+                {# Flash Messages #}
                 {% for label, messages in app.flashes %}
                     {% for message in messages %}
                         <div class="alert alert-{{ label == 'error' ? 'danger' : label }}">
@@ -374,50 +368,59 @@
 
         </div>
 
-        {# --- SCRIPT AUTOMATIQUE POUR STYLISER LES BOUTONS --- #}
-        {# Ce script transforme juste le texte en bouton, SANS ajouter d'animation #}
+        {# --- SCRIPT AUTOMATIQUE AMÉLIORÉ --- #}
         <script>
             document.addEventListener("DOMContentLoaded", function() {
-                // 1. Transformer les liens de la dernière colonne des tableaux (Actions)
-                const tables = document.querySelectorAll('table');
                 
+                // 1. Gérer les TABLEAUX (pour l'index)
+                const tables = document.querySelectorAll('table');
                 tables.forEach(table => {
                     if(!table.classList.contains('planning-table')) {
                         table.classList.add('planning-table');
                     }
-                    
-                    const rows = table.querySelectorAll('tbody tr');
-                    rows.forEach(row => {
-                        const lastCell = row.lastElementChild;
-                        if(lastCell) {
-                            const links = lastCell.querySelectorAll('a');
-                            links.forEach(link => {
-                                const text = link.textContent.trim().toLowerCase();
-                                
-                                // Si lien "show" ou "voir"
-                                if(text.includes('show') || text.includes('voir')) {
-                                    link.className = 'btn-action btn-show';
-                                    link.innerHTML = '<i class="fa-solid fa-eye"></i> Voir';
-                                }
-                                // Si lien "edit" ou "modifier"
-                                else if(text.includes('edit') || text.includes('modifier')) {
-                                    link.className = 'btn-action btn-edit';
-                                    link.innerHTML = '<i class="fa-solid fa-pen-to-square"></i> Modifier';
-                                }
-                            });
-                        }
-                    });
                 });
 
-                // 2. Transformer le lien "Create new" ou "Créer"
-                const contentArea = document.querySelector('.content-container');
-                if(contentArea) {
-                    const allLinks = contentArea.querySelectorAll('a');
-                    allLinks.forEach(link => {
-                        const text = link.textContent.trim().toLowerCase();
-                        if(!link.classList.contains('btn-action') && (text.includes('create new') || text.includes('créer') || text.includes('ajouter'))) {
-                            link.className = 'btn-create';
-                            link.innerHTML = '<i class="fa-solid fa-plus"></i> ' + link.textContent;
+                // 2. SCANNER TOUS LES LIENS ET BOUTONS DE LA PAGE
+                // On cherche dans le conteneur principal
+                const container = document.querySelector('.content-container');
+                if(container) {
+                    // On prend tous les liens <a> et les boutons <button>
+                    const allElements = container.querySelectorAll('a, button');
+
+                    allElements.forEach(el => {
+                        const text = el.textContent.trim().toLowerCase();
+                        
+                        // Ignore si déjà stylisé (ex: classe ajoutée manuellement)
+                        if (el.classList.contains('btn-action') || el.classList.contains('btn-create')) return;
+
+                        // -- BOUTON "VOIR" / "SHOW" -- (VERT)
+                        if(text === 'show' || text === 'voir') {
+                            el.className = 'btn-action btn-show';
+                            el.innerHTML = '<i class="fa-solid fa-eye"></i> Voir';
+                        }
+                        
+                        // -- BOUTON "MODIFIER" / "EDIT" -- (NOIR)
+                        else if(text === 'edit' || text === 'modifier') {
+                            el.className = 'btn-action btn-edit';
+                            el.innerHTML = '<i class="fa-solid fa-pen-to-square"></i> Modifier';
+                        }
+
+                        // -- BOUTON "RETOUR" / "BACK TO LIST" -- (GRIS)
+                        else if(text.includes('back to list') || text.includes('retour')) {
+                            el.className = 'btn-action btn-back';
+                            el.innerHTML = '<i class="fa-solid fa-arrow-left"></i> Retour';
+                        }
+
+                        // -- BOUTON "SUPPRIMER" / "DELETE" -- (ROUGE)
+                        else if(text === 'delete' || text === 'supprimer') {
+                            el.className = 'btn-action btn-delete';
+                            el.innerHTML = '<i class="fa-solid fa-trash"></i> Supprimer';
+                        }
+
+                        // -- BOUTON "CRÉER" / "CREATE NEW" -- (VERT + GROS)
+                        else if(text.includes('create new') || text.includes('créer') || text.includes('ajouter')) {
+                            el.className = 'btn-create';
+                            el.innerHTML = '<i class="fa-solid fa-plus"></i> ' + el.textContent;
                         }
                     });
                 }
