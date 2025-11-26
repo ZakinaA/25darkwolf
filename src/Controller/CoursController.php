@@ -5,13 +5,12 @@ namespace App\Controller;
 use App\Entity\Cours;
 use App\Form\CoursType;
 use App\Repository\CoursRepository;
-use App\Repository\EleveRepository; // Ajout nécessaire
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted; // Ajout nécessaire
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/cours')]
 final class CoursController extends AbstractController
@@ -19,6 +18,19 @@ final class CoursController extends AbstractController
     #[Route(name: 'app_cours_index', methods: ['GET'])]
     public function index(CoursRepository $coursRepository): Response
     {
+        /** @var \App\Entity\User|null $user */
+        $user = $this->getUser();
+
+        // 1. Redirection automatique si c'est un ÉLÈVE
+        if ($this->isGranted('ROLE_ELEVE') || ($user && $user->getEleve())) {
+            return $this->redirectToRoute('app_eleve_mes_cours');
+        }
+
+        // 2. Redirection automatique si c'est un PROFESSEUR (Mise à jour : ROLE_PROF)
+        if ($this->isGranted('ROLE_PROF') || ($user && $user->getProfesseur())) {
+             return $this->redirectToRoute('app_professeur_mes_cours');
+        }
+
         return $this->render('cours/index.html.twig', [
             'cours' => $coursRepository->findAll(),
         ]);
@@ -44,27 +56,21 @@ final class CoursController extends AbstractController
         ]);
     }
 
-    /**
-     * Affiche uniquement les cours de l'élève connecté.
-     * Cette route doit être placée AVANT la route /{id} pour éviter les conflits.
-     */
+    // --- ROUTES SPÉCIFIQUES ---
+
     #[Route('/mes-cours', name: 'app_eleve_mes_cours', methods: ['GET'])]
     #[IsGranted('ROLE_ELEVE')]
     public function mesCours(CoursRepository $coursRepository): Response
     {
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
-
-        // Grâce à ta relation OneToOne dans User.php, on accède directement à l'élève
         $eleve = $user->getEleve();
 
-        // Sécurité : Si l'utilisateur a le rôle mais pas de fiche élève associée
         if (!$eleve) {
             $this->addFlash('danger', 'Votre compte utilisateur n\'est pas relié à une fiche élève.');
             return $this->redirectToRoute('app_home');
         }
 
-        // On appelle la méthode qu'on vient de créer dans le Repository
         $mesCours = $coursRepository->findCoursByEleve($eleve->getId());
 
         return $this->render('cours/mes_cours.html.twig', [
@@ -72,6 +78,29 @@ final class CoursController extends AbstractController
             'eleve' => $eleve
         ]);
     }
+
+    #[Route('/espace-professeur', name: 'app_professeur_mes_cours', methods: ['GET'])]
+    #[IsGranted('ROLE_PROF')] // Mise à jour : ROLE_PROF
+    public function mesCoursProfesseur(CoursRepository $coursRepository): Response
+    {
+        /** @var \App\Entity\User $user */
+        $user = $this->getUser();
+        $professeur = $user->getProfesseur();
+
+        if (!$professeur) {
+            $this->addFlash('danger', 'Votre compte utilisateur n\'est pas lié à un profil Professeur.');
+            return $this->redirectToRoute('app_home');
+        }
+
+        $mesCours = $coursRepository->findCoursByProfesseur($professeur->getId());
+
+        return $this->render('cours/mes_cours_professeur.html.twig', [
+            'cours' => $mesCours,
+            'professeur' => $professeur
+        ]);
+    }
+
+    // --- ROUTES DYNAMIQUES ---
 
     #[Route('/{id}', name: 'app_cours_show', methods: ['GET'])]
     public function show(Cours $cour): Response
@@ -108,28 +137,5 @@ final class CoursController extends AbstractController
         }
 
         return $this->redirectToRoute('app_cours_index', [], Response::HTTP_SEE_OTHER);
-    }
-    #[Route('/espace-professeur', name: 'app_professeur_mes_cours', methods: ['GET'])]
-    #[IsGranted('ROLE_PROFESSEUR')] // Sécurité : seuls les profs accèdent à cette page
-    public function mesCoursProfesseur(CoursRepository $coursRepository): Response
-    {
-        /** @var \App\Entity\User $user */
-        $user = $this->getUser();
-
-        // On récupère le profil Professeur lié au User
-        $professeur = $user->getProfesseur();
-
-        if (!$professeur) {
-            $this->addFlash('danger', 'Votre compte utilisateur n\'est pas lié à un profil Professeur.');
-            return $this->redirectToRoute('app_home');
-        }
-
-        // On appelle la requête du repository
-        $mesCours = $coursRepository->findCoursByProfesseur($professeur->getId());
-
-        return $this->render('cours/mes_cours_professeur.html.twig', [
-            'cours' => $mesCours,
-            'professeur' => $professeur
-        ]);
     }
 }

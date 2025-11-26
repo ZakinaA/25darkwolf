@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Espace Professeur{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Bonjour {{ professeur.prenom }} {{ professeur.nom }}</h1>
+        <span class="badge bg-primary">Espace Enseignant</span>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-light">
+            <h5 class="mb-0">Votre emploi du temps</h5>
+        </div>
+        <div class="card-body">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Intitulé du Cours</th>
+                        <th>Jour</th>
+                        <th>Horaires</th>
+                        <th>Âge Mini</th>
+                        <th class="text-center">Élèves inscrits</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for cour in cours %}
+                    <tr>
+                        <td><strong>{{ cour.libelle }}</strong></td>
+                        
+                        <td>{{ cour.jour.libelle|default('-') }}</td>
+                        
+                        <td>
+                            {{ cour.heureDebut ? cour.heureDebut|date('H:i') : '' }}
+                            - 
+                            {{ cour.heureFin ? cour.heureFin|date('H:i') : '' }}
+                        </td>
+
+                        <td>{{ cour.ageMini }} ans</td>
+                        
+                        {# On compte le nombre d'inscriptions pour ce cours #}
+                        <td class="text-center">
+                            <span class="badge rounded-pill {{ cour.inscription|length > 0 ? 'text-bg-success' : 'text-bg-secondary' }}">
+                                {{ cour.inscription|length }}
+                            </span>
+                        </td>
+                        
+                        <td>
+                            <a href="{{ path('app_cours_show', {'id': cour.id}) }}" class="btn btn-sm btn-outline-primary">
+                                Voir la liste
+                            </a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="6" class="text-center py-4">
+                            Aucun cours ne vous est attribué pour le moment.
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <div class="mt-3">
+        <a href="{{ path('app_home') }}" class="btn btn-link text-decoration-none">← Retour à l'accueil</a>
+    </div>
+</div>
+{% endblock %}
