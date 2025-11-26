@@ -1,59 +1,76 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Cours{% endblock %}
+{% block title %}Cours : {{ cour.libelle }}{% endblock %}
 
 {% block body %}
-    <h1>Cours</h1>
 
-    <table class="table">
-        <tbody>
-          
-            <tr>
-                <th>Libelle</th>
-                <td>{{ cour.libelle }}</td>
-            </tr>
-            <tr>
-                <th>AgeMini</th>
-                <td>{{ cour.ageMini }}</td>
-            </tr>
-            <tr>
-                <th>HeureDebut</th>
-                <td>{{ cour.heureDebut ? cour.heureDebut|date('H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>HeureFin</th>
-                <td>{{ cour.heureFin ? cour.heureFin|date('H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Professeur</th>
-                <td>{{ cour.professeur.prenom }} {{ cour.professeur.nom }}
-                </td>
-            </tr>
-            <tr>
-                <th>Élèves inscrits</th>
-                <td>
-                    <ul>
-                        {% for inscription in cour.inscription %}
-                            <li>{{ inscription.eleve.prenom }} {{ inscription.eleve.nom }}</li>
-                        {% else %}
-                            <li>Aucun élève inscrit pour ce cours.</li>
-                        {% endfor %}
-                    </ul>
-                </td>
-            </tr>
-            <tr>
-                <th>Jour</th>
-                <td>{{ cour.jour.libelle }} 
-                </td>
-            </tr>
+<div class="show-container">
+    <h1><i class="fa-solid fa-chalkboard-user"></i> Cours : {{ cour.libelle }}</h1>
 
-            
-        </tbody>
-    </table>
+    <div class="info-grid">
 
-    <a href="{{ path('app_cours_index') }}">back to list</a>
+        {# --- INFOS GÉNÉRALES --- #}
+        <div class="info-item">
+            <span class="info-label"><i class="fa-solid fa-tag"></i> Libellé</span>
+            <span class="info-value">{{ cour.libelle }}</span>
+        </div>
 
-    <a href="{{ path('app_cours_edit', {'id': cour.id}) }}">edit</a>
+        <div class="info-item">
+            <span class="info-label"><i class="fa-regular fa-calendar"></i> Jour</span>
+            <span class="info-value">{{ cour.jour.libelle }}</span>
+        </div>
 
-    {{ include('cours/_delete_form.html.twig') }}
+        <div class="info-item">
+            <span class="info-label"><i class="fa-regular fa-clock"></i> Horaires</span>
+            <span class="info-value">
+                {{ cour.heureDebut ? cour.heureDebut|date('H:i') : '' }} - {{ cour.heureFin ? cour.heureFin|date('H:i') : '' }}
+            </span>
+        </div>
+
+        <div class="info-item">
+            <span class="info-label"><i class="fa-solid fa-child-reaching"></i> Age Minimum</span>
+            <span class="info-value">{{ cour.ageMini }} ans</span>
+        </div>
+
+        {# --- PROFESSEUR --- #}
+        <div class="info-item" style="grid-column: 1 / -1;">
+            <span class="info-label"><i class="fa-solid fa-person-chalkboard"></i> Professeur responsable</span>
+            <span class="info-value" style="font-size: 1.2rem;">
+                {{ cour.professeur.prenom }} {{ cour.professeur.nom }}
+            </span>
+        </div>
+
+        {# --- LISTE DES ÉLÈVES INSCRITS (Pleine largeur) --- #}
+        <div class="info-item" style="grid-column: 1 / -1;">
+            <span class="info-label"><i class="fa-solid fa-users"></i> Élèves inscrits</span>
+            <div class="info-value list-chips">
+                {% for inscription in cour.inscription %}
+                    <span class="chip">
+                        <i class="fa-solid fa-user"></i> {{ inscription.eleve.prenom }} {{ inscription.eleve.nom }}
+                    </span>
+                {% else %}
+                    <span style="color: #999; font-style: italic;">Aucun élève inscrit pour ce cours.</span>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+
+    {# --- ACTIONS --- #}
+    <div class="actions">
+        {# Bouton Retour #}
+        <a href="{{ path('app_cours_index') }}" class="btn-action btn-back">
+            <i class="fa-solid fa-arrow-left"></i> Retour à la liste
+        </a>
+
+        {# Bouton Modifier #}
+        <a href="{{ path('app_cours_edit', {'id': cour.id}) }}" class="btn-action btn-edit">
+            <i class="fa-solid fa-pen-to-square"></i> Modifier
+        </a>
+
+        {# Bouton Supprimer #}
+        {{ include('cours/_delete_form.html.twig') }}
+    </div>
+
+</div>
 {% endblock %}
