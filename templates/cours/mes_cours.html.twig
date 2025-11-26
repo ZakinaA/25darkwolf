@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes Cours{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1>Bonjour {{ eleve.prenom }} {{ eleve.nom }}</h1>
+        <p>Voici la liste de vos cours pour cette année :</p>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Cours</th>
+                    <th>Jour</th>
+                    <th>Horaires</th>
+                    <th>Professeur</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for cour in cours %}
+                <tr>
+                    <td>{{ cour.libelle }}</td>
+                    
+                    {# On gère le cas où le jour serait null #}
+                    <td>{{ cour.jour.libelle|default('Non défini') }}</td>
+                    
+                    <td>
+                        {{ cour.heureDebut ? cour.heureDebut|date('H:i') : '' }}
+                        - 
+                        {{ cour.heureFin ? cour.heureFin|date('H:i') : '' }}
+                    </td>
+                    
+                    {# Affichage du prof s'il existe #}
+                    <td>
+                        {% if cour.professeur %}
+                            {{ cour.professeur.prenom }} {{ cour.professeur.nom }}
+                        {% else %}
+                            <span class="text-muted">Non assigné</span>
+                        {% endif %}
+                    </td>
+                    
+                    <td>
+                        <a href="{{ path('app_cours_show', {'id': cour.id}) }}" class="btn btn-info btn-sm">
+                            Voir détails
+                        </a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5" class="text-center">
+                        Vous n'êtes inscrit à aucun cours pour le moment.
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <a href="{{ path('app_home') }}">Retour à l'accueil</a>
+    </div>
+{% endblock %}
