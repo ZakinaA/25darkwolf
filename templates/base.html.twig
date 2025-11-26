@@ -11,13 +11,18 @@
 
         {% block stylesheets %}
             <style>
-                /* --- DEFINITION DES COULEURS PRINCIPALES (Vert pour l'accent) --- */
+                /* --- DEFINITION DES COULEURS PRINCIPALES --- */
                 :root {
                     --color-sidebar-bg: #2c3e50; /* Bleu nuit */
-                    --color-primary-accent: #009879; /* Vert Émeraude Rétabli */
+                    --color-primary-accent: #009879; /* Vert Émeraude */
                     --color-primary-dark: #007c64; /* Vert Émeraude Foncé */
                     --color-text-light: #bdc3c7;
                     --color-bg-light-hover: #e6fff7; /* Vert clair 50 */
+                    
+                    /* TES COULEURS PERSONNALISEES */
+                    --btn-info: #009879;    /* Vert pour Voir */
+                    --btn-warning: #000000; /* Noir pour Modifier */
+                    --btn-danger: #e74c3c;  /* Rouge pour Supprimer/Logout */
                 }
 
 
@@ -51,7 +56,7 @@
                 .sidebar h2 {
                     text-align: center;
                     margin-bottom: 30px;
-                    color: var(--color-primary-accent); /* Utilisation du Vert Émeraude */
+                    color: var(--color-primary-accent);
                     text-transform: uppercase;
                     letter-spacing: 2px;
                     font-size: 1.8rem;
@@ -76,18 +81,18 @@
                     margin-bottom: 5px;
                     border-radius: 5px;
                     font-size: 1rem;
-                    transition: 0.3s;
                     display: block;
+                    /* J'ai retiré 'transition' pour supprimer l'animation */
                 }
 
                 .sidebar a:hover {
-                    background-color: var(--color-primary-accent); /* Utilisation du Vert Émeraude */
+                    background-color: var(--color-primary-accent); 
                     color: white;
-                    padding-left: 20px;
+                    padding-left: 20px; /* Petit décalage instantané, pas d'animation */
                 }
 
                 .sidebar a.active {
-                    background-color: var(--color-primary-accent); /* Utilisation du Vert Émeraude */
+                    background-color: var(--color-primary-accent);
                     color: white;
                 }
 
@@ -124,11 +129,10 @@
                     border-radius: 20px;
                     font-weight: bold;
                     font-size: 0.9rem;
-                    transition: 0.3s;
                     display: inline-block;
+                    /* Pas de transition */
                 }
                 
-                /* Boutons de connexion et inscription uniformisés avec le Vert Émeraude */
                 .btn-login {
                     border: 2px solid var(--color-primary-accent);
                     color: var(--color-primary-accent);
@@ -142,8 +146,8 @@
                 .btn-register:hover { background-color: var(--color-primary-dark); }
 
                 .btn-logout {
-                    border: 2px solid #e74c3c;
-                    color: #e74c3c;
+                    border: 2px solid var(--btn-danger);
+                    color: var(--btn-danger);
                 }
                 .btn-logout:hover { background-color: #fceceb; }
 
@@ -157,6 +161,7 @@
                     overflow-x: auto;
                     box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1); 
                     border-radius: 12px; 
+                    margin-bottom: 20px;
                 }
                 
                 .planning-table {
@@ -166,7 +171,7 @@
                 }
 
                 .planning-table thead {
-                    background-color: var(--color-primary-accent); /* Fond Vert Émeraude de l'en-tête */
+                    background-color: var(--color-primary-accent);
                     color: white;
                 }
                 
@@ -179,27 +184,78 @@
 
                 .planning-table tbody tr {
                     border-bottom: 1px solid #e5e7eb;
-                    transition: background-color 0.15s ease-in-out;
+                    /* Pas de transition ici non plus */
                 }
 
                 .planning-table tbody tr:hover {
-                    background-color: var(--color-bg-light-hover); /* Effet hover léger Vert Émeraude */
+                    background-color: var(--color-bg-light-hover);
                 }
 
                 .planning-table td {
                     padding: 12px 16px;
                     font-size: 1rem;
                     color: #4b5563; 
+                    vertical-align: middle;
                 }
 
                 .planning-table .day-cell {
                     font-weight: 800; 
-                    color: var(--color-primary-dark); /* Jour en Vert Émeraude foncé */
+                    color: var(--color-primary-dark);
                 }
                 
                 .planning-table .name-cell {
                     color: #1f2937; 
                     font-weight: 500; 
+                }
+
+                /* --- NOUVEAUX STYLES POUR LES BOUTONS CRUD (CREATE, SHOW, EDIT) --- */
+                /* Ces classes sont utilisées par le script JS en bas de page */
+                
+                .btn-action {
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 6px 12px;
+                    border-radius: 6px;
+                    text-decoration: none;
+                    font-size: 0.85rem;
+                    font-weight: 600;
+                    margin-right: 5px;
+                    border: none;
+                    cursor: pointer;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                    /* Suppression des transitions et transform */
+                }
+                .btn-action i { margin-right: 5px; }
+                
+                /* Suppression de l'effet de saut (transform) au survol */
+                .btn-action:hover { box-shadow: 0 4px 6px rgba(0,0,0,0.15); }
+
+                /* Couleurs spécifiques (TES COULEURS) */
+                .btn-show { background-color: var(--btn-info); color: white; }
+                .btn-show:hover { background-color: #007c64; color: white; /* Légèrement plus foncé au survol */ }
+
+                .btn-edit { background-color: var(--btn-warning); color: white; }
+                .btn-edit:hover { background-color: #333333; color: white; /* Gris foncé au survol */ }
+
+                /* Bouton Créer Nouveau */
+                .btn-create {
+                    display: inline-flex;
+                    align-items: center;
+                    background-color: var(--color-primary-accent);
+                    color: white;
+                    padding: 10px 20px;
+                    border-radius: 8px;
+                    font-weight: bold;
+                    text-decoration: none;
+                    margin-top: 20px;
+                    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                    /* Pas d'animation */
+                }
+                .btn-create i { margin-right: 8px; }
+                .btn-create:hover {
+                    background-color: var(--color-primary-dark);
+                    color: white;
                 }
 
                 /* Alertes Flash */
@@ -238,6 +294,7 @@
 
                 <div class="sidebar-section">Finance</div>
                 <a href="{{ path('app_inscription_index') }}">📋 Inscriptions</a>
+                {# Ajout explicite de Paiements comme demandé #}
                 <a href="{{ path('app_paiement_index') }}">💰 Paiements</a>
 
             {# --- MENU GESTIONNAIRE --- #}
@@ -277,15 +334,14 @@
                 <div class="user-info">
                     {% if app.user %}
                         Bonjour, {{ app.user.email }}
-                        {# Utilisation de couleurs qui contrastent bien #}
                         {% if is_granted('ROLE_ADMIN') %} 
-                            <span style="color: var(--color-primary-accent);"> (Admin)</span> 
+                            <span style="color: var(--color-primary-accent); font-weight:bold;"> (Admin)</span> 
                         {% elseif is_granted('ROLE_GESTIONNAIRE') %}
-                            <span style="color: #e67e22;">(Gestionnaire)</span>
+                            <span style="color: #e67e22; font-weight:bold;">(Gestionnaire)</span>
                         {% elseif is_granted('ROLE_PROF') %}
-                            <span style="color: #9b59b6;">(Professeur)</span>
+                            <span style="color: #9b59b6; font-weight:bold;">(Professeur)</span>
                         {% elseif is_granted('ROLE_ELEVE') %}
-                            <span style="color: #3498db);">(Élève)</span>
+                            <span style="color: #3498db; font-weight:bold;">(Élève)</span>
                         {% endif %}
                     {% else %}
                         Bienvenue sur E-Music
@@ -318,5 +374,54 @@
 
         </div>
 
+        {# --- SCRIPT AUTOMATIQUE POUR STYLISER LES BOUTONS --- #}
+        {# Ce script transforme juste le texte en bouton, SANS ajouter d'animation #}
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                // 1. Transformer les liens de la dernière colonne des tableaux (Actions)
+                const tables = document.querySelectorAll('table');
+                
+                tables.forEach(table => {
+                    if(!table.classList.contains('planning-table')) {
+                        table.classList.add('planning-table');
+                    }
+                    
+                    const rows = table.querySelectorAll('tbody tr');
+                    rows.forEach(row => {
+                        const lastCell = row.lastElementChild;
+                        if(lastCell) {
+                            const links = lastCell.querySelectorAll('a');
+                            links.forEach(link => {
+                                const text = link.textContent.trim().toLowerCase();
+                                
+                                // Si lien "show" ou "voir"
+                                if(text.includes('show') || text.includes('voir')) {
+                                    link.className = 'btn-action btn-show';
+                                    link.innerHTML = '<i class="fa-solid fa-eye"></i> Voir';
+                                }
+                                // Si lien "edit" ou "modifier"
+                                else if(text.includes('edit') || text.includes('modifier')) {
+                                    link.className = 'btn-action btn-edit';
+                                    link.innerHTML = '<i class="fa-solid fa-pen-to-square"></i> Modifier';
+                                }
+                            });
+                        }
+                    });
+                });
+
+                // 2. Transformer le lien "Create new" ou "Créer"
+                const contentArea = document.querySelector('.content-container');
+                if(contentArea) {
+                    const allLinks = contentArea.querySelectorAll('a');
+                    allLinks.forEach(link => {
+                        const text = link.textContent.trim().toLowerCase();
+                        if(!link.classList.contains('btn-action') && (text.includes('create new') || text.includes('créer') || text.includes('ajouter'))) {
+                            link.className = 'btn-create';
+                            link.innerHTML = '<i class="fa-solid fa-plus"></i> ' + link.textContent;
+                        }
+                    });
+                }
+            });
+        </script>
     </body>
 </html>
