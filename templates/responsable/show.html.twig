@@ -1,58 +1,78 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Responsable{% endblock %}
+{% block title %}Responsable : {{ responsable.prenom }} {{ responsable.nom }}{% endblock %}
 
 {% block body %}
-    <h1>Responsable</h1>
 
-    <table class="table">
-        <tbody>
-            
-            <tr>
-                <th>Nom</th>
-                <td>{{ responsable.nom }}</td>
-            </tr>
-            <tr>
-                <th>Prenom</th>
-                <td>{{ responsable.prenom }}</td>
-            </tr>
-            <tr>
-                <th>NumRue</th>
-                <td>{{ responsable.numRue }}</td>
-            </tr>
-            <tr>
-                <th>Rue</th>
-                <td>{{ responsable.rue }}</td>
-            </tr>
-            <tr>
-                <th>Copos</th>
-                <td>{{ responsable.copos }}</td>
-            </tr>
-            <tr>
-                <th>Ville</th>
-                <td>{{ responsable.ville }}</td>
-            </tr>
-            <tr>
-                <th>Tel</th>
-                <td>{{ responsable.tel }}</td>
-            </tr>
-            <tr>
-                <th>Mail</th>
-                <td>{{ responsable.mail }}</td>
-            </tr>
-            <tr>
-                <th>Eleve</th>
-                <td>{% for eleve in responsable.eleves %}
-                        {{ eleve.prenom }}
+<div class="show-container">
+    <h1><i class="fa-solid fa-user-shield"></i> Responsable : {{ responsable.prenom }} {{ responsable.nom }}</h1>
+
+    <div class="info-grid">
+
+        {# --- IDENTITÉ --- #}
+        <div class="info-item">
+            <span class="info-label"><i class="fa-solid fa-user"></i> Nom</span>
+            <span class="info-value">{{ responsable.nom }}</span>
+        </div>
+
+        <div class="info-item">
+            <span class="info-label"><i class="fa-regular fa-user"></i> Prénom</span>
+            <span class="info-value">{{ responsable.prenom }}</span>
+        </div>
+
+        {# --- CONTACT --- #}
+        <div class="info-item">
+            <span class="info-label"><i class="fa-solid fa-envelope"></i> Email</span>
+            <span class="info-value">{{ responsable.mail }}</span>
+        </div>
+
+        <div class="info-item">
+            <span class="info-label"><i class="fa-solid fa-phone"></i> Téléphone</span>
+            <span class="info-value">{{ responsable.tel }}</span>
+        </div>
+
+        {# --- ADRESSE --- #}
+        <div class="info-item" style="grid-column: 1 / -1;">
+            <span class="info-label"><i class="fa-solid fa-location-dot"></i> Adresse Postale</span>
+            <span class="info-value">
+                {{ responsable.numRue }} {{ responsable.rue }}<br>
+                {{ responsable.copos }} {{ responsable.ville }}
+            </span>
+        </div>
+
+        {# --- ÉLÈVES LIÉS --- #}
+        <div class="info-item" style="grid-column: 1 / -1;">
+            <span class="info-label"><i class="fa-solid fa-children"></i> Élèves à charge</span>
+            <div class="info-value list-chips">
+                {% if responsable.eleves is not empty %}
+                    {% for eleve in responsable.eleves %}
+                        <span class="chip">
+                            <i class="fa-solid fa-user-graduate"></i> {{ eleve.prenom }} {{ eleve.nom|default('') }}
+                        </span>
                     {% endfor %}
-                </td>
-            </tr>
-        </tbody>
-    </table>
+                {% else %}
+                    <span style="color: #999; font-style: italic;">Aucun élève associé pour le moment</span>
+                {% endif %}
+            </div>
+        </div>
 
-    <a href="{{ path('app_responsable_index') }}">back to list</a>
+    </div>
 
-    <a href="{{ path('app_responsable_edit', {'id': responsable.id}) }}">edit</a>
+    {# --- ACTIONS --- #}
+    <div class="actions">
+        {# Bouton Retour #}
+        <a href="{{ path('app_responsable_index') }}" class="btn-action btn-back">
+            <i class="fa-solid fa-arrow-left"></i> Retour à la liste
+        </a>
 
-    {{ include('responsable/_delete_form.html.twig') }}
+        {# Bouton Modifier #}
+        <a href="{{ path('app_responsable_edit', {'id': responsable.id}) }}" class="btn-action btn-edit">
+            <i class="fa-solid fa-pen-to-square"></i> Modifier
+        </a>
+
+        {# Bouton Supprimer #}
+        {{ include('responsable/_delete_form.html.twig') }}
+    </div>
+
+</div>
 {% endblock %}

@@ -3,75 +3,101 @@
 {% block title %}Détail de l'Intervention #{{ intervention.id }}{% endblock %}
 
 {% block body %}
-    <div class="container mx-auto p-6 max-w-3xl bg-white shadow-xl rounded-lg">
-        <h1 class="text-3xl font-bold mb-6 text-gray-800 border-b pb-2">Détail de l'Intervention #{{ intervention.id }}</h1>
 
-        <table class="w-full text-left border-collapse">
-            <tbody>
-                <tr class="border-b hover:bg-gray-50">
-                    <th class="py-3 px-4 font-semibold text-gray-600 w-1/4">Id</th>
-                    <td class="py-3 px-4 text-gray-800">{{ intervention.id }}</td>
-                </tr>
-                <tr class="border-b hover:bg-gray-50">
-                    <th class="py-3 px-4 font-semibold text-gray-600">Date Début</th>
-                    <td class="py-3 px-4 text-gray-800">{{ intervention.dateDebut ? intervention.dateDebut|date('Y-m-d H:i:s') : 'N/A' }}</td>
-                </tr>
-                <tr class="border-b hover:bg-gray-50">
-                    <th class="py-3 px-4 font-semibold text-gray-600">Date Fin</th>
-                    <td class="py-3 px-4 text-gray-800">{{ intervention.dateFin ? intervention.dateFin|date('Y-m-d H:i:s') : 'N/A' }}</td>
-                </tr>
-                <tr class="border-b hover:bg-gray-50">
-                    <th class="py-3 px-4 font-semibold text-gray-600">Prix (€)</th>
-                    <td class="py-3 px-4 text-gray-800 font-bold">{{ intervention.prix|number_format(2, ',', ' ') }}</td>
-                </tr>
-                <tr class="border-b hover:bg-gray-50">
-                    <th class="py-3 px-4 font-semibold text-gray-600">Quotité</th>
-                    <td class="py-3 px-4 text-gray-800">{{ intervention.quotite }}</td>
-                </tr>
-                <tr class="border-b hover:bg-gray-50">
-                    <th class="py-3 px-4 font-semibold text-gray-600 align-top">Descriptif</th>
-                    <td class="py-3 px-4 text-gray-800 italic">{{ intervention.descriptif|nl2br }}</td>
-                </tr>
-            </tbody>
-        </table>
+<div class="show-container">
+    <h1><i class="fa-solid fa-screwdriver-wrench"></i> Détail de l'Intervention #{{ intervention.id }}</h1>
+
+    {# --- INFORMATIONS GÉNÉRALES --- #}
+    <div class="info-grid">
         
-        {# NOUVEAU BLOC : INSTRUMENT CONCERNÉ #}
-        {% if intervention.instrument %}
-            <h2 class="text-2xl font-semibold text-indigo-700 mt-8 mb-4 border-b pb-1">Instrument concerné</h2>
-            {% set instrument = intervention.instrument %}
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4 bg-indigo-50 rounded-lg">
-                <div>
-                    <dt class="font-medium text-gray-600">N° de Série :</dt>
-                    <dd class="font-mono text-lg text-indigo-900">{{ instrument.numSerie }}</dd>
-                </div>
-                <div>
-                    <dt class="font-medium text-gray-600">Type :</dt>
-                    <dd class="text-lg text-indigo-900">
-                        {{ instrument.typeInstrument ? instrument.typeInstrument.libelle : 'Non spécifié' }}
-                    </dd>
-                </div>
-                <div>
-                    <dt class="font-medium text-gray-600">Marque :</dt>
-                    <dd class="text-lg text-indigo-900">
-                        {# L'accès à 'marque' fonctionne maintenant grâce à l'entité Instrument mise à jour #}
-                        {{ instrument.marque ? instrument.marque.libelle : 'Non spécifiée' }}
-                    </dd>
-                </div>
-            </div>
-        {% else %}
-            <p class="mt-6 p-3 bg-yellow-100 text-yellow-800 rounded-lg">⚠ Aucun instrument lié à cette intervention.</p>
-        {% endif %}
-
-        <div class="mt-8 flex space-x-4">
-            <a href="{{ path('app_intervention_index') }}" class="bg-gray-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-gray-600 transition duration-150">
-                Retour à la liste
-            </a>
-            <a href="{{ path('app_intervention_edit', {'id': intervention.id}) }}" class="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-150">
-                Modifier
-            </a>
-            
-            {# Inclure le formulaire de suppression pour l'action POST #}
-            {{ include('intervention/_delete_form.html.twig') }}
+        {# ID #}
+        <div class="info-item">
+            <span class="info-label"><i class="fa-solid fa-hashtag"></i> Id</span>
+            <span class="info-value">{{ intervention.id }}</span>
         </div>
+
+        {# Prix #}
+        <div class="info-item">
+            <span class="info-label"><i class="fa-solid fa-euro-sign"></i> Prix</span>
+            <span class="info-value">{{ intervention.prix|number_format(2, ',', ' ') }} €</span>
+        </div>
+
+        {# Quotité #}
+        <div class="info-item">
+            <span class="info-label"><i class="fa-solid fa-percent"></i> Quotité</span>
+            <span class="info-value">{{ intervention.quotite }}</span>
+        </div>
+
+        {# Date Début #}
+        <div class="info-item">
+            <span class="info-label"><i class="fa-regular fa-calendar-plus"></i> Date Début</span>
+            <span class="info-value">{{ intervention.dateDebut ? intervention.dateDebut|date('d/m/Y H:i') : 'N/A' }}</span>
+        </div>
+
+        {# Date Fin #}
+        <div class="info-item">
+            <span class="info-label"><i class="fa-regular fa-calendar-check"></i> Date Fin</span>
+            <span class="info-value">{{ intervention.dateFin ? intervention.dateFin|date('d/m/Y H:i') : 'N/A' }}</span>
+        </div>
+
+        {# Descriptif (Pleine largeur) #}
+        <div class="info-item" style="grid-column: 1 / -1;">
+            <span class="info-label"><i class="fa-solid fa-align-left"></i> Descriptif</span>
+            <span class="info-value" style="font-style: italic;">
+                {{ intervention.descriptif ? intervention.descriptif|nl2br : 'Aucun descriptif fourni.' }}
+            </span>
+        </div>
+
     </div>
+
+    {# --- SECTION INSTRUMENT --- #}
+    {% if intervention.instrument %}
+        {% set instrument = intervention.instrument %}
+        
+        <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 5px;">
+            <i class="fa-solid fa-guitar"></i> Instrument concerné
+        </h3>
+
+        <div class="info-grid">
+            <div class="info-item">
+                <span class="info-label">Numéro de Série</span>
+                <span class="info-value">{{ instrument.numSerie }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Type</span>
+                <span class="info-value">
+                    {{ instrument.typeInstrument ? instrument.typeInstrument.libelle : 'Non spécifié' }}
+                </span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Marque</span>
+                <span class="info-value">
+                    {{ instrument.marque ? instrument.marque.libelle : 'Non spécifiée' }}
+                </span>
+            </div>
+        </div>
+
+    {% else %}
+        <div class="alert alert-danger" style="margin-top: 20px;">
+            <i class="fa-solid fa-triangle-exclamation"></i> Aucun instrument lié à cette intervention.
+        </div>
+    {% endif %}
+
+    {# --- ACTIONS --- #}
+    <div class="actions">
+        {# Bouton Retour #}
+        <a href="{{ path('app_intervention_index') }}" class="btn-action btn-back">
+            <i class="fa-solid fa-arrow-left"></i> Retour à la liste
+        </a>
+
+        {# Bouton Modifier #}
+        <a href="{{ path('app_intervention_edit', {'id': intervention.id}) }}" class="btn-action btn-edit">
+            <i class="fa-solid fa-pen-to-square"></i> Modifier
+        </a>
+
+        {# Bouton Supprimer #}
+        {{ include('intervention/_delete_form.html.twig') }}
+    </div>
+
+</div>
 {% endblock %}

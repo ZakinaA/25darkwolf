@@ -1,27 +1,69 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Paiement{% endblock %}
+{% block title %}Paiement #{{ paiement.id }}{% endblock %}
 
 {% block body %}
-    <h1>Paiement</h1>
 
-    <table class="table">
-        <tbody>
-            
-            <tr>
-                <th>Montant</th>
-                <td>{{ paiement.montant }}</td>
-            </tr>
-            <tr>
-                <th>DatePaiement</th>
-                <td>{{ paiement.datePaiement ? paiement.datePaiement|date('Y-m-d') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
+<div class="show-container">
+    <h1><i class="fa-solid fa-money-bill-wave"></i> Détails du Paiement #{{ paiement.id }}</h1>
 
-    <a href="{{ path('app_paiement_index') }}">back to list</a>
+    <div class="info-grid">
 
-    <a href="{{ path('app_paiement_edit', {'id': paiement.id}) }}">edit</a>
+        {# --- ID --- #}
+        <div class="info-item">
+            <span class="info-label"><i class="fa-solid fa-hashtag"></i> Id</span>
+            <span class="info-value">{{ paiement.id }}</span>
+        </div>
 
-    {{ include('paiement/_delete_form.html.twig') }}
+        {# --- MONTANT --- #}
+        <div class="info-item">
+            <span class="info-label"><i class="fa-solid fa-euro-sign"></i> Montant</span>
+            <span class="info-value" style="font-size: 1.2rem; color: #27ae60;">
+                {{ paiement.montant|number_format(2, ',', ' ') }} €
+            </span>
+        </div>
+
+        {# --- DATE --- #}
+        <div class="info-item">
+            <span class="info-label"><i class="fa-regular fa-calendar-check"></i> Date du paiement</span>
+            <span class="info-value">
+                {{ paiement.datePaiement ? paiement.datePaiement|date('d/m/Y') : 'Non renseignée' }}
+            </span>
+        </div>
+
+        {# --- INSCRIPTION LIÉE (Si la relation existe dans ton entité) --- #}
+        {% if paiement.inscription is defined and paiement.inscription %}
+            <div class="info-item">
+                <span class="info-label"><i class="fa-solid fa-file-contract"></i> Inscription associée</span>
+                <span class="info-value">
+                    Inscription #{{ paiement.inscription.id }}
+                    {% if paiement.inscription.eleve is defined and paiement.inscription.eleve %}
+                        <br>
+                        <span style="font-size: 0.9em; color: #666;">
+                            (Élève : {{ paiement.inscription.eleve.prenom }} {{ paiement.inscription.eleve.nom }})
+                        </span>
+                    {% endif %}
+                </span>
+            </div>
+        {% endif %}
+
+    </div>
+
+    {# --- ACTIONS --- #}
+    <div class="actions">
+        {# Bouton Retour #}
+        <a href="{{ path('app_paiement_index') }}" class="btn-action btn-back">
+            <i class="fa-solid fa-arrow-left"></i> Retour à la liste
+        </a>
+
+        {# Bouton Modifier #}
+        <a href="{{ path('app_paiement_edit', {'id': paiement.id}) }}" class="btn-action btn-edit">
+            <i class="fa-solid fa-pen-to-square"></i> Modifier
+        </a>
+
+        {# Bouton Supprimer #}
+        {{ include('paiement/_delete_form.html.twig') }}
+    </div>
+
+</div>
 {% endblock %}

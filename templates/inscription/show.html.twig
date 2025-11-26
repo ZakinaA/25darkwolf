@@ -1,23 +1,65 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Inscription{% endblock %}
+{% block title %}Inscription #{{ inscription.id }}{% endblock %}
 
 {% block body %}
-    <h1>Inscription</h1>
 
-    <table class="table">
-        <tbody>
-           
-            <tr>
-                <th>DateInscrption</th>
-                <td>{{ inscription.dateInscrption ? inscription.dateInscrption|date('Y-m-d') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
+<div class="show-container">
+    <h1><i class="fa-solid fa-file-contract"></i> Détails de l'Inscription #{{ inscription.id }}</h1>
 
-    <a href="{{ path('app_inscription_index') }}">back to list</a>
+    <div class="info-grid">
 
-    <a href="{{ path('app_inscription_edit', {'id': inscription.id}) }}">edit</a>
+        {# --- DATE ET ID --- #}
+        <div class="info-item">
+            <span class="info-label"><i class="fa-solid fa-hashtag"></i> Id</span>
+            <span class="info-value">{{ inscription.id }}</span>
+        </div>
 
-    {{ include('inscription/_delete_form.html.twig') }}
+        <div class="info-item">
+            <span class="info-label"><i class="fa-regular fa-calendar-check"></i> Date d'inscription</span>
+            <span class="info-value">
+                {# J'ai gardé ta variable 'dateInscrption' (attention à la faute de frappe dans ton entité si elle existe) #}
+                {{ inscription.dateInscrption ? inscription.dateInscrption|date('d/m/Y') : 'Non renseignée' }}
+            </span>
+        </div>
+
+        {# --- INFO ÉLÈVE (Si la relation existe) --- #}
+        {% if inscription.eleve is defined and inscription.eleve %}
+            <div class="info-item">
+                <span class="info-label"><i class="fa-solid fa-user-graduate"></i> Élève inscrit</span>
+                <span class="info-value">
+                    {{ inscription.eleve.prenom }} {{ inscription.eleve.nom }}
+                </span>
+            </div>
+        {% endif %}
+
+        {# --- INFO COURS (Si la relation existe) --- #}
+        {% if inscription.cours is defined and inscription.cours %}
+            <div class="info-item">
+                <span class="info-label"><i class="fa-solid fa-chalkboard-user"></i> Cours concerné</span>
+                <span class="info-value">
+                    {{ inscription.cours.libelle }}
+                </span>
+            </div>
+        {% endif %}
+
+    </div>
+
+    {# --- ACTIONS --- #}
+    <div class="actions">
+        {# Bouton Retour #}
+        <a href="{{ path('app_inscription_index') }}" class="btn-action btn-back">
+            <i class="fa-solid fa-arrow-left"></i> Retour à la liste
+        </a>
+
+        {# Bouton Modifier #}
+        <a href="{{ path('app_inscription_edit', {'id': inscription.id}) }}" class="btn-action btn-edit">
+            <i class="fa-solid fa-pen-to-square"></i> Modifier
+        </a>
+
+        {# Bouton Supprimer #}
+        {{ include('inscription/_delete_form.html.twig') }}
+    </div>
+
+</div>
 {% endblock %}
