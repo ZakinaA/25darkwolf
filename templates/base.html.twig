@@ -206,6 +206,57 @@
                     color: #1f2937; 
                     font-weight: 500; 
                 }
+                
+                /* --- NOUVEAUX STYLES POUR LES FORMULAIRES (EDIT/NEW) --- */
+                h1 {
+                    color: #2c3e50;
+                    margin-bottom: 25px;
+                    font-size: 2rem;
+                    border-bottom: 3px solid var(--color-primary-accent);
+                    display: inline-block;
+                    padding-bottom: 5px;
+                }
+                
+                /* On cible les formulaires pour les rendre propres */
+                form {
+                    background-color: white;
+                    padding: 25px;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+                    max-width: 800px; /* Largeur max pour ne pas que ce soit trop étiré */
+                }
+
+                label {
+                    display: block;
+                    margin-bottom: 8px;
+                    font-weight: 600;
+                    color: #34495e;
+                    margin-top: 15px;
+                }
+                
+                /* Style des inputs texte, nombre, select, etc. */
+                input[type="text"], 
+                input[type="number"], 
+                input[type="email"], 
+                input[type="password"], 
+                input[type="date"], 
+                select, 
+                textarea {
+                    width: 100%;
+                    padding: 12px;
+                    border: 1px solid #dcdcdc;
+                    border-radius: 6px;
+                    font-size: 1rem;
+                    color: #2c3e50;
+                    background-color: #fcfcfc;
+                    margin-bottom: 10px;
+                }
+
+                input:focus, select:focus, textarea:focus {
+                    outline: none;
+                    border-color: var(--color-primary-accent);
+                    box-shadow: 0 0 0 3px rgba(0, 152, 121, 0.1);
+                }
 
                 /* --- STYLES DES BOUTONS GENERES AUTOMATIQUEMENT --- */
                 
@@ -214,19 +265,20 @@
                     display: inline-flex;
                     align-items: center;
                     justify-content: center;
-                    padding: 6px 12px;
+                    padding: 8px 16px; /* Un peu plus grand */
                     border-radius: 6px;
                     text-decoration: none;
-                    font-size: 0.85rem;
+                    font-size: 0.9rem;
                     font-weight: 600;
-                    margin-right: 5px;
+                    margin-right: 10px;
+                    margin-top: 10px;
                     border: none;
                     cursor: pointer;
                     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-                    color: white; /* Texte blanc par défaut */
+                    color: white; 
                 }
-                .btn-action i { margin-right: 5px; }
-                .btn-action:hover { box-shadow: 0 4px 6px rgba(0,0,0,0.15); opacity: 0.9; }
+                .btn-action i { margin-right: 8px; }
+                .btn-action:hover { box-shadow: 0 4px 6px rgba(0,0,0,0.15); opacity: 0.95; }
 
                 /* COULEURS SPECIFIQUES */
                 .btn-show { background-color: var(--btn-info); }     /* VERT */
@@ -234,17 +286,21 @@
                 .btn-delete { background-color: var(--btn-danger); } /* ROUGE */
                 .btn-back { background-color: var(--btn-back); }     /* GRIS */
 
-                /* Bouton Créer Nouveau */
+                /* Bouton Créer/Sauvegarder (Gros bouton principal) */
                 .btn-create {
                     display: inline-flex;
                     align-items: center;
                     background-color: var(--color-primary-accent);
                     color: white;
-                    padding: 10px 20px;
+                    padding: 12px 24px;
                     border-radius: 8px;
                     font-weight: bold;
                     text-decoration: none;
                     margin-top: 20px;
+                    margin-right: 10px;
+                    border: none;
+                    cursor: pointer;
+                    font-size: 1rem;
                     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
                 }
                 .btn-create i { margin-right: 8px; }
@@ -417,10 +473,17 @@
                             el.innerHTML = '<i class="fa-solid fa-trash"></i> Supprimer';
                         }
 
-                        // -- BOUTON "CRÉER" / "CREATE NEW" -- (VERT + GROS)
+                        // -- BOUTON "CRÉER" / "AJOUTER" -- (VERT + GROS)
                         else if(text.includes('create new') || text.includes('créer') || text.includes('ajouter')) {
                             el.className = 'btn-create';
                             el.innerHTML = '<i class="fa-solid fa-plus"></i> ' + el.textContent;
+                        }
+
+                        // -- BOUTON "UPDATE" / "ENREGISTRER" / "SAUVEGARDER" -- (VERT comme Créer)
+                        // C'est celui qui te manquait pour la page Edit
+                        else if(text === 'update' || text === 'mettre à jour' || text === 'save' || text === 'enregistrer') {
+                            el.className = 'btn-create'; // On réutilise le style vert
+                            el.innerHTML = '<i class="fa-solid fa-check"></i> ' + el.textContent;
                         }
                     });
                 }
