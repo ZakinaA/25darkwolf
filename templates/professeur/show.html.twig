@@ -1,111 +1,117 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Détail de {{ professeur.prenom }} {{ professeur.nom }}{% endblock %}
+{% block title %}Professeur : {{ professeur.prenom }} {{ professeur.nom }}{% endblock %}
 
 {% block body %}
-    <h1>Détail du professeur : {{ professeur.prenom }} {{ professeur.nom }}</h1>
 
-    {# --- BLOC 1: DÉTAILS DU PROFESSEUR (EXISTANT) --- #}
-    <div class="row mt-4">
-        
-        {# Image du professeur #}
-        <div class="col-md-4">
+<div class="show-container">
+    <h1><i class="fa-solid fa-chalkboard-user"></i> Professeur : {{ professeur.prenom }} {{ professeur.nom }}</h1>
+
+    <div class="info-grid">
+
+        {# --- PHOTO (Bloc spécifique) --- #}
+        <div class="info-item" style="align-items: center; justify-content: center; padding: 10px;">
+            {# On garde la logique de ton image #}
             <img src="{{ asset('img/professeurs/' ~ professeur.id ~ '.png') }}" 
-                 alt="Photo de {{ professeur.prenom }} {{ professeur.nom }}" 
-                 style="width: 200px; height: 200px;"
-                 class="img-fluid rounded shadow-sm">
+                 alt="Photo de {{ professeur.prenom }}" 
+                 style="max-width: 100%; max-height: 150px; border-radius: 8px;"
+                 onerror="this.style.display='none'"> {# Cache l'image si elle n'existe pas #}
         </div>
-        
-        {# Tableau des détails #}
-        <div class="col-md-8">
-            <table class="table table-striped">
-                <tbody>
-                    <tr>
-                        <th style="width: 30%;">Nom complet</th>
-                        <td>{{ professeur.prenom }} {{ professeur.nom }}</td>
-                    </tr>
-                    <tr>
-                        <th>Adresse</th>
-                        <td>
-                            {{ professeur.numRue }} {{ professeur.rue }}<br>
-                            {{ professeur.copos }} {{ professeur.ville }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Contact</th>
-                        <td>
-                            Téléphone : {{ professeur.tel }}<br>
-                            Mail : {{ professeur.mail }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Spécialités</th>
-                        <td>
-                            {% if professeur.typeInstrument is not empty %}
-                                {% for type in professeur.typeInstrument %}
-                                    <span class="badge bg-primary">{{ type.libelle }}</span>
-                                {% endfor %}
-                            {% else %}
-                                <span class="text-muted">Aucune spécialité renseignée</span>
-                            {% endif %}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
 
-    {# --- BLOC 2: LISTE DES COURS (NOUVEAU) --- #}
-    <div class="row mt-5">
-        <div class="col-md-12">
-            <h3>Cours dispensés par {{ professeur.prenom }}</h3>
+        {# --- IDENTITÉ --- #}
+        <div class="info-item">
+            <span class="info-label"><i class="fa-solid fa-user-tie"></i> Nom Complet</span>
+            <span class="info-value">{{ professeur.prenom }} {{ professeur.nom }}</span>
+        </div>
+
+        {# --- CONTACT --- #}
+        <div class="info-item">
+            <span class="info-label"><i class="fa-solid fa-address-card"></i> Contact</span>
+            <span class="info-value">
+                <i class="fa-solid fa-envelope"></i> {{ professeur.mail }}<br>
+                <i class="fa-solid fa-phone"></i> {{ professeur.tel }}
+            </span>
+        </div>
+
+        {# --- ADRESSE --- #}
+        <div class="info-item">
+            <span class="info-label"><i class="fa-solid fa-location-dot"></i> Adresse</span>
+            <span class="info-value">
+                {{ professeur.numRue }} {{ professeur.rue }}<br>
+                {{ professeur.copos }} {{ professeur.ville }}
+            </span>
+        </div>
+
+        {# --- SPÉCIALITÉS (Instruments enseigné) --- #}
+        <div class="info-item" style="grid-column: 1 / -1;">
+            <span class="info-label"><i class="fa-solid fa-music"></i> Spécialités (Instruments)</span>
+            <div class="info-value list-chips">
+                {% if professeur.typeInstrument is not empty %}
+                    {% for type in professeur.typeInstrument %}
+                        <span class="chip">{{ type.libelle }}</span>
+                    {% endfor %}
+                {% else %}
+                    <span style="color: #999; font-style: italic;">Aucune spécialité renseignée</span>
+                {% endif %}
+            </div>
+        </div>
+
+        {# --- LISTE DES COURS (Tableau vert) --- #}
+        <div class="info-item" style="grid-column: 1 / -1;">
+            <span class="info-label"><i class="fa-solid fa-calendar-days"></i> Cours dispensés</span>
             
-            {# On vérifie si la collection 'cours' du professeur n'est pas vide #}
-            {% if professeur.cours is not empty %}
-                <table class="table table-hover">
-                    <thead class="table-light">
-                        <tr>
-                            <th>Libellé du cours</th>
-                            <th>Instrument</th>
-                            <th>Jour</th>
-                            <th>Horaires</th>
-                            <th>Âge minimum</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {# On boucle sur chaque cours associé au professeur #}
-                        {% for cours in professeur.cours %}
+            <div style="margin-top: 15px; overflow-x: auto;">
+                {% if professeur.cours is not empty %}
+                    <table class="planning-table">
+                        <thead>
                             <tr>
-                                <td>{{ cours.libelle }}</td>
-                                {# On accède aux propriétés des entités liées au cours #}
-                                <td>{{ cours.typeInstrument ? cours.typeInstrument.libelle : 'N/A' }}</td>
-                                <td>{{ cours.jour ? cours.jour.libelle : 'N/A' }}</td>
-                                <td>
-                                    {{ cours.heureDebut ? cours.heureDebut|date('H:i') : '?' }} 
-                                    - 
-                                    {{ cours.heureFin ? cours.heureFin|date('H:i') : '?' }}
-                                </td>
-                                <td>{{ cours.ageMini ? cours.ageMini ~ ' ans' : 'N/A' }}</td>
+                                <th>Libellé</th>
+                                <th>Instrument</th>
+                                <th>Jour & Horaires</th>
+                                <th>Âge min.</th>
                             </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            {% else %}
-                {# Message si le professeur n'a aucun cours #}
-                <div class="alert alert-info">
-                    Ce professeur ne dispense aucun cours pour le moment.
-                </div>
-            {% endif %}
+                        </thead>
+                        <tbody>
+                            {% for cours in professeur.cours %}
+                                <tr>
+                                    <td class="name-cell">{{ cours.libelle }}</td>
+                                    <td>{{ cours.typeInstrument ? cours.typeInstrument.libelle : 'N/A' }}</td>
+                                    <td>
+                                        <span class="day-cell">{{ cours.jour ? cours.jour.libelle : 'N/A' }}</span>
+                                        <br>
+                                        {{ cours.heureDebut ? cours.heureDebut|date('H:i') : '?' }} - 
+                                        {{ cours.heureFin ? cours.heureFin|date('H:i') : '?' }}
+                                    </td>
+                                    <td>{{ cours.ageMini ? cours.ageMini ~ ' ans' : '-' }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <div class="alert alert-info" style="margin-bottom: 0;">
+                        Ce professeur ne dispense aucun cours pour le moment.
+                    </div>
+                {% endif %}
+            </div>
         </div>
+
     </div>
-    {# --- FIN DU NOUVEAU BLOC --- #}
 
-    <hr>
+    {# --- ACTIONS --- #}
+    <div class="actions">
+        {# Bouton Retour #}
+        <a href="{{ path('app_professeur_index') }}" class="btn-action btn-back">
+            <i class="fa-solid fa-arrow-left"></i> Retour à la liste
+        </a>
 
-    <a href="{{ path('app_professeur_index') }}" class="btn btn-secondary">Retour à la liste</a>
-    <a href="{{ path('app_professeur_edit', {'id': professeur.id}) }}" class="btn btn-warning">Modifier</a>
+        {# Bouton Modifier #}
+        <a href="{{ path('app_professeur_edit', {'id': professeur.id}) }}" class="btn-action btn-edit">
+            <i class="fa-solid fa-pen-to-square"></i> Modifier
+        </a>
 
-    <div style="display: inline-block;">
+        {# Bouton Supprimer #}
         {{ include('professeur/_delete_form.html.twig') }}
     </div>
+
+</div>
 {% endblock %}
