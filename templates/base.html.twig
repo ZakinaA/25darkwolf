@@ -208,7 +208,12 @@
                 <a href="{{ path('app_contrat_pret_index') }}">📝 Contrats Prêt</a>
                 <a href="{{ path('app_intervention_index') }}">🔧 Interventions</a>
 
-            {# --- MENU AUTRES ROLES (Eleve, Prof...) --- #}
+            {# --- MENU ELEVE --- #}
+            {% elseif is_granted('ROLE_ELEVE') %}
+                <div class="sidebar-section">Mon Espace</div>
+                <a href="{{ path('app_cours_index') }}">📅 Cours</a>
+
+            {# --- MENU AUTRES ROLES (Prof, User...) --- #}
             {% else %}
                 <div class="sidebar-section">Mon Espace</div>
                 <a href="#">📅 Mon Planning</a>
@@ -227,6 +232,8 @@
                             <span style="color: #009879;">(Admin)</span> 
                         {% elseif is_granted('ROLE_GESTIONNAIRE') %}
                             <span style="color: #e67e22;">(Gestionnaire)</span>
+                        {% elseif is_granted('ROLE_ELEVE') %}
+                            <span style="color: #3498db;">(Élève)</span>
                         {% endif %}
                     {% else %}
                         Bienvenue sur E-Music

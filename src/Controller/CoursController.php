@@ -5,11 +5,13 @@ namespace App\Controller;
 use App\Entity\Cours;
 use App\Form\CoursType;
 use App\Repository\CoursRepository;
+use App\Repository\EleveRepository; // Ajout nécessaire
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted; // Ajout nécessaire
 
 #[Route('/cours')]
 final class CoursController extends AbstractController
@@ -39,6 +41,38 @@ final class CoursController extends AbstractController
         return $this->render('cours/new.html.twig', [
             'cour' => $cour,
             'form' => $form,
+        ]);
+    }
+
+    /**
+     * Affiche uniquement les cours de l'élève connecté.
+     * Cette route doit être placée AVANT la route /{id} pour éviter les conflits.
+     */
+    #[Route('/mes-cours', name: 'app_eleve_mes_cours', methods: ['GET'])]
+    #[IsGranted('ROLE_ELEVE')]
+    public function mesCours(CoursRepository $coursRepository, EleveRepository $eleveRepository): Response
+    {
+        // 1. Récupérer l'utilisateur connecté
+        $user = $this->getUser();
+
+        if (!$user) {
+             return $this->redirectToRoute('app_login');
+        }
+
+        // 2. Récupérer l'entité Élève liée à cet utilisateur
+        $eleve = $eleveRepository->findOneBy(['user' => $user]);
+
+        if (!$eleve) {
+            $this->addFlash('danger', 'Profil élève non trouvé. Veuillez contacter l\'administration.');
+            return $this->redirectToRoute('app_home');
+        }
+
+        // 3. Utiliser la requête personnalisée du Repository
+        $mesCours = $coursRepository->findByEleve($eleve->getId());
+
+        return $this->render('cours/mes_cours.html.twig', [
+            'cours' => $mesCours,
+            'eleve' => $eleve
         ]);
     }
 

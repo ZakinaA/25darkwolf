@@ -8,26 +8,30 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Libelle</th>
                 <th>AgeMini</th>
                 <th>HeureDebut</th>
                 <th>HeureFin</th>
-                <th>actions</th>
+                {# On masque l'en-tête 'actions' si l'utilisateur est un élève #}
+                {% if not is_granted('ROLE_ELEVE') %}
+                    <th>actions</th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
         {% for cour in cours %}
             <tr>
-                <td>{{ cour.id }}</td>
                 <td>{{ cour.libelle }}</td>
                 <td>{{ cour.ageMini }}</td>
                 <td>{{ cour.heureDebut ? cour.heureDebut|date('H:i:s') : '' }}</td>
                 <td>{{ cour.heureFin ? cour.heureFin|date('H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('app_cours_show', {'id': cour.id}) }}">show</a>
-                    <a href="{{ path('app_cours_edit', {'id': cour.id}) }}">edit</a>
-                </td>
+                {# On masque les boutons d'action si l'utilisateur est un élève #}
+                {% if not is_granted('ROLE_ELEVE') %}
+                    <td>
+                        <a href="{{ path('app_cours_show', {'id': cour.id}) }}">show</a>
+                        <a href="{{ path('app_cours_edit', {'id': cour.id}) }}">edit</a>
+                    </td>
+                {% endif %}
             </tr>
         {% else %}
             <tr>
@@ -37,5 +41,8 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_cours_new') }}">Create new</a>
+    {# On masque le lien de création si l'utilisateur est un élève #}
+    {% if not is_granted('ROLE_ELEVE') %}
+        <a href="{{ path('app_cours_new') }}">Create new</a>
+    {% endif %}
 {% endblock %}
