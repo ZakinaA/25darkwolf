@@ -8,7 +8,6 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Nom</th>
                 <th>Prenom</th>
                 <th>NumRue</th>
@@ -24,7 +23,6 @@
         <tbody>
         {% for eleve in eleves %}
             <tr>
-                <td>{{ eleve.id }}</td>
                 <td>{{ eleve.nom }}</td>
                 <td>{{ eleve.prenom }}</td>
                 <td>{{ eleve.numRue }}</td>
@@ -38,7 +36,7 @@
                 {%endfor%}
                 </td>
                 <td>
-                    <a href="{{ path('app_eleve_show', {'id': eleve.id}) }}">show</a>
+                    <a href="{{ path('app_eleve_show', {'id': eleve.id}) }}">show</a>      
                     <a href="{{ path('app_eleve_edit', {'id': eleve.id}) }}">edit</a>
                 </td>
             </tr>
