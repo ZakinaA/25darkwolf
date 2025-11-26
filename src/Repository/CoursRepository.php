@@ -117,4 +117,20 @@ class CoursRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+        /**
+     * Récupère les cours dispensés par un professeur spécifique
+     * @return Cours[]
+     */
+    public function findCoursByProfesseur(int $professeurId): array
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.professeur = :profId')
+            ->setParameter('profId', $professeurId)
+            // On trie par jour puis par heure de début pour un emploi du temps clair
+            ->leftJoin('c.jour', 'j') // Jointure pour trier par jour si besoin
+            ->orderBy('j.id', 'ASC')  // ou 'c.jour' selon ta structure
+            ->addOrderBy('c.heureDebut', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 }
