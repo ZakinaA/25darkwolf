@@ -208,12 +208,17 @@
                 <a href="{{ path('app_contrat_pret_index') }}">📝 Contrats Prêt</a>
                 <a href="{{ path('app_intervention_index') }}">🔧 Interventions</a>
 
+            {# --- MENU PROFESSEUR --- #}
+            {% elseif is_granted('ROLE_PROF') %}
+                <div class="sidebar-section">Espace Professeur</div>
+                <a href="{{ path('app_cours_index') }}">📅 Cours</a>
+
             {# --- MENU ELEVE --- #}
             {% elseif is_granted('ROLE_ELEVE') %}
                 <div class="sidebar-section">Mon Espace</div>
                 <a href="{{ path('app_cours_index') }}">📅 Cours</a>
 
-            {# --- MENU AUTRES ROLES (Prof, User...) --- #}
+            {# --- MENU AUTRES ROLES (User...) --- #}
             {% else %}
                 <div class="sidebar-section">Mon Espace</div>
                 <a href="#">📅 Mon Planning</a>
@@ -232,6 +237,8 @@
                             <span style="color: #009879;">(Admin)</span> 
                         {% elseif is_granted('ROLE_GESTIONNAIRE') %}
                             <span style="color: #e67e22;">(Gestionnaire)</span>
+                        {% elseif is_granted('ROLE_PROF') %}
+                            <span style="color: #9b59b6;">(Professeur)</span>
                         {% elseif is_granted('ROLE_ELEVE') %}
                             <span style="color: #3498db;">(Élève)</span>
                         {% endif %}
