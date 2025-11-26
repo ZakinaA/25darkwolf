@@ -109,4 +109,27 @@ final class CoursController extends AbstractController
 
         return $this->redirectToRoute('app_cours_index', [], Response::HTTP_SEE_OTHER);
     }
+    #[Route('/espace-professeur', name: 'app_professeur_mes_cours', methods: ['GET'])]
+    #[IsGranted('ROLE_PROFESSEUR')] // Sécurité : seuls les profs accèdent à cette page
+    public function mesCoursProfesseur(CoursRepository $coursRepository): Response
+    {
+        /** @var \App\Entity\User $user */
+        $user = $this->getUser();
+
+        // On récupère le profil Professeur lié au User
+        $professeur = $user->getProfesseur();
+
+        if (!$professeur) {
+            $this->addFlash('danger', 'Votre compte utilisateur n\'est pas lié à un profil Professeur.');
+            return $this->redirectToRoute('app_home');
+        }
+
+        // On appelle la requête du repository
+        $mesCours = $coursRepository->findCoursByProfesseur($professeur->getId());
+
+        return $this->render('cours/mes_cours_professeur.html.twig', [
+            'cours' => $mesCours,
+            'professeur' => $professeur
+        ]);
+    }
 }
