@@ -26,7 +26,7 @@ final class CoursController extends AbstractController
             return $this->redirectToRoute('app_eleve_mes_cours');
         }
 
-        // 2. Redirection automatique si c'est un PROFESSEUR (Mise à jour : ROLE_PROF)
+        // 2. Redirection automatique si c'est un PROFESSEUR
         if ($this->isGranted('ROLE_PROF') || ($user && $user->getProfesseur())) {
              return $this->redirectToRoute('app_professeur_mes_cours');
         }
@@ -73,14 +73,15 @@ final class CoursController extends AbstractController
 
         $mesCours = $coursRepository->findCoursByEleve($eleve->getId());
 
-        return $this->render('cours/mes_cours.html.twig', [
+        // CHANGEMENT ICI : on pointe vers le nouveau fichier _eleve
+        return $this->render('cours/mes_cours_eleve.html.twig', [
             'cours' => $mesCours,
             'eleve' => $eleve
         ]);
     }
 
     #[Route('/espace-professeur', name: 'app_professeur_mes_cours', methods: ['GET'])]
-    #[IsGranted('ROLE_PROF')] // Mise à jour : ROLE_PROF
+    #[IsGranted('ROLE_PROF')]
     public function mesCoursProfesseur(CoursRepository $coursRepository): Response
     {
         /** @var \App\Entity\User $user */
