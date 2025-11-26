@@ -11,6 +11,16 @@
 
         {% block stylesheets %}
             <style>
+                /* --- DEFINITION DES COULEURS PRINCIPALES (Vert pour l'accent) --- */
+                :root {
+                    --color-sidebar-bg: #2c3e50; /* Bleu nuit */
+                    --color-primary-accent: #009879; /* Vert Émeraude Rétabli */
+                    --color-primary-dark: #007c64; /* Vert Émeraude Foncé */
+                    --color-text-light: #bdc3c7;
+                    --color-bg-light-hover: #e6fff7; /* Vert clair 50 */
+                }
+
+
                 /* --- RESET & GLOBAL --- */
                 * { box-sizing: border-box; }
                 body {
@@ -25,7 +35,7 @@
                 /* --- 1. SIDEBAR (GAUCHE) --- */
                 .sidebar {
                     width: 260px;
-                    background-color: #2c3e50; /* Bleu nuit */
+                    background-color: var(--color-sidebar-bg); 
                     color: white;
                     display: flex;
                     flex-direction: column;
@@ -34,24 +44,23 @@
                     height: 100%;
                     left: 0;
                     top: 0;
-                    overflow-y: auto; /* Permet de scroller si le menu est trop long */
+                    overflow-y: auto; 
                     z-index: 1000;
                 }
 
                 .sidebar h2 {
                     text-align: center;
                     margin-bottom: 30px;
-                    color: #009879; /* Vert émeraude */
+                    color: var(--color-primary-accent); /* Utilisation du Vert Émeraude */
                     text-transform: uppercase;
                     letter-spacing: 2px;
                     font-size: 1.8rem;
                 }
 
-                /* Titres de section dans le menu */
                 .sidebar-section {
                     font-size: 0.75rem;
                     text-transform: uppercase;
-                    color: #95a5a6; /* Gris clair */
+                    color: #95a5a6; 
                     margin-top: 20px;
                     margin-bottom: 5px;
                     padding-left: 10px;
@@ -61,7 +70,7 @@
                 }
 
                 .sidebar a {
-                    color: #bdc3c7;
+                    color: var(--color-text-light);
                     text-decoration: none;
                     padding: 12px 15px;
                     margin-bottom: 5px;
@@ -72,23 +81,23 @@
                 }
 
                 .sidebar a:hover {
-                    background-color: #009879;
+                    background-color: var(--color-primary-accent); /* Utilisation du Vert Émeraude */
                     color: white;
                     padding-left: 20px;
                 }
 
                 .sidebar a.active {
-                    background-color: #009879;
+                    background-color: var(--color-primary-accent); /* Utilisation du Vert Émeraude */
                     color: white;
                 }
 
                 /* --- 2. ZONE PRINCIPALE (DROITE) --- */
                 .main-wrapper {
-                    margin-left: 260px; /* C'EST LA CLÉ : Décale tout le contenu à droite */
+                    margin-left: 260px; 
                     flex: 1;
                     display: flex;
                     flex-direction: column;
-                    width: calc(100% - 260px); /* S'assure que ça ne dépasse pas */
+                    width: calc(100% - 260px); 
                 }
 
                 /* --- 3. TOP BAR (HAUT) --- */
@@ -97,7 +106,7 @@
                     height: 70px;
                     box-shadow: 0 2px 10px rgba(0,0,0,0.05);
                     display: flex;
-                    justify-content: space-between; /* Espace entre le titre page et les boutons */
+                    justify-content: space-between; 
                     align-items: center;
                     padding: 0 30px;
                 }
@@ -118,18 +127,19 @@
                     transition: 0.3s;
                     display: inline-block;
                 }
-
+                
+                /* Boutons de connexion et inscription uniformisés avec le Vert Émeraude */
                 .btn-login {
-                    border: 2px solid #009879;
-                    color: #009879;
+                    border: 2px solid var(--color-primary-accent);
+                    color: var(--color-primary-accent);
                 }
-                .btn-login:hover { background-color: #eafaf1; }
+                .btn-login:hover { background-color: var(--color-bg-light-hover); }
 
                 .btn-register {
-                    background-color: #009879;
+                    background-color: var(--color-primary-accent);
                     color: white;
                 }
-                .btn-register:hover { background-color: #007f65; }
+                .btn-register:hover { background-color: var(--color-primary-dark); }
 
                 .btn-logout {
                     border: 2px solid #e74c3c;
@@ -142,20 +152,55 @@
                     padding: 30px;
                 }
 
-                /* --- STYLES UTILITAIRES (Tableaux, Alertes) --- */
-                .table {
-                    width: 100%;
-                    border-collapse: collapse;
-                    background-color: #ffffff;
-                    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-                    border-radius: 8px;
-                    overflow: hidden;
-                    margin-bottom: 20px;
+                /* --- STYLES TABLEAU COURS (PLANNING) --- */
+                .planning-table-container {
+                    overflow-x: auto;
+                    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1); 
+                    border-radius: 12px; 
                 }
-                .table thead { background-color: #009879; color: #ffffff; }
-                .table th, .table td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #dddddd; }
-                .table tbody tr:nth-of-type(even) { background-color: #f3f3f3; }
-                .table tbody tr:last-of-type { border-bottom: 2px solid #009879; }
+                
+                .planning-table {
+                    min-width: 100%;
+                    background-color: #ffffff;
+                    border-collapse: collapse;
+                }
+
+                .planning-table thead {
+                    background-color: var(--color-primary-accent); /* Fond Vert Émeraude de l'en-tête */
+                    color: white;
+                }
+                
+                .planning-table th {
+                    padding: 16px 16px;
+                    text-align: left;
+                    font-weight: 600; 
+                    letter-spacing: 0.05em; 
+                }
+
+                .planning-table tbody tr {
+                    border-bottom: 1px solid #e5e7eb;
+                    transition: background-color 0.15s ease-in-out;
+                }
+
+                .planning-table tbody tr:hover {
+                    background-color: var(--color-bg-light-hover); /* Effet hover léger Vert Émeraude */
+                }
+
+                .planning-table td {
+                    padding: 12px 16px;
+                    font-size: 1rem;
+                    color: #4b5563; 
+                }
+
+                .planning-table .day-cell {
+                    font-weight: 800; 
+                    color: var(--color-primary-dark); /* Jour en Vert Émeraude foncé */
+                }
+                
+                .planning-table .name-cell {
+                    color: #1f2937; 
+                    font-weight: 500; 
+                }
 
                 /* Alertes Flash */
                 .alert { padding: 15px; margin-bottom: 20px; border-radius: 5px; }
@@ -221,7 +266,6 @@
             {# --- MENU AUTRES ROLES (User...) --- #}
             {% else %}
                 <div class="sidebar-section">Mon Espace</div>
-                <a href="#">📅 Mon Planning</a>
             {% endif %}
         </div>
 
@@ -233,14 +277,15 @@
                 <div class="user-info">
                     {% if app.user %}
                         Bonjour, {{ app.user.email }}
+                        {# Utilisation de couleurs qui contrastent bien #}
                         {% if is_granted('ROLE_ADMIN') %} 
-                            <span style="color: #009879;">(Admin)</span> 
+                            <span style="color: var(--color-primary-accent);"> (Admin)</span> 
                         {% elseif is_granted('ROLE_GESTIONNAIRE') %}
                             <span style="color: #e67e22;">(Gestionnaire)</span>
                         {% elseif is_granted('ROLE_PROF') %}
                             <span style="color: #9b59b6;">(Professeur)</span>
                         {% elseif is_granted('ROLE_ELEVE') %}
-                            <span style="color: #3498db;">(Élève)</span>
+                            <span style="color: #3498db);">(Élève)</span>
                         {% endif %}
                     {% else %}
                         Bienvenue sur E-Music
