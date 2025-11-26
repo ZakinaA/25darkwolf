@@ -3,96 +3,113 @@
 {% block title %}Type : {{ type_instrument.libelle }}{% endblock %}
 
 {% block body %}
-    <h1>Type d'instrument : {{ type_instrument.libelle }}</h1>
-    <div class="row">
-        <div class="col-md-12">
-            <table class="table table-striped">
-                <tbody>
-                    <tr>
-                        <th style="width: 20%;">Id</th>
-                        <td>{{ type_instrument.id }}</td>
-                    </tr>
-                    <tr>
-                        <th>Libellé</th>
-                        <td>{{ type_instrument.libelle }}</td>
-                    </tr>
-                    <tr>
-                        <th>Classe</th>
-                        {# On affiche la classe parente, c'est une info utile #}
-                        <td>{{ type_instrument.classeInstrument ? type_instrument.classeInstrument.libelle : 'Non classé' }}</td>
-                    </tr>
-                </tbody>
-            </table>
+
+<div class="show-container">
+    <h1><i class="fa-solid fa-guitar"></i> Type d'instrument : {{ type_instrument.libelle }}</h1>
+
+    <div class="info-grid">
+
+        {# Bloc ID #}
+        <div class="info-item">
+            <span class="info-label"><i class="fa-solid fa-hashtag"></i> Id</span>
+            <span class="info-value">{{ type_instrument.id }}</span>
         </div>
-    </div>
-    <div class="row mt-4">
-        <div class="col-md-12">
-            <h3>Instruments de ce type</h3>
+
+        {# Bloc Libellé #}
+        <div class="info-item">
+            <span class="info-label"><i class="fa-solid fa-tag"></i> Libellé</span>
+            <span class="info-value">{{ type_instrument.libelle }}</span>
+        </div>
+
+        {# Bloc Classe Parente #}
+        <div class="info-item">
+            <span class="info-label"><i class="fa-solid fa-layer-group"></i> Classe associée</span>
+            <span class="info-value">
+                {{ type_instrument.classeInstrument ? type_instrument.classeInstrument.libelle : 'Non classé' }}
+            </span>
+        </div>
+
+        {# --- LISTE DES INSTRUMENTS (Bloc pleine largeur) --- #}
+        <div class="info-item" style="grid-column: 1 / -1;">
+            <span class="info-label"><i class="fa-solid fa-music"></i> Instruments de ce type</span>
             
-            {% if type_instrument.instruments is not empty %}
-                <table class="table table-hover">
-                    <thead class="table-light">
-                        <tr>
-                            <th>Numéro de série</th>
-                            <th>Marque</th>
-                            <th>Prix d'achat</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for instrument in type_instrument.instruments %}
+            <div style="margin-top: 15px; overflow-x: auto;">
+                {% if type_instrument.instruments is not empty %}
+                    {# On utilise la classe planning-table pour avoir le style vert de la base #}
+                    <table class="planning-table">
+                        <thead>
                             <tr>
-                                <td>{{ instrument.numSerie }}</td>
-                                <td>{{ instrument.marque ? instrument.marque.libelle : 'N/A' }}</td>
-                                <td>{{ instrument.prixAchat ? instrument.prixAchat|number_format(2, ',', ' ') ~ ' €' : 'N/A' }}</td>
+                                <th>Numéro de série</th>
+                                <th>Marque</th>
+                                <th>Prix d'achat</th>
                             </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            {% else %}
-                <div class="alert alert-info">
-                    Aucun instrument de ce type n'est actuellement enregistré.
-                </div>
-            {% endif %}
+                        </thead>
+                        <tbody>
+                            {% for instrument in type_instrument.instruments %}
+                                <tr>
+                                    <td>{{ instrument.numSerie }}</td>
+                                    <td>{{ instrument.marque ? instrument.marque.libelle : 'N/A' }}</td>
+                                    <td>{{ instrument.prixAchat ? instrument.prixAchat|number_format(2, ',', ' ') ~ ' €' : 'N/A' }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <div class="alert alert-info" style="margin-bottom: 0;">
+                        Aucun instrument de ce type n'est actuellement enregistré.
+                    </div>
+                {% endif %}
+            </div>
         </div>
+
+        {# --- LISTE DES PROFESSEURS (Bloc pleine largeur) --- #}
+        <div class="info-item" style="grid-column: 1 / -1;">
+            <span class="info-label"><i class="fa-solid fa-chalkboard-user"></i> Professeurs enseignant ce type</span>
+            
+            <div style="margin-top: 15px; overflow-x: auto;">
+                {% if type_instrument.professeurs is not empty %}
+                    <table class="planning-table">
+                        <thead>
+                            <tr>
+                                <th>Nom</th>
+                                <th>Email</th>
+                                <th>Téléphone</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for prof in type_instrument.professeurs %}
+                                <tr>
+                                    <td>{{ prof.prenom }} {{ prof.nom }}</td>
+                                    <td>{{ prof.mail }}</td>
+                                    <td>{{ prof.tel }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <div class="alert alert-info" style="margin-bottom: 0;">
+                        Aucun professeur n'enseigne ce type d'instrument pour le moment.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
     </div>
 
-    <div class="row mt-4">
-        <div class="col-md-12">
-            <h3>Professeurs enseignant ce type</h3>
+    <div class="actions">
+        {# Bouton Retour #}
+        <a href="{{ path('app_type_instrument_index') }}" class="btn-action btn-back">
+            <i class="fa-solid fa-arrow-left"></i> Retour à la liste
+        </a>
 
-            {% if type_instrument.professeurs is not empty %}
-                <table class="table table-hover">
-                    <thead class="table-light">
-                        <tr>
-                            <th>Nom</th>
-                            <th>Email</th>
-                            <th>Téléphone</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for prof in type_instrument.professeurs %}
-                            <tr>
-                                <td>{{ prof.prenom }} {{ prof.nom }}</td>
-                                <td>{{ prof.mail }}</td>
-                                <td>{{ prof.tel }}</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            {% else %}
-                <div class="alert alert-info">
-                    Aucun professeur n'enseigne ce type d'instrument pour le moment.
-                </div>
-            {% endif %}
-        </div>
-    </div>
+        {# Bouton Modifier #}
+        <a href="{{ path('app_type_instrument_edit', {'id': type_instrument.id}) }}" class="btn-action btn-edit">
+            <i class="fa-solid fa-pen-to-square"></i> Modifier
+        </a>
 
-    <hr class="mt-4">
-
-    <a href="{{ path('app_type_instrument_index') }}" class="btn btn-secondary">Retour à la liste</a>
-    <a href="{{ path('app_type_instrument_edit', {'id': type_instrument.id}) }}" class="btn btn-warning">Modifier</a>
-
-    <div style="display: inline-block;">
+        {# Bouton Supprimer #}
         {{ include('type_instrument/_delete_form.html.twig') }}
     </div>
+
+</div>
 {% endblock %}

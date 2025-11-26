@@ -1,155 +1,148 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Contrat de Prêt #{{ contratPret.id }}{% endblock %}
+{% block title %}Contrat de Prêt #{{ contratPret.numContrat }}{% endblock %}
 
 {% block body %}
-    <div class="container mx-auto p-6 max-w-4xl">
-        <h1 class="text-4xl font-extrabold text-gray-900 mb-8 border-b pb-2">Détails du Contrat de Prêt #{{ contratPret.id }}</h1>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            
-            {# ================================= #}
-            {# Informations du Contrat de Prêt #}
-            {# ================================= #}
-            <div class="bg-white shadow-xl rounded-xl p-6 border border-gray-100">
-                <h2 class="text-2xl font-semibold text-indigo-700 mb-4 border-b pb-2">Contrat</h2>
-                
-                <dl class="space-y-3 text-gray-700">
-                    <div>
-                        <dt class="font-medium text-gray-500">Numéro :</dt>
-                        <dd class="text-lg font-bold">{{ contratPret.numContrat }}</dd>
-                    </div>
-                    <div>
-                        <dt class="font-medium text-gray-500">Date de Début :</dt>
-                        <dd class="text-lg font-bold">{{ contratPret.dateDebut ? contratPret.dateDebut|date('d/m/Y') : 'N/A' }}</dd>
-                    </div>
-                    <div>
-                        <dt class="font-medium text-gray-500">Date de Fin Prévue :</dt>
-                        <dd class="text-lg font-bold text-red-600">{{ contratPret.dateFin ? contratPret.dateFin|date('d/m/Y') : 'N/A' }}</dd>
-                    </div>
-                    <div>
-                        <dt class="font-medium text-gray-500">Assurance Fournie :</dt>
-                        <dd class="text-lg font-bold">
-                            {% if contratPret.isAttestationAssurance %}
-                                <span class="text-green-600">Oui</span>
-                            {% else %}
-                                <span class="text-red-600">Non</span>
-                            {% endif %}
-                        </dd>
-                    </div>
-                </dl>
-                
-                <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3">États</h3>
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="p-3 bg-gray-50 rounded">
-                        <dt class="font-medium text-gray-500">Début du Prêt :</dt>
-                        <dd class="text-sm italic text-gray-700">{{ contratPret.etatDetailleDebut|nl2br }}</dd>
-                    </div>
-                    <div class="p-3 bg-gray-50 rounded">
-                        <dt class="font-medium text-gray-500">Retour (Si renseigné) :</dt>
-                        <dd class="text-sm italic text-gray-700">
-                            {% if contratPret.etatDetailleRetour %}
-                                {{ contratPret.etatDetailleRetour|nl2br }}
-                            {% else %}
-                                Non renseigné
-                            {% endif %}
-                        </dd>
-                    </div>
-                </div>
-            </div>
+<div class="show-container">
+    <h1><i class="fa-solid fa-file-signature"></i> Contrat de Prêt #{{ contratPret.numContrat }}</h1>
 
-            {# ================================= #}
-            {# Informations sur l'Élève #}
-            {# ================================= #}
-            {% if contratPret.eleve %}
-                <div class="bg-white shadow-xl rounded-xl p-6 border border-gray-100">
-                    <h2 class="text-2xl font-semibold text-indigo-700 mb-4 border-b pb-2">Élève Emprunteur</h2>
-                    
-                    {% set eleve = contratPret.eleve %}
-                    <dl class="space-y-3 text-gray-700">
-                        <div>
-                            <dt class="font-medium text-gray-500">Nom Complet :</dt>
-                            <dd class="text-lg font-bold">{{ eleve.prenom }} {{ eleve.nom }}</dd>
-                        </div>
-                        <div>
-                            <dt class="font-medium text-gray-500">Contact :</dt>
-                            <dd>{{ eleve.mail }} / {{ eleve.tel }}</dd>
-                        </div>
-                        <div>
-                            <dt class="font-medium text-gray-500">Adresse :</dt>
-                            <dd>{{ eleve.numRue }} {{ eleve.rue }}, {{ eleve.copos }} {{ eleve.ville }}</dd>
-                        </div>
-                        <div>
-                            <dt class="font-medium text-gray-500">Tranche d'Âge :</dt>
-                            <dd>{{ eleve.tranche ? eleve.tranche.libelle : 'N/A' }}</dd>
-                        </div>
-                    </dl>
-                    {# Lien vers le show de l'élève si vous en avez un : #}
-                    {# <div class="mt-4"><a href="{{ path('app_eleve_show', {'id': eleve.id}) }}" class="text-sm text-indigo-600 hover:text-indigo-800 font-medium">Voir le profil complet</a></div> #}
-                </div>
-            {% endif %}
-        </div>
+    {# --- SECTION 1 : INFORMATIONS DU CONTRAT --- #}
+    <h3 style="color: #2c3e50; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 5px;">
+        <i class="fa-solid fa-circle-info"></i> Informations Générales
+    </h3>
+
+    <div class="info-grid">
         
-        {# ================================= #}
-        {# Informations sur l'Instrument #}
-        {# La section 'Marque' a été retirée pour éviter l'erreur. #}
-        {# ================================= #}
-        {% if contratPret.instrument %}
-            <div class="mt-8 bg-white shadow-xl rounded-xl p-6 border border-gray-100">
-                <h2 class="text-2xl font-semibold text-indigo-700 mb-4 border-b pb-2">Instrument Prêté</h2>
-                
-                {% set instrument = contratPret.instrument %}
-                {# Mise en page ajustée suite au retrait du champ Marque (maintenant 3 colonnes) #}
-                <dl class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-3 text-gray-700">
-                    <div>
-                        <dt class="font-medium text-gray-500">Type :</dt>
-                        <dd class="text-lg font-bold">{{ instrument.typeInstrument ? instrument.typeInstrument.libelle : 'N/A' }}</dd>
-                    </div>
-                    <div>
-                        <dt class="font-medium text-gray-500">Numéro de Série :</dt>
-                        <dd class="font-mono">{{ instrument.numSerie }}</dd>
-                    </div>
-                    <div>
-                        <dt class="font-medium text-gray-500">Prix d'Achat :</dt>
-                        <dd>{{ instrument.prixAchat|number_format(2, ',', ' ') }} €</dd>
-                    </div>
-                    <div>
-                        <dt class="font-medium text-gray-500">Couleurs :</dt>
-                        <dd>
-                            {% for couleur in instrument.couleurs %}
-                                <span class="inline-block bg-gray-200 text-gray-800 text-xs px-2 py-0.5 rounded-full">{{ couleur.libelle }}</span>
-                            {% else %}
-                                Aucune
-                            {% endfor %}
-                        </dd>
-                    </div>
-                    <div>
-                        <dt class="font-medium text-gray-500">Date d'Achat :</dt>
-                        <dd>{{ instrument.dateAchat ? instrument.dateAchat|date('d/m/Y') : 'N/A' }}</dd>
-                    </div>
-                    {# Laissez le dernier slot vide ou remplissez-le si d'autres champs existent #}
-                    <div>
-                        {# Espace réservé si besoin d'alignement #}
-                    </div>
-                </dl>
-            </div>
-        {% else %}
-            <p class="mt-8 p-4 bg-red-100 text-red-800 rounded-lg">⚠ Aucune information d'instrument liée à ce contrat.</p>
-        {% endif %}
-
-        {# ================================= #}
-        {# Actions #}
-        {# ================================= #}
-        <div class="mt-8 flex space-x-4">
-            {# Assurez-vous que la route 'app_contrat_pret_edit' existe dans votre contrôleur #}
-            <a href="{{ path('app_contrat_pret_edit', {'id': contratPret.id}) }}" class="btn-action btn-edit">
-                <i class="fa-solid fa-pen-to-square"></i> Modifier le contrat
-            </a>
-            {# Assurez-vous que la route 'app_contrat_pret_index' existe dans votre contrôleur #}
-            <a href="{{ path('app_contrat_pret_index') }}" class="bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded-lg hover:bg-gray-300 transition duration-150">
-                Retour à la liste
-            </a>
+        {# Numéro #}
+        <div class="info-item">
+            <span class="info-label"><i class="fa-solid fa-hashtag"></i> Numéro de contrat</span>
+            <span class="info-value">{{ contratPret.numContrat }}</span>
         </div>
 
+        {# Assurance #}
+        <div class="info-item">
+            <span class="info-label"><i class="fa-solid fa-shield-halved"></i> Assurance Fournie</span>
+            <span class="info-value">
+                {% if contratPret.isAttestationAssurance %}
+                    <span style="color: green; font-weight: bold;"><i class="fa-solid fa-check"></i> Oui</span>
+                {% else %}
+                    <span style="color: red; font-weight: bold;"><i class="fa-solid fa-xmark"></i> Non</span>
+                {% endif %}
+            </span>
+        </div>
+
+        {# Date Début #}
+        <div class="info-item">
+            <span class="info-label"><i class="fa-regular fa-calendar-check"></i> Date de Début</span>
+            <span class="info-value">{{ contratPret.dateDebut ? contratPret.dateDebut|date('d/m/Y') : 'N/A' }}</span>
+        </div>
+
+        {# Date Fin #}
+        <div class="info-item">
+            <span class="info-label"><i class="fa-regular fa-calendar-xmark"></i> Date de Fin Prévue</span>
+            <span class="info-value" style="color: #e74c3c;">{{ contratPret.dateFin ? contratPret.dateFin|date('d/m/Y') : 'N/A' }}</span>
+        </div>
+
+        {# États (Pleine largeur) #}
+        <div class="info-item" style="grid-column: 1 / -1;">
+            <span class="info-label"><i class="fa-solid fa-clipboard-list"></i> État au départ</span>
+            <span class="info-value" style="font-style: italic; font-size: 1rem;">
+                {{ contratPret.etatDetailleDebut ? contratPret.etatDetailleDebut|nl2br : 'Non renseigné' }}
+            </span>
+        </div>
+
+        <div class="info-item" style="grid-column: 1 / -1;">
+            <span class="info-label"><i class="fa-solid fa-clipboard-check"></i> État au retour</span>
+            <span class="info-value" style="font-style: italic; font-size: 1rem;">
+                {{ contratPret.etatDetailleRetour ? contratPret.etatDetailleRetour|nl2br : 'Non renseigné (Prêt en cours)' }}
+            </span>
+        </div>
     </div>
+
+    {# --- SECTION 2 : L'ÉLÈVE --- #}
+    {% if contratPret.eleve %}
+        {% set eleve = contratPret.eleve %}
+        <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 5px;">
+            <i class="fa-solid fa-user-graduate"></i> Élève Emprunteur
+        </h3>
+
+        <div class="info-grid">
+            <div class="info-item">
+                <span class="info-label">Nom Complet</span>
+                <span class="info-value">{{ eleve.prenom }} {{ eleve.nom }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Contact</span>
+                <span class="info-value">{{ eleve.mail }} <br> {{ eleve.tel }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Adresse</span>
+                <span class="info-value">
+                    {{ eleve.numRue }} {{ eleve.rue }}<br>
+                    {{ eleve.copos }} {{ eleve.ville }}
+                </span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Tranche d'âge</span>
+                <span class="info-value">{{ eleve.tranche ? eleve.tranche.libelle : 'N/A' }}</span>
+            </div>
+        </div>
+    {% endif %}
+
+    {# --- SECTION 3 : L'INSTRUMENT --- #}
+    {% if contratPret.instrument %}
+        {% set instrument = contratPret.instrument %}
+        <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 5px;">
+            <i class="fa-solid fa-guitar"></i> Instrument Prêté
+        </h3>
+
+        <div class="info-grid">
+            <div class="info-item">
+                <span class="info-label">Type</span>
+                <span class="info-value">{{ instrument.typeInstrument ? instrument.typeInstrument.libelle : 'N/A' }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Numéro de Série</span>
+                <span class="info-value">{{ instrument.numSerie }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Prix de l'instrument</span>
+                <span class="info-value">{{ instrument.prixAchat ? (instrument.prixAchat|number_format(2, ',', ' ') ~ ' €') : 'N/A' }}</span>
+            </div>
+            
+            {# Couleurs #}
+            <div class="info-item" style="grid-column: 1 / -1;">
+                <span class="info-label">Couleurs</span>
+                <div class="info-value list-chips">
+                    {% if instrument.couleurs is not empty %}
+                        {% for couleur in instrument.couleurs %}
+                            <span class="chip">{{ couleur.nom }}</span>
+                        {% endfor %}
+                    {% else %}
+                        <span style="color: #999; font-style: italic;">Aucune couleur</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="alert alert-danger" style="margin-top: 20px;">
+            <i class="fa-solid fa-triangle-exclamation"></i> Aucun instrument n'est actuellement lié à ce contrat.
+        </div>
+    {% endif %}
+
+    {# --- ACTIONS --- #}
+    <div class="actions">
+        {# Bouton Retour #}
+        <a href="{{ path('app_contrat_pret_index') }}" class="btn-action btn-back">
+            <i class="fa-solid fa-arrow-left"></i> Retour à la liste
+        </a>
+
+        {# Bouton Modifier #}
+        <a href="{{ path('app_contrat_pret_edit', {'id': contratPret.id}) }}" class="btn-action btn-edit">
+            <i class="fa-solid fa-pen-to-square"></i> Modifier le contrat
+        </a>
+    </div>
+
+</div>
 {% endblock %}

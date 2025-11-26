@@ -1,54 +1,45 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Liste des Instruments{% endblock %}
+{% block title %}Instrument index{% endblock %}
 
 {% block body %}
+    <h1>Instrument index</h1>
 
-<div class="list-container">
-    <h1>Liste des Instruments</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Numéro de Série</th>
+                <th>Date d'Achat</th>
+                <th>Prix d'Achat</th>
+                <th>Type</th>
+                <th>Marque</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for instrument in instruments %}
+            <tr>
+                <td>{{ instrument.id }}</td>
+                <td>{{ instrument.numSerie }}</td>
+                <td>{{ instrument.dateAchat ? instrument.dateAchat|date('d/m/Y') : '' }}</td>
+                <td>{{ instrument.prixAchat ? (instrument.prixAchat|number_format(2, ',', ' ') ~ ' €') : '' }}</td>
+                <td>{{ instrument.typeInstrument.libelle ?? 'N/A' }}</td>
+                <td>{{ instrument.marque.libelle ?? 'N/A' }}</td>
+                <td>
+                    {# Les mots clés 'voir' et 'modifier' seront détectés par ton base.html.twig pour mettre les boutons Vert et Noir #}
+                    <a href="{{ path('app_instrument_show', {'id': instrument.id}) }}">voir</a>
+                    <a href="{{ path('app_instrument_edit', {'id': instrument.id}) }}">modifier</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">Aucun enregistrement trouvé</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 
-    <div class="action-bar">
-        <a href="{{ path('app_instrument_new') }}">Créer un nouvel instrument</a>
-    </div>
-
-    {% if instruments is empty %}
-        <p style="text-align: center; color: #666; margin-top: 20px;">
-            Aucun instrument trouvé. Ajoutez-en un nouveau !
-        </p>
-    {% else %}
-        <div style="overflow-x:auto;">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Id</th>
-                        <th>Numéro de Série</th>
-                        <th>Date d'Achat</th>
-                        <th>Prix d'Achat</th>
-                        <th>Type</th>
-                        <th>Marque</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {% for instrument in instruments %}
-                    <tr>
-                        <td>{{ instrument.id }}</td>
-                        <td>{{ instrument.numSerie }}</td>
-                        <td>{{ instrument.dateAchat ? instrument.dateAchat|date('d/m/Y') : '' }}</td>
-                        <td>{{ instrument.prixAchat ? (instrument.prixAchat|number_format(2, ',', ' ') ~ ' €') : '' }}</td>
-                        <td>{{ instrument.typeInstrument.libelle ?? 'N/A' }}</td>
-                        <td>{{ instrument.marque.libelle ?? 'N/A' }}</td>
-                        <td>
-                            <a href="{{ path('app_instrument_show', {'id': instrument.id}) }}">Voir</a>
-                            {# Tu peux ajouter le bouton edit ici si tu veux #}
-                            {# <a href="{{ path('app_instrument_edit', {'id': instrument.id}) }}">Editer</a> #}
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    {% endif %}
-
-</div>
+    {# Le mot clé 'Create new' ou 'Créer' sera détecté pour mettre le gros bouton vert #}
+    <a href="{{ path('app_instrument_new') }}">Create new</a>
 {% endblock %}

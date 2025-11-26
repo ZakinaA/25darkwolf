@@ -3,49 +3,55 @@
 {% block title %}Classe : {{ classe_instrument.libelle }}{% endblock %}
 
 {% block body %}
-    <h1>Classe d'instrument : {{ classe_instrument.libelle }}</h1>
 
-    <table class="table table-striped">
-        <tbody>
-            <tr>
-                <th style="width: 20%;">Id</th>
-                <td>{{ classe_instrument.id }}</td>
-            </tr>
-            <tr>
-                <th>Libellé</th>
-                <td>{{ classe_instrument.libelle }}</td>
-            </tr>
-        </tbody>
-    </table>
+<div class="show-container">
+    <h1><i class="fa-solid fa-layer-group"></i> Classe d'instrument : {{ classe_instrument.libelle }}</h1>
 
-    <div class="row mt-4">
-        <div class="col-md-12">
-            <h3>Types d'instruments dans cette classe</h3>
-            
-            {% if classe_instrument.typeInstruments is not empty %}
-                <ul class="list-group">
-                    {# On boucle sur chaque type d'instrument associé #}
-                    {% for type in classe_instrument.typeInstruments %}
-                        <li class="list-group-item">
-                            {{ type.libelle }}
-                        </li>
-                    {% endfor %}
-                </ul>
-            {% else %}
-                {# Message si aucun type d'instrument n'est associé #}
-                <div class="alert alert-info">
-                    Aucun type d'instrument n'est actuellement associé à cette classe.
-                </div>
-            {% endif %}
+    <div class="info-grid">
+
+        {# Bloc ID #}
+        <div class="info-item">
+            <span class="info-label"><i class="fa-solid fa-hashtag"></i> Id</span>
+            <span class="info-value">{{ classe_instrument.id }}</span>
         </div>
+
+        {# Bloc Libellé #}
+        <div class="info-item">
+            <span class="info-label"><i class="fa-solid fa-tag"></i> Libellé</span>
+            <span class="info-value">{{ classe_instrument.libelle }}</span>
+        </div>
+
+        {# Bloc Liste des Types (Prend toute la largeur) #}
+        <div class="info-item" style="grid-column: 1 / -1;">
+            <span class="info-label"><i class="fa-solid fa-music"></i> Types d'instruments dans cette classe</span>
+            
+            <div class="info-value list-chips">
+                {% if classe_instrument.typeInstruments is not empty %}
+                    {% for type in classe_instrument.typeInstruments %}
+                        <span class="chip">{{ type.libelle }}</span>
+                    {% endfor %}
+                {% else %}
+                    <span style="color: #999; font-style: italic;">Aucun type d'instrument associé</span>
+                {% endif %}
+            </div>
+        </div>
+
     </div>
 
-    <hr class="mt-4">
+    <div class="actions">
+        {# Bouton Retour #}
+        <a href="{{ path('app_classe_instrument_index') }}" class="btn-action btn-back">
+            <i class="fa-solid fa-arrow-left"></i> Retour à la liste
+        </a>
 
-    <a href="{{ path('app_classe_instrument_index') }}" class="btn btn-secondary">Retour à la liste</a>
-    <a href="{{ path('app_classe_instrument_edit', {'id': classe_instrument.id}) }}" class="btn btn-warning">Modifier</a>
+        {# Bouton Modifier #}
+        <a href="{{ path('app_classe_instrument_edit', {'id': classe_instrument.id}) }}" class="btn-action btn-edit">
+            <i class="fa-solid fa-pen-to-square"></i> Modifier
+        </a>
 
-    <div style="display: inline-block;">
+        {# Bouton Supprimer #}
         {{ include('classe_instrument/_delete_form.html.twig') }}
     </div>
+
+</div>
 {% endblock %}
