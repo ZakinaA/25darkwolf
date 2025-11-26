@@ -1,146 +1,77 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}E-Music{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>🎵</text></svg>">
-        
-        {% block stylesheets %}
-            <style>
-                /* --- RESET & GLOBAL --- */
-                * { box-sizing: border-box; }
-                body {
-                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                    background-color: #f4f6f9;
-                    margin: 0;
-                    padding: 0;
-                    display: flex; /* Crée la disposition en colonnes (Sidebar + Contenu) */
-                    min-height: 100vh;
-                }
+{% extends 'base.html.twig' %}
 
-                /* --- 1. SIDEBAR (GAUCHE) --- */
-                .sidebar {
-                    width: 260px; /* Largeur fixe */
-                    background-color: #2c3e50; /* Bleu nuit foncé */
-                    color: white;
-                    display: flex;
-                    flex-direction: column;
-                    padding: 20px;
-                    position: fixed; /* Reste fixe quand on scrolle */
-                    height: 100%;
-                    left: 0;
-                    top: 0;
-                }
+{% block title %}Bienvenue à l'École de Musique !{% endblock %}
 
-                .sidebar h2 {
-                    text-align: center;
-                    margin-bottom: 40px;
-                    color: #009879; /* Rappel du vert émeraude */
-                    text-transform: uppercase;
-                    letter-spacing: 2px;
-                }
-
-                .sidebar a {
-                    color: #bdc3c7;
-                    text-decoration: none;
-                    padding: 15px;
-                    margin-bottom: 10px;
-                    border-radius: 5px;
-                    font-size: 1.1rem;
-                    transition: 0.3s;
-                    display: block;
-                }
-
-                .sidebar a:hover {
-                    background-color: #009879;
-                    color: white;
-                    padding-left: 20px; /* Petit effet de glissement */
-                }
-
-                /* --- 2. ZONE PRINCIPALE (DROITE) --- */
-                .main-wrapper {
-                    margin-left: 260px; /* On pousse le contenu pour ne pas qu'il soit caché par la sidebar */
-                    flex: 1; /* Prend tout l'espace restant */
-                    display: flex;
-                    flex-direction: column;
-                }
-
-                /* --- 3. TOP BAR (HAUT) --- */
-                .top-bar {
-                    background-color: white;
-                    height: 70px;
-                    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-                    display: flex;
-                    justify-content: flex-end; /* Pousse les boutons à droite */
-                    align-items: center;
-                    padding: 0 30px;
-                }
-
-                .top-bar .btn {
-                    text-decoration: none;
-                    padding: 8px 20px;
-                    margin-left: 15px;
-                    border-radius: 20px;
-                    font-weight: bold;
-                    font-size: 0.9rem;
-                    transition: 0.3s;
-                }
-
-                /* Bouton Connexion (Outline) */
-                .btn-login {
-                    border: 2px solid #009879;
-                    color: #009879;
-                }
-                .btn-login:hover { background-color: #eafaf1; }
-
-                /* Bouton Créer compte (Plein) */
-                .btn-register {
-                    background-color: #009879;
-                    color: white;
-                }
-                .btn-register:hover { background-color: #007f65; }
-
-                /* --- 4. CONTENU DE LA PAGE --- */
-                .content-container {
-                    padding: 30px; /* Espace autour du contenu */
-                }
-
-                /* Style des tableaux (on garde ton ancien style) */
-                .table {
-                    width: 100%;
-                    border-collapse: collapse;
-                    background-color: #ffffff;
-                    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-                    border-radius: 8px;
-                    overflow: hidden;
-                    margin-bottom: 20px;
-                }
-                .table thead { background-color: #009879; color: #ffffff; }
-                .table th, .table td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #dddddd; }
-                .table tbody tr:nth-of-type(even) { background-color: #f3f3f3; }
-                .table tbody tr:last-of-type { border-bottom: 2px solid #009879; }
-
-            </style>
-        {% endblock %}
-    </head>
-    <body>
-        
-        <div class="sidebar">
-            <h2>E-Music 🎵</h2> 
+{% block body %}
+    <div class="container mx-auto p-6">
+        {# --- MESSAGE DE BIENVENUE ET PRÉSENTATION --- #}
+        <div class="bg-white p-8 rounded-xl shadow-lg mb-10">
+            <h1 class="text-4xl font-extrabold mb-4 text-indigo-700">
+                Bienvenue à l'École de Musique E-Music 🎵
+            </h1>
+            <p class="text-lg text-gray-700 mb-4 leading-relaxed">
+                Depuis plus de 10 ans, E-Music est le cœur vibrant de la formation musicale dans notre région. Nous offrons une large gamme de cours, de l'éveil musical aux classes d'excellence, pour tous les âges et tous les niveaux. Notre mission est d'inspirer la passion, de cultiver le talent et de fournir à nos élèves les instruments nécessaires pour s'épanouir.
+            </p>
+            <p class="text-lg text-gray-700 leading-relaxed">
+                Vous trouverez ci-dessous le planning hebdomadaire complet de tous nos cours.
+            </p>
         </div>
 
-        <div class="main-wrapper">
-            
-            <div class="top-bar">
-                <a href="{{ path('app_login') }}" class="btn btn-login">Connexion</a>
-                <a href="{{ path('app_register') is defined ? path('app_register') : '#' }}" class="btn btn-register">Créer un compte</a>
+
+        {# --- AFFICHAGE DU PLANNING DES COURS --- #}
+
+        <h2 class="text-3xl font-bold mb-6 mt-10 text-gray-800 border-b-4 border-indigo-500 pb-2">
+            Planning Hebdomadaire des Cours
+        </h2>
+
+        {% if planning_cours is empty %}
+            {# Message si aucun cours n'est trouvé #}
+            <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded-lg shadow-sm" role="alert">
+                <p class="font-bold">Information</p>
+                <p>Aucun cours n'est actuellement programmé. Le planning sera mis à jour prochainement.</p>
             </div>
-
-            <div class="content-container">
-                {% block body %}{% endblock %}
+        {% else %}
+            {# UTILISATION DES CLASSES DE STYLE DÉFINIES DANS base.html.twig POUR LE TABLEAU #}
+            <div class="planning-table-container">
+                <table class="planning-table">
+                    <thead>
+                        <tr>
+                            <th class="py-4 px-4 text-left font-semibold tracking-wider">Jour</th>
+                            <th class="py-4 px-4 text-left font-semibold tracking-wider">Heure</th>
+                            <th class="py-4 px-4 text-left font-semibold tracking-wider">Nom du Cours</th>
+                            <th class="py-4 px-4 text-left font-semibold tracking-wider">Instrument</th>
+                            {# Plus de colonne Professeur #}
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for cour in planning_cours %}
+                        <tr>
+                            {# Jour : Mise en évidence via la classe CSS "day-cell" #}
+                            <td class="day-cell">
+                                {{ cour.jour ? cour.jour.libelle : 'Non spécifié' }}
+                            </td>
+                            
+                            {# Heure Début - Heure Fin #}
+                            <td>
+                                {{ cour.heureDebut ? cour.heureDebut|date('H:i') : 'N/A' }} 
+                                – 
+                                {{ cour.heureFin ? cour.heureFin|date('H:i') : 'N/A' }}
+                            </td>
+                            
+                            {# Libelle du Cours : Mise en évidence via la classe CSS "name-cell" #}
+                            <td class="name-cell">
+                                {{ cour.libelle }}
+                            </td>
+                            
+                            {# Instrument (via relation TypeInstrument) #}
+                            <td>
+                                {{ cour.typeInstrument ? cour.typeInstrument.libelle : 'Général' }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
             </div>
-
-        </div>
-
-    </body>
-</html>
+        {% endif %}
+    </div>
+{% endblock %}
