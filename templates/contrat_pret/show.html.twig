@@ -142,8 +142,8 @@
         {# ================================= #}
         <div class="mt-8 flex space-x-4">
             {# Assurez-vous que la route 'app_contrat_pret_edit' existe dans votre contrôleur #}
-            <a href="{{ path('app_contrat_pret_edit', {'id': contratPret.id}) }}" class="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-150">
-                Modifier le contrat
+            <a href="{{ path('app_contrat_pret_edit', {'id': contratPret.id}) }}" class="btn-action btn-edit">
+                <i class="fa-solid fa-pen-to-square"></i> Modifier le contrat
             </a>
             {# Assurez-vous que la route 'app_contrat_pret_index' existe dans votre contrôleur #}
             <a href="{{ path('app_contrat_pret_index') }}" class="bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded-lg hover:bg-gray-300 transition duration-150">
