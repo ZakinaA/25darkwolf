@@ -26,6 +26,33 @@
             padding-bottom: 5px;
         }
 
+                /* --- STYLE IMAGE MODIFIÉ (DIMENSIONS RÉDUITES) --- */
+        .instrument-visual {
+            text-align: bottom;
+            margin-bottom: 30px;
+            background-color: #f8f9fa;
+            padding: 15px; /* Padding un peu réduit */
+            border-radius: 12px;
+        }
+
+        .instrument-visual img {
+            
+            max-height: 200px; /* Hauteur maximale fixée à 200px (au lieu de 350px) */
+            max-width: 400px;  /* Largeur maximale pour éviter les images trop larges */
+            
+            width: auto;       /* Garde le ratio original */
+            height: auto;      /* Garde le ratio original */
+            
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            object-fit: contain; /* S'assure que l'image rentre bien sans être coupée */
+        }
+
+        .instrument-visual img:hover {
+            transform: scale(1.05);
+        }
+
         /* Grille d'informations (2 colonnes) */
         .info-grid {
             display: grid;
@@ -108,6 +135,16 @@
 
 <div class="show-container">
     <h1><i class="fa-solid fa-guitar"></i> Détails de l'Instrument #{{ instruments.id }}</h1>
+    </div>
+    <div class="instrument-visual">
+        {# On construit le chemin : img/instruments/ID.jpg #}
+        {# 'onerror' sert de sécurité : si l'image 1.jpg n'existe pas, on cache l'image ou on met une image par défaut #}
+        <img src="{{ asset('img/instruments/' ~ instruments.id ~ '.jpg') }}" 
+             alt="Instrument {{ instruments.numSerie }}"
+             onerror="this.onerror=null; this.src='{{ asset('img/instruments/default.jpg') }}'; this.alt='Image non disponible';"
+        >
+        {# Note: Si tu n'as pas d'image 'default.jpg', tu peux remplacer le contenu du onerror par "this.style.display='none'" pour cacher l'image cassée #}
+    </div>
 
     <div class="info-grid">
 
