@@ -16,6 +16,17 @@ class InscriptionRepository extends ServiceEntityRepository
         parent::__construct($registry, Inscription::class);
     }
 
+    public function findInscriptionByEleveAndCours(Eleve $eleve, Cours $cours): ?Inscription
+    {
+        return $this->createQueryBuilder('i')
+            ->andWhere('i.eleve = :eleve')
+            ->setParameter('eleve', $eleve)
+            ->andWhere('i.cours = :cours')
+            ->setParameter('cours', $cours)
+            ->getQuery()
+            ->getOneOrNullResult(); // Récupère l'objet ou null
+    }
+
     //    /**
     //     * @return Inscription[] Returns an array of Inscription objects
     //     */

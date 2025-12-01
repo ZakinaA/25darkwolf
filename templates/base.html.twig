@@ -500,9 +500,8 @@
             {# --- MENU ELEVE --- #}
             {% elseif is_granted('ROLE_ELEVE') %}
                 <div class="sidebar-section">Mon Espace</div>
-                <a href="{{ path('app_eleve_mes_cours') }}">📅 Mes Cours</a>
-
-            {# --- MENU AUTRE --- #}
+                <a href="{{ path('app_eleve_mes_cours') }}">📅 Cours</a>
+                <a href="{{ path('app_eleve_catalogue_cours') }}">📚 Catalogue des cours</a>
             {% else %}
                 <div class="sidebar-section">Mon Espace</div>
             {% endif %}

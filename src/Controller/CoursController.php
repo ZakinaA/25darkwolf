@@ -80,6 +80,20 @@ final class CoursController extends AbstractController
         ]);
     }
 
+    // NOUVELLE ROUTE : Catalogue accessible uniquement aux élèves
+    #[Route('/catalogue', name: 'app_catalogue', methods: ['GET'])]
+    #[IsGranted('ROLE_ELEVE')]
+    public function catalogueAction(CoursRepository $coursRepository): Response
+    {
+        // Tous les cours sont récupérés pour être affichés dans le catalogue.
+        $cours = $coursRepository->findAll();
+
+        return $this->render('cours/catalogue_cours.html.twig', [
+            'cours' => $cours,
+            'titre' => 'Catalogue Complet des Cours',
+        ]);
+    }
+
     #[Route('/espace-professeur', name: 'app_professeur_mes_cours', methods: ['GET'])]
     #[IsGranted('ROLE_PROF')]
     public function mesCoursProfesseur(CoursRepository $coursRepository): Response
