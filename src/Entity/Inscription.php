@@ -16,8 +16,14 @@ class Inscription
     #[ORM\Column]
     private ?int $id = null;
 
+    /**
+     * Cette colonne correspond à votre colonne existante en BDD.
+     * Elle est maintenant initialisée automatiquement avec la date du jour.
+     * * NOTE: Puisque la BDD la définit probablement en type DATE (pas DATETIME), 
+     * l'heure sera ignorée, mais la date sera toujours celle du moment de l'inscription.
+     */
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    private ?\DateTime $dateInscrption = null;
+    private ?\DateTime $dateInscrption = null; 
 
     #[ORM\ManyToOne(inversedBy: 'inscription')]
     private ?Eleve $eleve = null;
@@ -28,12 +34,14 @@ class Inscription
     /**
      * @var Collection<int, Paiement>
      */
-    #[ORM\OneToMany(targetEntity: Paiement::class, mappedBy: 'inscription')]
+    #[ORM\OneToMany(targetEntity: Paiement::class, mappedBy: 'inscription', orphanRemoval: true, cascade: ['remove'])]
     private Collection $paiements;
 
     public function __construct()
     {
         $this->paiements = new ArrayCollection();
+        // Initialisation automatique de la date du jour pour l'inscription
+        $this->dateInscrption = new \DateTime(); 
     }
 
     public function getId(): ?int
