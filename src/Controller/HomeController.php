@@ -14,8 +14,8 @@ class HomeController extends AbstractController
     public function index(CoursRepository $coursRepository): Response
     {
         // 1. Récupérer la liste des cours triés en utilisant la méthode du repository.
-        // Cela suppose que la méthode findAllSortedByDayAndTime() existe dans votre CoursRepository.
-        $planningCours = $coursRepository->findAllSortedByDayAndTime();
+        // Cela suppose que la méthode findAllOrderedByTime() existe dans votre CoursRepository.
+        $planningCours = $coursRepository->findAllOrderedByTime();
 
         // 2. Ceci est votre page d'accueil publique
         return $this->render('home/index.html.twig', [

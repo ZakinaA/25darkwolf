@@ -455,6 +455,9 @@
 
             {# --- MENU ADMIN --- #}
             {% if is_granted('ROLE_ADMIN') %}
+                <div class="sidebar-section">Administration</div>
+                <a href="{{ path('app_planning_global') }}">🗓️ Planning Global</a>
+
                 <div class="sidebar-section">Parc Instrumental</div>
                 <a href="{{ path('app_instrument_index') }}">🎸 Instruments</a>
                 <a href="{{ path('app_accessoire_index') }}">🎻 Accessoires</a>
@@ -477,6 +480,9 @@
 
             {# --- MENU GESTIONNAIRE --- #}
             {% elseif is_granted('ROLE_GESTIONNAIRE') %}
+                <div class="sidebar-section">Administration</div>
+                <a href="{{ path('app_planning_global') }}">🗓️ Planning Global</a>
+
                 <div class="sidebar-section">Pédagogie</div>
                 <a href="{{ path('app_eleve_index') }}">🎓 Élèves</a>
                 <a href="{{ path('app_responsable_index') }}">👪 Responsables</a>
@@ -496,14 +502,16 @@
             {% elseif is_granted('ROLE_PROF') %}
                 <div class="sidebar-section">Espace Professeur</div>
                 <a href="{{ path('app_professeur_mes_cours') }}">📅 Mes Cours</a>
+                <a href="{{ path('app_planning_global') }}">🗓️ Planning Global</a> <!-- Ajout pour le prof -->
 
             {# --- MENU ELEVE --- #}
             {% elseif is_granted('ROLE_ELEVE') %}
                 <div class="sidebar-section">Mon Espace</div>
-                <a href="{{ path('app_eleve_mes_cours') }}">📅 Cours</a>
-                <a href="{{ path('app_eleve_catalogue_cours') }}">📚 Catalogue des cours</a>
+                <a href="{{ path('app_eleve_mes_cours') }}">📅 Mes Cours</a>
+
+            {# --- MENU AUTRE --- #}
             {% else %}
-                <div class="sidebar-section">Mon Espace</div>
+                <div class="sidebar-section">Menu Principal</div>
             {% endif %}
         </div>
 
@@ -531,7 +539,7 @@
                     {% if app.user %}
                         {# Ajout d'une icône sur le bouton de déconnexion #}
                         <a href="{{ path('app_logout') }}" class="btn btn-logout">
-                            <i class="fa-solid fa-right-from-bracket"></i> Se déconnecter
+                            <i class="fa-solid fa-right-from-bracket"></i> Déconnexion
                         </a>
                     {% else %}
                         {# Ajout d'une icône sur le bouton de connexion #}
@@ -598,6 +606,7 @@
                     allElements.forEach(el => {
                         const text = el.textContent.trim().toLowerCase();
                         
+                        // Ignore si déjà stylisé ou fait partie des boutons d'auth
                         if (el.classList.contains('btn-action') || el.classList.contains('btn-create') || el.closest('.auth-buttons')) return;
 
                         if(text === 'show' || text === 'voir' || text.includes('détails')) {
