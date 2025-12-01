@@ -8,18 +8,38 @@
     <h1><i class="fa-solid fa-icons"></i> Détails de l'Accessoire</h1>
 
     <div class="info-grid">
-        
-        {# Bloc ID #}
-        <div class="info-item">
-            <span class="info-label"><i class="fa-solid fa-hashtag"></i> Id</span>
-            <span class="info-value">{{ accessoire.id }}</span>
-        </div>
-
+    
         {# Bloc Libelle #}
         <div class="info-item">
             <span class="info-label"><i class="fa-solid fa-tag"></i> Libelle</span>
             <span class="info-value">{{ accessoire.libelle }}</span>
         </div>
+
+        {# --- NOUVEAU BLOC : INSTRUMENT ASSOCIÉ --- #}
+        <div class="info-item">
+            <span class="info-label"><i class="fa-solid fa-guitar"></i> Instrument associé</span>
+            <span class="info-value">
+                {% if accessoire.instrument %}
+                    {# On crée un lien vers la fiche de l'instrument #}
+                    <a href="{{ path('app_instrument_show', {'id': accessoire.instrument.id}) }}" 
+                       style="text-decoration: none; color: var(--color-primary-accent); font-weight: bold;">
+                        
+                        {# On affiche le Numéro de Série #}
+                        {{ accessoire.instrument.numSerie }}
+                        
+                        {# On ajoute Type et Marque en petit pour plus de détails #}
+                        <small style="color: #7f8c8d; font-weight: normal;">
+                            ({{ accessoire.instrument.typeInstrument.libelle ?? 'Type inconnu' }} 
+                             - 
+                             {{ accessoire.instrument.marque.libelle ?? 'Marque inconnue' }})
+                        </small>
+                    </a>
+                {% else %}
+                    <span style="color: #95a5a6; font-style: italic;">Aucun instrument associé (Stock libre)</span>
+                {% endif %}
+            </span>
+        </div>
+        {# ----------------------------------------- #}
         
     </div>
 
