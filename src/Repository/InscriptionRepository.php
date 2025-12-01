@@ -5,6 +5,8 @@ namespace App\Repository;
 use App\Entity\Inscription;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Entity\Eleve; // <-- AJOUT CRUCIAL
+use App\Entity\Cours; // <-- AJOUT CRUCIAL
 
 /**
  * @extends ServiceEntityRepository<Inscription>
@@ -21,10 +23,11 @@ class InscriptionRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('i')
             ->andWhere('i.eleve = :eleve')
             ->setParameter('eleve', $eleve)
-            ->andWhere('i.cours = :cours')
+            // <-- CORRECTION ICI : 'i.cour' remplacé par 'i.cours' (le nom de la propriété dans l'entité)
+            ->andWhere('i.cours = :cours') 
             ->setParameter('cours', $cours)
             ->getQuery()
-            ->getOneOrNullResult(); // Récupère l'objet ou null
+            ->getOneOrNullResult();
     }
 
     //    /**
