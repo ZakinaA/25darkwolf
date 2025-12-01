@@ -53,7 +53,30 @@
                     z-index: 1000;
                 }
 
+                /* --- NOUVEAUX STYLES LOGO --- */
+                .logo-container {
+                    text-align: center;
+                    margin-bottom: 30px;
+                    padding-bottom: 20px;
+                    /* Ajout d'une ligne de séparation sous le logo */
+                    border-bottom: 1px solid #34495e; 
+                }
+
+                .sidebar-logo {
+                    max-width: 180px; /* Taille max du logo */
+                    height: auto;
+                    border-radius: 8px;
+                    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3)); 
+                    transition: transform 0.3s ease;
+                }
+
+                .sidebar-logo:hover {
+                    transform: scale(1.05);
+                }
+                /* -------------------------- */
+
                 .sidebar h2 {
+                    /* Style du h2 original, maintenant inutilisé car remplacé par l'image */
                     text-align: center;
                     margin-bottom: 30px;
                     color: var(--color-primary-accent);
@@ -233,9 +256,17 @@
                     vertical-align: middle;
                 }
 
-                /* --- NOUVEAUX STYLES GLOBAUX POUR LES PAGES "SHOW" (DETAIL) --- */
-                /* C'est ici que j'ai mis le style de ta page Instrument pour qu'il soit universel */
+                .planning-table .day-cell {
+                    font-weight: 800; 
+                    color: var(--color-primary-dark);
+                }
                 
+                .planning-table .name-cell {
+                    color: #1f2937; 
+                    font-weight: 500; 
+                }
+                
+                /* --- NOUVEAUX STYLES GLOBAUX POUR LES PAGES "SHOW" (DETAIL) --- */
                 .show-container {
                     background-color: white;
                     padding: 30px;
@@ -411,10 +442,18 @@
         
         {# --- SIDEBAR --- #}
         <div class="sidebar">
-            <h2>E-Music 🎵</h2>
+            
+            {# --- NOUVEAU BLOC LOGO --- #}
+            <div class="logo-container">
+                <a href="{{ path('app_home') }}">
+                    {# Utilisation de asset() pour pointer vers public/img/logo.png #}
+                    <img src="{{ asset('img/logo.png') }}" alt="Logo E-Music" class="sidebar-logo">
+                </a>
+            </div>
 
             <a href="{{ path('app_home') }}">🏠 Accueil</a>
 
+            {# --- MENU ADMIN --- #}
             {% if is_granted('ROLE_ADMIN') %}
                 <div class="sidebar-section">Parc Instrumental</div>
                 <a href="{{ path('app_instrument_index') }}">🎸 Instruments</a>
@@ -436,6 +475,7 @@
                 <a href="{{ path('app_inscription_index') }}">📋 Inscriptions</a>
                 <a href="{{ path('app_paiement_index') }}">💰 Paiements</a>
 
+            {# --- MENU GESTIONNAIRE --- #}
             {% elseif is_granted('ROLE_GESTIONNAIRE') %}
                 <div class="sidebar-section">Pédagogie</div>
                 <a href="{{ path('app_eleve_index') }}">🎓 Élèves</a>
@@ -452,10 +492,12 @@
                 <a href="{{ path('app_inscription_index') }}">📋 Inscriptions</a>
                 <a href="{{ path('app_paiement_index') }}">💰 Paiements</a>
 
+            {# --- MENU PROF --- #}
             {% elseif is_granted('ROLE_PROF') %}
                 <div class="sidebar-section">Espace Professeur</div>
-                <a href="{{ path('app_cours_index') }}">📅 Cours</a>
+                <a href="{{ path('app_professeur_mes_cours') }}">📅 Mes Cours</a>
 
+            {# --- MENU ELEVE --- #}
             {% elseif is_granted('ROLE_ELEVE') %}
                 <div class="sidebar-section">Mon Espace</div>
                 <a href="{{ path('app_eleve_mes_cours') }}">📅 Cours</a>
@@ -469,7 +511,8 @@
             <div class="top-bar">
                 <div class="user-info">
                     {% if app.user %}
-                        Bonjour, {{ app.user.email }}
+                        {# Mise à jour pour afficher l'identifiant utilisateur (email) #}
+                        Bonjour, <span style="font-weight:bold;">{{ app.user.userIdentifier }}</span>
                         {% if is_granted('ROLE_ADMIN') %} 
                             <span style="color: var(--color-primary-accent); font-weight:bold;"> (Admin)</span> 
                         {% elseif is_granted('ROLE_GESTIONNAIRE') %}
@@ -486,18 +529,32 @@
 
                 <div class="auth-buttons">
                     {% if app.user %}
-                        <a href="{{ path('app_logout') }}" class="btn btn-logout">Se déconnecter</a>
+                        {# Ajout d'une icône sur le bouton de déconnexion #}
+                        <a href="{{ path('app_logout') }}" class="btn btn-logout">
+                            <i class="fa-solid fa-right-from-bracket"></i> Se déconnecter
+                        </a>
                     {% else %}
-                        <a href="{{ path('app_login') }}" class="btn btn-login">Connexion</a>
+                        {# Ajout d'une icône sur le bouton de connexion #}
+                        <a href="{{ path('app_login') }}" class="btn btn-login">
+                            <i class="fa-solid fa-arrow-right-to-bracket"></i> Connexion
+                        </a>
                         <a href="{{ path('app_register') is defined ? path('app_register') : '#' }}" class="btn btn-register">Créer un compte</a>
                     {% endif %}
                 </div>
             </div>
 
             <div class="content-container">
+                {# Flash Messages #}
                 {% for label, messages in app.flashes %}
                     {% for message in messages %}
-                        <div class="alert alert-{{ label == 'error' ? 'danger' : label }}">
+                        <div class="alert alert-{{ label == 'error' or label == 'danger' ? 'danger' : label == 'success' ? 'success' : 'info' }}">
+                            {% if label == 'success' %}
+                                <i class="fa-solid fa-check-circle"></i>
+                            {% elseif label == 'danger' or label == 'error' %}
+                                <i class="fa-solid fa-triangle-exclamation"></i>
+                            {% else %}
+                                <i class="fa-solid fa-info-circle"></i>
+                            {% endif %}
                             {{ message }}
                         </div>
                     {% endfor %}
@@ -541,15 +598,15 @@
                     allElements.forEach(el => {
                         const text = el.textContent.trim().toLowerCase();
                         
-                        if (el.classList.contains('btn-action') || el.classList.contains('btn-create')) return;
+                        if (el.classList.contains('btn-action') || el.classList.contains('btn-create') || el.closest('.auth-buttons')) return;
 
-                        if(text === 'show' || text === 'voir') {
+                        if(text === 'show' || text === 'voir' || text.includes('détails')) {
                             el.className = 'btn-action btn-show';
-                            el.innerHTML = '<i class="fa-solid fa-eye"></i> Voir';
+                            el.innerHTML = '<i class="fa-solid fa-eye"></i> ' + el.textContent;
                         }
                         else if(text === 'edit' || text === 'modifier') {
                             el.className = 'btn-action btn-edit';
-                            el.innerHTML = '<i class="fa-solid fa-pen-to-square"></i> Modifier';
+                            el.innerHTML = '<i class="fa-solid fa-pen-to-square"></i> ' + el.textContent;
                         }
                         else if(text.includes('retour') || text.includes('back to list')) {
                             el.className = 'btn-action btn-back';
