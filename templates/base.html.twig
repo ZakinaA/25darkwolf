@@ -234,6 +234,7 @@
                 }
 
                 /* --- NOUVEAUX STYLES GLOBAUX POUR LES PAGES "SHOW" (DETAIL) --- */
+                /* C'est ici que j'ai mis le style de ta page Instrument pour qu'il soit universel */
                 
                 .show-container {
                     background-color: white;
@@ -244,7 +245,7 @@
                     margin: 0 auto;
                 }
 
-                /* Grille d'informations */
+                /* Grille d'informations (2 colonnes auto) */
                 .info-grid {
                     display: grid;
                     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -252,7 +253,6 @@
                     margin-bottom: 30px;
                 }
 
-                /* Style de chaque boite d'info */
                 .info-item {
                     background-color: #f8f9fa;
                     padding: 15px 20px;
@@ -281,7 +281,7 @@
                     font-weight: 600;
                 }
 
-                /* Style pour les Chips */
+                /* Style pour les Chips (Badges) */
                 .list-chips {
                     display: flex;
                     flex-wrap: wrap;
@@ -299,7 +299,7 @@
                     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
                 }
 
-                /* Zone des boutons */
+                /* Zone des boutons en bas des fiches */
                 .actions {
                     margin-top: 40px;
                     padding-top: 20px;
@@ -309,11 +309,9 @@
                     flex-wrap: wrap;
                     gap: 10px;
                 }
-                .actions form {
-                    margin: 0; padding: 0; box-shadow: none; background: none; display: inline-block;
-                }
+                .actions form { margin: 0; padding: 0; box-shadow: none; background: none; display: inline-block; }
 
-                /* --- STYLES DES FORMULAIRES --- */
+                /* --- STYLES DES FORMULAIRES (EDIT/NEW) --- */
                 form {
                     background-color: white;
                     padding: 25px;
@@ -321,6 +319,7 @@
                     box-shadow: 0 4px 6px rgba(0,0,0,0.05);
                     max-width: 800px; 
                 }
+                /* Exception pour le formulaire de suppression */
                 .actions form {
                     box-shadow: none;
                     background-color: transparent;
@@ -354,7 +353,7 @@
                     box-shadow: 0 0 0 3px rgba(0, 152, 121, 0.1);
                 }
 
-                /* --- BOUTONS AUTOMATIQUES --- */
+                /* BOUTONS GLOBAUX */
                 .btn-action {
                     display: inline-flex;
                     align-items: center;
@@ -375,10 +374,10 @@
                 .btn-action:hover { box-shadow: 0 4px 6px rgba(0,0,0,0.15); opacity: 0.95; }
 
                 /* COULEURS */
-                .btn-show { background-color: var(--btn-info); }     
-                .btn-edit { background-color: var(--btn-warning); }  
-                .btn-delete { background-color: var(--btn-danger); } 
-                .btn-back { background-color: var(--btn-back); }     
+                .btn-show { background-color: var(--btn-info); }     /* VERT */
+                .btn-edit { background-color: var(--btn-warning); }  /* NOIR */
+                .btn-delete { background-color: var(--btn-danger); } /* ROUGE */
+                .btn-back { background-color: var(--btn-back); }     /* GRIS */
 
                 /* Bouton Créer/Sauvegarder */
                 .btn-create {
@@ -398,7 +397,7 @@
                     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
                 }
                 .btn-create i { margin-right: 8px; }
-                .btn-create:hover { background-color: var(--color-primary-dark); color: white; }
+                .btn-create:hover { background-color: var(--color-primary-dark); }
 
                 /* Alertes */
                 .alert { padding: 15px; margin-bottom: 20px; border-radius: 5px; }
@@ -416,7 +415,6 @@
 
             <a href="{{ path('app_home') }}">🏠 Accueil</a>
 
-            {# --- MENU ADMIN --- #}
             {% if is_granted('ROLE_ADMIN') %}
                 <div class="sidebar-section">Parc Instrumental</div>
                 <a href="{{ path('app_instrument_index') }}">🎸 Instruments</a>
@@ -438,7 +436,6 @@
                 <a href="{{ path('app_inscription_index') }}">📋 Inscriptions</a>
                 <a href="{{ path('app_paiement_index') }}">💰 Paiements</a>
 
-            {# --- MENU GESTIONNAIRE --- #}
             {% elseif is_granted('ROLE_GESTIONNAIRE') %}
                 <div class="sidebar-section">Pédagogie</div>
                 <a href="{{ path('app_eleve_index') }}">🎓 Élèves</a>
@@ -451,26 +448,24 @@
                 <a href="{{ path('app_contrat_pret_index') }}">📝 Contrats Prêt</a>
                 <a href="{{ path('app_intervention_index') }}">🔧 Interventions</a>
 
-            {# --- MENU PROF --- #}
+                <div class="sidebar-section">Finance</div>
+                <a href="{{ path('app_inscription_index') }}">📋 Inscriptions</a>
+                <a href="{{ path('app_paiement_index') }}">💰 Paiements</a>
+
             {% elseif is_granted('ROLE_PROF') %}
                 <div class="sidebar-section">Espace Professeur</div>
                 <a href="{{ path('app_cours_index') }}">📅 Cours</a>
 
-            {# --- MENU ELEVE --- #}
             {% elseif is_granted('ROLE_ELEVE') %}
                 <div class="sidebar-section">Mon Espace</div>
                 <a href="{{ path('app_eleve_mes_cours') }}">📅 Cours</a>
 
-            {# --- MENU AUTRE --- #}
             {% else %}
                 <div class="sidebar-section">Mon Espace</div>
             {% endif %}
         </div>
 
-        {# --- ZONE DROITE --- #}
         <div class="main-wrapper">
-            
-            {# --- TOP BAR --- #}
             <div class="top-bar">
                 <div class="user-info">
                     {% if app.user %}
@@ -499,9 +494,7 @@
                 </div>
             </div>
 
-            {# --- CONTENU --- #}
             <div class="content-container">
-                {# Flash Messages #}
                 {% for label, messages in app.flashes %}
                     {% for message in messages %}
                         <div class="alert alert-{{ label == 'error' ? 'danger' : label }}">
@@ -528,11 +521,11 @@
 
         </div>
 
-        {# --- SCRIPT AUTOMATIQUE --- #}
+        {# --- SCRIPT AUTOMATIQUE + FIX SCROLL --- #}
         <script>
             document.addEventListener("DOMContentLoaded", function() {
                 
-                // 1. Gérer les TABLEAUX (pour l'index)
+                /* 1. STYLE TABLEAUX */
                 const tables = document.querySelectorAll('table');
                 tables.forEach(table => {
                     if(!table.classList.contains('planning-table')) {
@@ -540,7 +533,7 @@
                     }
                 });
 
-                // 2. SCANNER TOUS LES LIENS ET BOUTONS DE LA PAGE
+                /* 2. BOUTONS AUTOMATIQUES */
                 const container = document.querySelector('.content-container');
                 if(container) {
                     const allElements = container.querySelectorAll('a, button');
@@ -550,43 +543,47 @@
                         
                         if (el.classList.contains('btn-action') || el.classList.contains('btn-create')) return;
 
-                        // -- BOUTON "VOIR" / "SHOW" -- 
                         if(text === 'show' || text === 'voir') {
                             el.className = 'btn-action btn-show';
                             el.innerHTML = '<i class="fa-solid fa-eye"></i> Voir';
                         }
-                        
-                        // -- BOUTON "MODIFIER" / "EDIT" -- 
                         else if(text === 'edit' || text === 'modifier') {
                             el.className = 'btn-action btn-edit';
                             el.innerHTML = '<i class="fa-solid fa-pen-to-square"></i> Modifier';
                         }
-
-                        // -- BOUTON "RETOUR" -- 
-                        else if(text.includes('back to list') || text.includes('retour')) {
+                        else if(text.includes('retour') || text.includes('back to list')) {
                             el.className = 'btn-action btn-back';
                             el.innerHTML = '<i class="fa-solid fa-arrow-left"></i> Retour';
                         }
-
-                        // -- BOUTON "SUPPRIMER" -- 
                         else if(text === 'delete' || text === 'supprimer') {
                             el.className = 'btn-action btn-delete';
                             el.innerHTML = '<i class="fa-solid fa-trash"></i> Supprimer';
                         }
-
-                        // -- BOUTON "CRÉER" -- 
-                        else if(text.includes('create new') || text.includes('créer') || text.includes('ajouter')) {
+                        else if(text.includes('créer') || text.includes('ajouter') || text.includes('create new')) {
                             el.className = 'btn-create';
                             el.innerHTML = '<i class="fa-solid fa-plus"></i> ' + el.textContent;
                         }
-
-                        // -- BOUTON "UPDATE" / "ENREGISTRER" -- 
-                        else if(text === 'update' || text === 'mettre à jour' || text === 'save' || text === 'enregistrer') {
+                        else if(text === 'update' || text === 'save' || text === 'enregistrer' || text === 'mettre à jour') {
                             el.className = 'btn-create';
                             el.innerHTML = '<i class="fa-solid fa-check"></i> ' + el.textContent;
                         }
                     });
                 }
+
+                /* 3. FIX SCROLL SIDEBAR */
+                const sidebar = document.querySelector('.sidebar');
+
+                if (sidebar) {
+                    const savedScroll = localStorage.getItem('sidebar-scroll');
+                    if (savedScroll !== null) {
+                        sidebar.scrollTop = savedScroll;
+                    }
+
+                    sidebar.addEventListener('scroll', function () {
+                        localStorage.setItem('sidebar-scroll', sidebar.scrollTop);
+                    });
+                }
+
             });
         </script>
     </body>
