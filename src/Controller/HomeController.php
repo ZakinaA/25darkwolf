@@ -9,9 +9,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class HomeController extends AbstractController
 {
-    /**
-     * C'est cette ligne qui crée la route 'app_home'
-     */
+    
     #[Route('/', name: 'app_home', methods: ['GET'])]
     public function index(CoursRepository $coursRepository): Response
     {
@@ -25,4 +23,23 @@ class HomeController extends AbstractController
             'planning_cours' => $planningCours, // Transmission des données pour l'affichage du planning
         ]);
     }
+
+    #[Route('/mentions-legales', name: 'app_mentions_legales')]
+    public function mentionsLegales(): Response
+    {
+        return $this->render('mentionsLegales.html.twig');
+    }
+
+    #[Route('/politique-confidentialite', name: 'app_politique_confidentialite')]
+    public function politiqueConfidentialite(): Response
+    {
+        return $this->render('politiqueConfidentialite.html.twig');
+    }
+
+    #[Route('/cookies', name: 'app_cookies')]
+    public function cookies(): Response
+    {
+        return $this->render('cookies.html.twig');
+    }
+    
 }

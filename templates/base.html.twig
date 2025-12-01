@@ -519,10 +519,10 @@
                     &copy; {{ "now"|date("Y") }} E-Music. Tous droits réservés.
                 </div>
                 <div class="footer-links">
-                    {# Liens fictifs, tu pourras mettre les vraies routes plus tard #}
-                    <a href="#">Mentions Légales</a>
-                    <a href="#">Politique de Confidentialité</a>
-                    <a href="#">Cookies</a>
+                    
+                    <a href="{{ path('app_mentions_legales') }}">Mentions Légales</a>
+                    <a href="{{ path('app_politique_confidentialite') }}">Politique de Confidentialité</a>
+                    <a href="{{ path('app_cookies') }}">Cookies</a>
                 </div>
             </footer>
 
