@@ -425,6 +425,10 @@
                 <a href="{{ path('app_contrat_pret_index') }}">📝 Contrats Prêt</a>
                 <a href="{{ path('app_intervention_index') }}">🔧 Interventions</a>
 
+                <div class="sidebar-section">Finance</div>
+                <a href="{{ path('app_inscription_index') }}">📋 Inscriptions</a>
+                <a href="{{ path('app_paiement_index') }}">💰 Paiements</a>
+
             {# --- MENU PROF --- #}
             {% elseif is_granted('ROLE_PROF') %}
                 <div class="sidebar-section">Espace Professeur</div>
