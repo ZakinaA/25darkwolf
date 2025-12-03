@@ -89,14 +89,14 @@
                     {% if isEnrolled %}
                         {# Si inscrit : bouton DÉSINSCRIPTION (rouge) #}
                         <a href="{{ path('app_cours_toggle_inscription', {'courseId': cour.id}) }}" 
-                            class="btn btn-sm btn-danger"
+                            class="btn btn-sm btn-oval btn-rouge"
                         >
                             Se Désinscrire
                         </a>
                     {% else %}
                         {# Si non inscrit : bouton INSCRIPTION (bleu) #}
                         <a href="{{ path('app_cours_toggle_inscription', {'courseId': cour.id}) }}" 
-                            class="btn btn-sm btn-primary"
+                            class="btn btn-sm btn-oval btn-vert"
                         >
                             S'inscrire
                         </a>
