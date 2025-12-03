@@ -21,16 +21,21 @@ final class CoursController extends AbstractController
         /** @var \App\Entity\User|null $user */
         $user = $this->getUser();
 
-        // 1. Redirection automatique si c'est un ÉLÈVE
-        if ($this->isGranted('ROLE_ELEVE') || ($user && $user->getEleve())) {
+        // 1. Redirection pour les rôles de GESTION/ADMIN/PROF vers le planning global (le plus large)
+        // Note: L'Admin et le Gestionnaire peuvent voir la liste complète dans le planning
+        if ($this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_GESTIONNAIRE') || $this->isGranted('ROLE_PROF')) {
+            // S'il est connecté avec un rôle de gestion, on le redirige vers la vue d'ensemble.
+            return $this->redirectToRoute('app_planning_global');
+        }
+
+        // 2. Redirection pour les ÉLÈVES vers leur page personnelle
+        // Cette condition est vérifiée UNIQUEMENT si l'utilisateur n'est pas Admin/Gest/Prof
+        if ($this->isGranted('ROLE_ELEVE')) {
+            // Pas de vérification d'objet Eleve ici, car elle est faite dans mesCours()
             return $this->redirectToRoute('app_eleve_mes_cours');
         }
 
-        // 2. Redirection automatique si c'est un PROFESSEUR
-        if ($this->isGranted('ROLE_PROF') || ($user && $user->getProfesseur())) {
-             return $this->redirectToRoute('app_professeur_mes_cours');
-        }
-
+        // 3. Vue par défaut (si anonyme ou utilisateur non reconnu)
         return $this->render('cours/index.html.twig', [
             'cours' => $coursRepository->findAll(),
         ]);
@@ -66,31 +71,18 @@ final class CoursController extends AbstractController
         $user = $this->getUser();
         $eleve = $user->getEleve();
 
+        // Cette vérification est cruciale et doit rester ici pour les élèves
         if (!$eleve) {
             $this->addFlash('danger', 'Votre compte utilisateur n\'est pas relié à une fiche élève.');
-            return $this->redirectToRoute('app_home');
+            // Redirige vers la page d'accueil car l'utilisateur ne devrait pas être là
+            return $this->redirectToRoute('app_home'); 
         }
 
         $mesCours = $coursRepository->findCoursByEleve($eleve->getId());
 
-        // CHANGEMENT ICI : on pointe vers le nouveau fichier _eleve
         return $this->render('cours/mes_cours_eleve.html.twig', [
             'cours' => $mesCours,
             'eleve' => $eleve
-        ]);
-    }
-
-    // NOUVELLE ROUTE : Catalogue accessible uniquement aux élèves
-    #[Route('/catalogue', name: 'app_catalogue', methods: ['GET'])]
-    #[IsGranted('ROLE_ELEVE')]
-    public function catalogueAction(CoursRepository $coursRepository): Response
-    {
-        // Tous les cours sont récupérés pour être affichés dans le catalogue.
-        $cours = $coursRepository->findAll();
-
-        return $this->render('cours/catalogue_cours.html.twig', [
-            'cours' => $cours,
-            'titre' => 'Catalogue Complet des Cours',
         ]);
     }
 
@@ -115,7 +107,7 @@ final class CoursController extends AbstractController
         ]);
     }
 
-    // --- ROUTES DYNAMIQUES ---
+    // --- ROUTES DYNAMIQUES (DOIVENT RESTER EN BAS) ---
 
     #[Route('/{id}', name: 'app_cours_show', methods: ['GET'])]
     public function show(Cours $cour): Response
