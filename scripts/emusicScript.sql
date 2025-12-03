@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3307
--- Généré le : mer. 26 nov. 2025 à 10:37
+-- Généré le : mer. 03 déc. 2025 à 10:24
 -- Version du serveur : 11.3.2-MariaDB
 -- Version de PHP : 8.2.18
 
@@ -353,7 +353,7 @@ CREATE TABLE IF NOT EXISTS `inscription` (
   PRIMARY KEY (`id`),
   KEY `IDX_5E90F6D6A6CC7B2` (`eleve_id`),
   KEY `IDX_5E90F6D67ECF78B0` (`cours_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Déchargement des données de la table `inscription`
@@ -377,7 +377,8 @@ INSERT INTO `inscription` (`id`, `eleve_id`, `cours_id`, `date_inscrption`) VALU
 (15, 1, 11, '2024-11-01'),
 (16, 2, 14, '2024-11-05'),
 (17, 4, 11, '2024-11-10'),
-(18, 5, 15, '2024-11-15');
+(18, 5, 15, '2024-11-15'),
+(21, 1, 2, '2025-12-03');
 
 -- --------------------------------------------------------
 
@@ -885,7 +886,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `password` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UNIQ_IDENTIFIER_EMAIL` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Déchargement des données de la table `user`
@@ -894,12 +895,12 @@ CREATE TABLE IF NOT EXISTS `user` (
 INSERT INTO `user` (`id`, `email`, `roles`, `password`) VALUES
 (1, 'admin@emusic.fr', '[\"ROLE_ADMIN\"]', '$2y$13$kU5GoWNIArQgbZmK8JU2RunDP/0hDYhFMjNGIoHu/8ff9wv.h8Xt.'),
 (2, 'gestion@emusic.fr', '[\"ROLE_GESTIONNAIRE\"]', '$2y$13$l/JQ1C7VXFyrai.ewcmpKuN5DF188l8MqLJUQ4fSO1UXp.P4uTw8O'),
-(3, 'marie.dupont@musique.fr', '[\"ROLE_PROF\"]', '$2y$13$N9ZkADi7ou7wAjbwcLjGTOsjhiIMf0qxGqe6x91/Zi.7fLvzV9H/u'),
+(3, 'marie.dupont@musique.fr', '[\"ROLE_PROF\"]', '$2y$13$DvzUD.k360rv8J1SOBQCSO.3lWi8y/TUymjfDuM4mPuPPYrNPrvKG'),
 (4, 'paul.martin@musique.fr', '[\"ROLE_PROF\"]', '$2y$13$2gReDnkO8mrHwrius9V7de5GqWaKgmHId3t.9yOWRF9YPVSsJTz6W'),
-(5, 'lucie.bernard@musique.fr', '[\"ROLE_PROF\"]', '$2y$13$o8cpn.WRK5mrOQtD/58D5eO/7rOWXN.c7BrE5GLp8ZerFMo/v3TPq'),
+(5, 'lucie.bernard@musique.fr', '[\"ROLE_PROF\"]', '$2y$13$C0rQpN5bBz9B824fIHXIWuqrMhdo7cKyqoTsEFkm.W0rFVQy612ky'),
 (6, 'julien.petit@musique.fr', '[\"ROLE_PROF\"]', '$2y$13$MHZqVUOW78.vnY4qhAOKJu9YCz19bEWJ65CDBFMjnRvRTAIgPdBAG'),
 (7, 'sophie.leblanc@mail.fr', '[\"ROLE_ELEVE\"]', '$2y$13$tRqNwcxjOZgy9SmvZSjY4.0fhcPwOaNNqoqfWt2oJOk3AG0edADDO'),
-(8, 'thomas.dubois@mail.fr', '[\"ROLE_ELEVE\"]', '$2y$13$uoD7zZu2kjCU7fCPjxte9.RIbUaPJqDZ9oWrAu7CvnuTQQ.VCquxq'),
+(8, 'thomas.dubois@mail.fr', '[\"ROLE_ELEVE\"]', '$2y$13$3uauSQY5v3MXO04uds6Vxeoc0sGxmAmhcBxVTj4P3mtCzAGC1fVwe'),
 (9, 'clara.dubois@example.com', '[\"ROLE_ELEVE\"]', '$2y$13$cgchPVjJdwBkr38Z6kpP3OPmtCRXwPHjk1E1bZAoKniLIoa7ayBHu'),
 (10, 'gabriel.lefevre@example.com', '[\"ROLE_ELEVE\"]', '$2y$13$Z3FQTSUiEUWLx0skY8KccutFbIL9g8NAyAuABtudfB.yEWx.9SGi2'),
 (11, 'louise.bernard@example.com', '[\"ROLE_ELEVE\"]', '$2y$13$Lp5C3tdjsdaMhP37ub8O0e.XQAg2tDhB.BScRvrNVO69/F04STG4m'),
@@ -911,7 +912,11 @@ INSERT INTO `user` (`id`, `email`, `roles`, `password`) VALUES
 (17, 'maxime.legrand@mail.fr', '[\"ROLE_ELEVE\"]', '$2y$13$tQ6lJRMRPocDBkQoseiDG.42h/g4Ii/ha9X8UDFd/EdTiT2qhiIRa'),
 (18, 'lea.richard@mail.fr', '[\"ROLE_ELEVE\"]', '$2y$13$tQ6lJRMRPocDBkQoseiDG.42h/g4Ii/ha9X8UDFd/EdTiT2qhiIRa'),
 (19, 'sophie.marie@mail.fr', '[\"ROLE_ELEVE\"]', '$2y$13$mE7VJqobyBGv/IMrODcRsO2sx8ZpoIRbcuqmasH7bJ50.i87RQrRC'),
-(20, 'adeline.leroy@mail.fr', '[\"ROLE_ELEVE\"]', '$2y$13$tQ6lJRMRPocDBkQoseiDG.42h/g4Ii/ha9X8UDFd/EdTiT2qhiIRa');
+(20, 'adeline.leroy@mail.fr', '[\"ROLE_ELEVE\"]', '$2y$13$tQ6lJRMRPocDBkQoseiDG.42h/g4Ii/ha9X8UDFd/EdTiT2qhiIRa'),
+(21, 'antonin@emusic.fr', '[\"ROLE_ELEVE\"]', '$2y$13$QUl3f17MOAGxIaKqJOdWO.h7wYjD4nNhYeH6rrDW94uN9Hk.9BPT.'),
+(22, 'bidon@test.com\' OR 1=1 --', '[]', '$2y$13$1AVvIvJLDL8QWOoI.NkUD.qAaeZ1.2Fog2bZ5aseflAl8FgmNvGRW'),
+(23, '\' admin --', '[]', '$2y$13$VdfBUfR6R2sYNyZOZdy6Y.5O.B1yTFpzGOnrI1eA2JVbDjd/Bmtju'),
+(24, 'liam@gmail.com', '[]', '$2y$13$sY9/gyVBKcI3Lu5xJjKKmu.N8ai2KY6nKr4dgM5tVwZr7FI21ineG');
 
 --
 -- Contraintes pour les tables déchargées
@@ -1007,36 +1012,10 @@ ALTER TABLE `professeur`
   ADD CONSTRAINT `FK_17A55299A76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
 
 --
--- Contraintes pour la table `professeur_type_instrument`
---
-ALTER TABLE `professeur_type_instrument`
-  ADD CONSTRAINT `FK_1E1989D67C1CAAA9` FOREIGN KEY (`type_instrument_id`) REFERENCES `type_instrument` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `FK_1E1989D6BAB22EE9` FOREIGN KEY (`professeur_id`) REFERENCES `professeur` (`id`) ON DELETE CASCADE;
-
---
 -- Contraintes pour la table `professionnel`
 --
 ALTER TABLE `professionnel`
   ADD CONSTRAINT `FK_7A28C10FED16FA20` FOREIGN KEY (`metier_id`) REFERENCES `metier` (`id`);
-
---
--- Contraintes pour la table `responsable`
---
-ALTER TABLE `responsable`
-  ADD CONSTRAINT `FK_52520D07B76F6B31` FOREIGN KEY (`tranche_id`) REFERENCES `tranche` (`id`);
-
---
--- Contraintes pour la table `tranche_type`
---
-ALTER TABLE `tranche_type`
-  ADD CONSTRAINT `FK_F98E49B2B76F6B31` FOREIGN KEY (`tranche_id`) REFERENCES `tranche` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `FK_F98E49B2C54C8C93` FOREIGN KEY (`type_id`) REFERENCES `type` (`id`) ON DELETE CASCADE;
-
---
--- Contraintes pour la table `type_instrument`
---
-ALTER TABLE `type_instrument`
-  ADD CONSTRAINT `FK_21BCBFF8CE879FB1` FOREIGN KEY (`classe_instrument_id`) REFERENCES `classe_instrument` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
