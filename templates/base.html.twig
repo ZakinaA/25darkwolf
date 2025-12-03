@@ -512,7 +512,7 @@
                 <div class="user-info">
                     {% if app.user %}
                         {# Mise à jour pour afficher l'identifiant utilisateur (email) #}
-                        Bonjour, <span style="font-weight:bold;">{{ app.user.userIdentifier }}</span>
+                        <span style="font-weight:bold;">{{ app.user.userIdentifier }}</span>
                         {% if is_granted('ROLE_ADMIN') %} 
                             <span style="color: var(--color-primary-accent); font-weight:bold;"> (Admin)</span> 
                         {% elseif is_granted('ROLE_GESTIONNAIRE') %}
