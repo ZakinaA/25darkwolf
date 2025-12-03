@@ -1,8 +1,78 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Tableau de bord Admin{% endblock %}
+{% block title %}Tableau de bord{% endblock %}
 
 {% block body %}
+    <div class="dashboard-container">
+        <div class="welcome-box">
+            {# Titre avec animation #}
+            <h1 class="animate-title">Bienvenue dans votre espace personnel</h1>
+            
+            {# Sous-titre dynamique : s'adapte à l'utilisateur #}
+            <p class="animate-subtitle">
+                Bonjour, 
+                <span class="highlight-user">
+                    {% if app.user %}
+                        {{ app.user.userIdentifier|split('@')[0]|split('.')[0]|capitalize }}
+                    {% else %}
+                        Invité
+                    {% endif %}
+                </span>
+            </p>
+        </div>
+    </div>
 
-    
+    <style>
+        /* Conteneur pour centrer verticalement et horizontalement */
+        .dashboard-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 80vh; /* Prend une bonne partie de l'écran */
+            background: linear-gradient(135deg, #ffffff 0%, #f1f4f8 100%);
+            border-radius: 10px;
+        }
+
+        .welcome-box {
+            text-align: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 2rem;
+        }
+
+        /* Style du Gros Titre */
+        .animate-title {
+            font-size: 3rem;
+            color: #2c3e50;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            opacity: 0; /* Caché au départ pour l'animation */
+            animation: fadeInUp 1s ease-out forwards;
+        }
+
+        /* Style du sous-titre */
+        .animate-subtitle {
+            font-size: 1.5rem;
+            color: #7f8c8d;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.3s forwards; /* Délai de 0.3s */
+        }
+
+        /* Mise en valeur du nom de l'utilisateur */
+        .highlight-user {
+            color: #1abc9c; /* Couleur turquoise E-Music (à adapter si besoin) */
+            font-weight: 600;
+        }
+
+        /* Définition de l'animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
 {% endblock %}
