@@ -173,6 +173,42 @@
                 }
                 .btn-logout:hover { background-color: #fceceb; }
 
+                .btn-oval {
+                    padding: 8px 20px;
+                    border-radius: 50px !important; /* forme ovale */
+                    font-weight: 500;
+                    text-decoration: none !important; /* enlève le souligné */
+                    box-shadow: 0 3px 6px rgba(0,0,0,0.15); /* ombre */
+                    transition: all 0.2s ease; /* animation douce */
+                }
+
+                .btn-oval:hover {
+                    transform: translateY(-2px); /* petit effet de “flottement” */
+                    box-shadow: 0 6px 12px rgba(0,0,0,0.22); /* ombre renforcée */
+                }
+
+                .btn-oval:active {
+                    transform: translateY(1px); /* effet appuyé */
+                }
+
+                .btn-oval.btn-vert {
+                    background-color: #28a745;
+                    color: white;
+                }
+
+                .btn-oval.btn-vert:hover {
+                    background-color: #218838;
+                }
+
+                .btn-oval.btn-rouge {
+                    background-color: #dc3545;
+                    color: white;
+                }
+
+                .btn-oval.btn-rouge:hover {
+                    background-color: #c82333;
+                }
+
                 /* --- 4. CONTENU DE LA PAGE --- */
                 .content-container {
                     padding: 30px;
