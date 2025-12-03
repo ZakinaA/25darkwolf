@@ -20,7 +20,7 @@
                     --color-bg-light-hover: #e6fff7; 
                     
                     /* TES COULEURS PERSONNALISEES */
-                    --btn-info: #009879;    /* Vert pour Voir */
+                    --btn-info: #009879ff;    /* Vert pour Voir */
                     --btn-warning: #000000; /* Noir pour Modifier */
                     --btn-danger: #e74c3c;  /* Rouge pour Supprimer/Logout */
                     --btn-back: #7f8c8d;    /* Gris pour Retour */
@@ -192,12 +192,12 @@
                 }
 
                 .btn-oval.btn-vert {
-                    background-color: #28a745;
+                    background-color: #009879ff;
                     color: white;
                 }
 
                 .btn-oval.btn-vert:hover {
-                    background-color: #218838;
+                    background-color: #009879ff;
                 }
 
                 .btn-oval.btn-rouge {
@@ -542,6 +542,7 @@
             {% elseif is_granted('ROLE_ELEVE') %}
                 <div class="sidebar-section">Mon Espace</div>
                 <a href="{{ path('app_eleve_mes_cours') }}">📅 Mes Cours</a>
+                <a href="{{ path('app_catalogue')}}">🗓️ Catalogue des Cours</a>
 
             {# --- MENU AUTRE --- #}
             {% else %}
