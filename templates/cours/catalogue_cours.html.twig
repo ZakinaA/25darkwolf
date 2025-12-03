@@ -3,122 +3,123 @@
 {% block title %}Catalogue des Cours{% endblock %}
 
 {% block body %}
+
 <div class="container mt-4">
 <h1>Catalogue des Cours Disponibles</h1>
 <p>Cliquez sur S'inscrire pour vous enregistrer à un cours ou sur Se Désinscrire pour l'annuler.</p>
 
-    {# Affichage des messages flash (succès ou erreur) #}
-    {% for message in app.flashes('success') %}
-        <div class="alert alert-success mt-3" role="alert">
-            {{ message }}
-        </div>
-    {% endfor %}
-    {% for message in app.flashes('error') %}
-        <div class="alert alert-danger mt-3" role="alert">
-            {{ message }}
-        </div>
-    {% endfor %}
+{# Affichage des messages flash (succès ou erreur) #}
+{% for message in app.flashes('success') %}
+    <div class="alert alert-success mt-3" role="alert">
+        {{ message }}
+    </div>
+{% endfor %}
+{% for message in app.flashes('error') %}
+    <div class="alert alert-danger mt-3" role="alert">
+        {{ message }}
+    </div>
+{% endfor %}
 
-    <table class="table table-striped mt-4">
-        <thead>
-            <tr>
-                <th>Cours</th>
-                <th>Jour</th>
-                <th>Horaires</th>
-                <th>Professeur</th>
-                <th class="text-center">Statut</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for cour in cours %}
-            {# 
-                LOGIQUE D'INSCRIPTION : 
-                Vérifie si l'élève connecté (app.user) a une inscription existante pour ce cours (cour).
-            #}
-            
-            {% set isEnrolled = false %}
-            
-            {# app.user.eleve est l'entité Eleve. C'est elle qui porte la collection d'inscriptions. #}
-            {% if app.user and app.user.eleve and app.user.eleve.inscriptions is defined %}
-                {# Parcourt les INSCRIPTIONS de l'élève pour trouver l'inscription correspondante au cours #}
-                {% for inscription in app.user.eleve.inscriptions %}
-                    {#
-                        CONSEIL: Dans un vrai projet, il faudrait s'assurer que l'entité Eleve porte
-                        directement la collection d'Inscriptions via une relation OneToMany si l'entité User
-                        n'est pas directement reliée aux inscriptions.
-                        Ici, nous passons par app.user.eleve.inscriptions, en supposant que la relation est Eleve -> Inscription.
-                    #}
-
-                    {# Correction du break : on vérifie si on n'a pas déjà trouvé d'inscription #}
-                    {% if not isEnrolled %}
-                        {% if inscription.cours.id == cour.id %}
-                            {% set isEnrolled = true %}
-                            {# On pourrait utiliser "continue" ici pour sauter le reste des vérifications,
-                            mais comme on sort du IF principal, ce n'est pas nécessaire. #}
-                        {% endif %}
-                    {% endif %}
-                {% endfor %}
+<table class="table table-striped mt-4">
+    <thead>
+        <tr>
+            <th>Cours</th>
+            <th>Jour</th>
+            <th>Horaires</th>
+            <th>Professeur</th>
+            <th class="text-center">Statut</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for cour in cours %}
+        
+        {# LOGIQUE OPTIMISÉE : Vérifie si l'ID du cours est dans le tableau des IDs inscrits. #}
+        {# La variable 'inscribedCourseIds' est passée par le contrôleur. #}
+        {% set isEnrolled = false %}
+        {% if app.user and is_granted('ROLE_ELEVE') %}
+            {# CORRECTION : Utilisation du filtre |default([]) pour s'assurer que la variable existe #}
+            {% if cour.id in inscribedCourseIds|default([]) %} 
+                {% set isEnrolled = true %}
             {% endif %}
+        {% endif %}
 
-            <tr>
-                <td>{{ cour.libelle }}</td>
-                
-                <td>{{ cour.jour.libelle|default('Non défini') }}</td>
-                
-                <td>
-                    {{ cour.heureDebut ? cour.heureDebut|date('H:i') : '' }}
-                    - 
-                    {{ cour.heureFin ? cour.heureFin|date('H:i') : '' }}
-                </td>
-                
-                <td>
-                    {% if cour.professeur %}
-                        {{ cour.professeur.prenom }} {{ cour.professeur.nom }}
-                    {% else %}
-                        <span class="text-muted">Non assigné</span>
-                    {% endif %}
-                </td>
-                
-                <td class="text-center">
-                    {% if isEnrolled %}
-                        <span class="badge bg-success">Inscrit(e)</span>
-                    {% else %}
-                        <span class="badge bg-info">Disponible</span>
-                    {% endif %}
-                </td>
+        <tr>
+            <td>{{ cour.libelle }}</td>
+            
+            {# Utilise le filtre |default en cas de valeur manquante #}
+            <td>{{ cour.jour.libelle|default('Non défini') }}</td>
+            
+            <td>
+                {{ cour.heureDebut ? cour.heureDebut|date('H:i') : '' }}
+                - 
+                {{ cour.heureFin ? cour.heureFin|date('H:i') : '' }}
+            </td>
+            
+            <td>
+                {% if cour.professeur %}
+                    {{ cour.professeur.prenom }} {{ cour.professeur.nom }}
+                {% else %}
+                    <span class="text-muted">Non assigné</span>
+                {% endif %}
+            </td>
+            
+            <td class="text-center">
+                {% if not app.user %}
+                        {# Statut si non connecté #}
+                        <span class="badge bg-secondary">Connexion requise</span>
+                {% elseif isEnrolled %}
+                    {# Statut si l'élève est inscrit #}
+                    <span class="badge bg-success">Inscrit(e)</span>
+                {% else %}
+                    {# Statut si le cours est disponible pour l'inscription #}
+                    <span class="badge bg-info">Disponible</span>
+                {% endif %}
+            </td>
 
-                {# Bouton d'Action (S'inscrire / Se Désinscrire) #}
-                <td>
-                    {# La route app_eleve_toggle_inscription est définie dans InscriptionController.php #}
-                    <a href="{{ path('app_eleve_toggle_inscription', {'courseId': cour.id}) }}" 
-                        class="btn btn-sm 
-                            {% if isEnrolled %}
-                                btn-danger 
-                            {% else %}
-                                btn-primary 
-                            {% endif %}
-                        ">
-                        {% if isEnrolled %}
-                            Se Désinscrire
-                        {% else %}
-                            S'inscrire
-                        {% endif %}
+            {# Bouton d'Action (S'inscrire / Se Désinscrire) #}
+            <td>
+                {# Le bouton est affiché uniquement si l'utilisateur est connecté et est un élève #}
+                {% if not app.user %}
+                    {# Si pas connecté, lien vers la connexion #}
+                    <a href="{{ path('app_login') }}" class="btn btn-sm btn-secondary">
+                        Connectez-vous
                     </a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="6" class="text-center">
-                    Aucun cours n'est actuellement disponible dans le catalogue.
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+                {% elseif is_granted('ROLE_ELEVE') %}
+                    {% if isEnrolled %}
+                        {# Si inscrit : bouton DÉSINSCRIPTION (rouge) #}
+                        <a href="{{ path('app_cours_toggle_inscription', {'courseId': cour.id}) }}" 
+                            class="btn btn-sm btn-oval btn-rouge"
+                        >
+                            Se Désinscrire
+                        </a>
+                    {% else %}
+                        {# Si non inscrit : bouton INSCRIPTION (bleu) #}
+                        <a href="{{ path('app_cours_toggle_inscription', {'courseId': cour.id}) }}" 
+                            class="btn btn-sm btn-oval btn-vert"
+                        >
+                            S'inscrire
+                        </a>
+                    {% endif %}
+                {% else %}
+                    {# >>> CE BLOC CIBLE TOUS LES AUTRES RÔLES CONNECTÉS (Professeur, Admin, etc.) <<< #}
+                        <span class="text-muted">Non applicable</span>
+                {% endif %}
+            </td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="6" class="text-center">
+                Aucun cours n'est actuellement disponible dans le catalogue.
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
 
-    <a href="{{ path('app_home') }}" class="btn btn-secondary mt-3">Retour à l'accueil</a>
+<a href="{{ path('app_home') }}" class="btn btn-secondary mt-3">Retour à l'accueil</a>
+
+
 </div>
-
 
 {% endblock %}
