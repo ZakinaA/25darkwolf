@@ -3,14 +3,19 @@
 namespace App\Controller;
 
 use App\Entity\Cours;
+use App\Entity\Eleve;
+use App\Entity\Inscription;
 use App\Form\CoursType;
 use App\Repository\CoursRepository;
+use App\Repository\InscriptionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Bundle\SecurityBundle\Security; // si tu l’utilises
+
 
 #[Route('/cours')]
 final class CoursController extends AbstractController
@@ -86,6 +91,92 @@ final class CoursController extends AbstractController
         ]);
     }
 
+    #[Route('/catalogue', name: 'app_catalogue', methods: ['GET'])]
+    #[IsGranted('ROLE_ELEVE')]
+    public function catalogueAction(CoursRepository $coursRepository, ): Response
+    {
+        // Tous les cours sont récupérés pour être affichés dans le catalogue.
+        $cours = $coursRepository->findAll();
+
+        /** @var \App\Entity\User $user */
+        $user = $this->getUser();
+        /** @var Eleve|null $eleve */
+        $eleve = $user?->getEleve();
+        
+        $inscribedCourseIds = [];
+
+        if ($eleve) {
+            // Construit un tableau simple contenant les IDs des cours auxquels l'élève est inscrit.
+            $inscribedCourseIds = $eleve->getInscription()
+                ->map(fn(Inscription $i) => $i->getCours() ? $i->getCours()->getId() : null)
+                ->filter(fn(?int $id) => $id !== null)
+                ->toArray();
+        }
+
+        return $this->render('cours/catalogue_cours.html.twig', [
+            'cours' => $cours,
+            'titre' => 'Catalogue Complet des Cours',
+            'inscribedCourseIds' => $inscribedCourseIds, // Passé au template pour l'état d'inscription
+        ]);
+    }
+
+    // [AJOUT NOUVELLE ROUTE] Bascule l'inscription/désinscription
+    /**
+     * Bascule l'inscription/désinscription d'un élève à un cours spécifique.
+     */
+    #[Route('/toggle-inscription/{courseId}', name: 'app_cours_toggle_inscription', methods: ['GET'])]
+    #[IsGranted('ROLE_ELEVE')]
+    public function toggleInscription(
+        int $courseId, 
+        EntityManagerInterface $em,
+        CoursRepository $coursRepository,
+        InscriptionRepository $inscriptionRepository
+    ): Response
+    {
+        /** @var \App\Entity\User $user */
+        $user = $this->getUser();
+        /** @var Eleve|null $eleve */
+        $eleve = $user?->getEleve();
+        
+        if (!$eleve) {
+            $this->addFlash('error', 'Votre compte utilisateur n\'est pas relié à une fiche élève.');
+            return $this->redirectToRoute('app_catalogue');
+        }
+
+        $cours = $coursRepository->find($courseId);
+
+        if (!$cours) {
+            $this->addFlash('error', 'Le cours demandé n\'existe pas.');
+            return $this->redirectToRoute('app_catalogue');
+        }
+
+        // Vérification de l'inscription existante
+        $existingInscription = $inscriptionRepository->findOneBy([
+            'eleve' => $eleve,
+            'cours' => $cours,
+        ]);
+
+        if ($existingInscription) {
+            // Désinscription
+            $em->remove($existingInscription);
+            $em->flush();
+            $this->addFlash('success', 'Vous vous êtes désinscrit(e) du cours : ' . $cours->getLibelle());
+        } else {
+            // Inscription
+            $inscription = new Inscription();
+            $inscription->setEleve($eleve);
+            $inscription->setCours($cours);
+
+            $em->persist($inscription);
+            $em->flush();
+            $this->addFlash('success', 'Félicitations ! Vous êtes inscrit(e) au cours : ' . $cours->getLibelle());
+        }
+
+        return $this->redirectToRoute('app_catalogue');
+    }
+
+
+
     #[Route('/espace-professeur', name: 'app_professeur_mes_cours', methods: ['GET'])]
     #[IsGranted('ROLE_PROF')]
     public function mesCoursProfesseur(CoursRepository $coursRepository): Response
@@ -115,6 +206,40 @@ final class CoursController extends AbstractController
         return $this->render('cours/show.html.twig', [
             'cour' => $cour,
         ]);
+    }
+
+    
+#[Route('/{id}/desinscription', name: 'app_unregister_course', methods: ['POST'])]
+    #[IsGranted('ROLE_ELEVE')] // Protection d'accès aux non-élèves
+    // ATTENTION: J'AI CHANGÉ LA DÉPENDANCE DE $security
+    public function unregister(Cours $cour, Security $security, InscriptionRepository $inscriptionRepository, EntityManagerInterface $entityManager): Response
+    {
+        /** @var \App\Entity\User $user */
+        $user = $security->getUser();
+        /** @var Eleve|null $eleve */
+        $eleve = $user?->getEleve(); 
+
+        // Cette vérification est redondante grâce à IsGranted, mais reste une bonne pratique
+        if (!$eleve) {
+            $this->addFlash('error', 'Vous devez être connecté en tant qu\'élève pour effectuer cette action.');
+            return $this->redirectToRoute('app_cours_show', ['id' => $cour->getId()]);
+        }
+
+        // Trouver l'inscription existante en utilisant votre méthode personnalisée
+        $inscription = $inscriptionRepository->findInscriptionByEleveAndCours($eleve, $cour);
+
+        if (!$inscription) {
+            $this->addFlash('warning', 'Erreur : Vous n\'étiez pas inscrit à ce cours.');
+        } else {
+            // Suppression de l'inscription
+            $entityManager->remove($inscription);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Vous avez été désinscrit du cours "' . $cour->getTitre() . '" avec succès.');
+        }
+
+        // Redirection vers la page de détails du cours
+        return $this->redirectToRoute('app_cours_show', ['id' => $cour->getId()]);
     }
 
     #[Route('/{id}/edit', name: 'app_cours_edit', methods: ['GET', 'POST'])]
