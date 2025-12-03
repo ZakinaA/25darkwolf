@@ -23,13 +23,13 @@ class CoursRepository extends ServiceEntityRepository
 
     /**
      * Récupère tous les Cours, triés manuellement par l'ordre des jours et ensuite par l'heure de début.
-     * Cette méthode est nécessaire car Doctrine ne peut pas trier facilement sur une colonne liée (Jour) sans index spécifique.
+     * C'est la méthode la plus fiable pour le planning global.
      * @return Cours[] Returns an array of Cours objects
      */
-    public function findAllSortedByDayAndTime(): array
+    public function findAllOrderedByTime(): array
     {
-        // Ordre des jours pour le tri manuel (il faut adapter cet ordre si votre entité Jour a un champ 'ordre' numérique)
-        // Les clés doivent correspondre aux libellés de vos entités Jour.
+        // Ordre des jours pour le tri manuel
+        // Assurez-vous que l'entité Jour a bien une méthode getLibelle()
         $dayOrder = [
             'Lundi' => 1, 
             'Mardi' => 2, 
@@ -37,27 +37,26 @@ class CoursRepository extends ServiceEntityRepository
             'Jeudi' => 4, 
             'Vendredi' => 5, 
             'Samedi' => 6, 
-            'Dimanche' => 7
+            'Dimanche' => 7,
+            'Inconnu' => 99, // Pour les cours sans jour
         ];
 
-        // 1. Récupérer tous les cours avec les relations Jour, TypeInstrument et Professeur chargées (JOIN)
+        // 1. Récupérer tous les cours avec les relations Jour et Professeur chargées
         $cours = $this->createQueryBuilder('c')
             ->leftJoin('c.jour', 'j')->addSelect('j')
-            ->leftJoin('c.typeInstrument', 'ti')->addSelect('ti')
             ->leftJoin('c.professeur', 'p')->addSelect('p')
-            ->orderBy('c.heureDebut', 'ASC') // Tri initial par heure de début
+            // Tri initial par heure de début
+            ->orderBy('c.heureDebut', 'ASC') 
             ->getQuery()
             ->getResult();
 
         // 2. Tri manuel en PHP pour garantir l'ordre Lundi, Mardi, Mercredi...
         usort($cours, function (Cours $a, Cours $b) use ($dayOrder) {
             
-            // Récupère le libellé du jour (assurez-vous que l'entité Jour a bien une méthode getLibelle())
             $jourA = $a->getJour() ? $a->getJour()->getLibelle() : 'Inconnu';
             $jourB = $b->getJour() ? $b->getJour()->getLibelle() : 'Inconnu';
             
-            // Détermine le rang du jour
-            $dayRankA = $dayOrder[$jourA] ?? 99; // 99 pour les jours non reconnus
+            $dayRankA = $dayOrder[$jourA] ?? 99;
             $dayRankB = $dayOrder[$jourB] ?? 99;
 
             // Comparaison principale : par jour
@@ -66,7 +65,6 @@ class CoursRepository extends ServiceEntityRepository
             }
 
             // Comparaison secondaire (si les jours sont les mêmes) : par heure de début
-            // Note : Cette comparaison fonctionne car les heures sont des objets DateTime
             return $a->getHeureDebut() <=> $b->getHeureDebut();
         });
 
@@ -74,51 +72,26 @@ class CoursRepository extends ServiceEntityRepository
     }
 
     /**
-     * Récupère les cours associés à un élève spécifique via la table Inscription.
-     *
-     * @param int $eleveId L'identifiant de l'élève
-     * @return Cours[] Retourne un tableau d'objets Cours
-     */
-    public function findByEleve($eleveId): array
-    {
-        return $this->createQueryBuilder('c')
-            // On joint l'entité Inscription (i) explicitement
-            // La condition 'WITH' assure qu'on lie l'inscription au cours actuel (c)
-            ->innerJoin('App\Entity\Inscription', 'i', 'WITH', 'i.cours = c')
-            
-            // On filtre pour ne garder que les inscriptions de l'élève demandé
-            ->andWhere('i.eleve = :val')
-            ->setParameter('val', $eleveId)
-            
-            // Tri : D'abord par jour (via la relation Jour), puis par heure de cours
-            // ATTENTION : Le tri Doctrine 'c.jour' pourrait ne pas respecter l'ordre Lundi, Mardi, ... 
-            // Si c'est le cas, il faudrait appliquer un tri manuel comme dans findAllSortedByDayAndTime().
-            ->orderBy('c.jour', 'ASC')
-            ->addOrderBy('c.heureDebut', 'ASC')
-            
-            ->getQuery()
-            ->getResult();
-    }
-    // src/Repository/CoursRepository.php
-
-    /**
-     * Récupère les cours associés à un élève via ses inscriptions
+     * Récupère les cours associés à un élève via ses inscriptions (table de jointure).
      * @return Cours[]
      */
-    public function findCoursByEleve($eleveId): array
+    public function findCoursByEleve(int $eleveId): array
     {
         return $this->createQueryBuilder('c')
-            // On joint l'entité Inscription (en supposant que Cours a une propriété "inscriptions")
-            // Si Cours n'a pas "inscriptions", on fait l'inverse :
-            ->innerJoin('App\Entity\Inscription', 'i', 'WITH', 'i.cours = c') 
-            ->andWhere('i.eleve = :val')
-            ->setParameter('val', $eleveId)
-            ->orderBy('c.id', 'ASC') // Optionnel : trier par ID
+            // Jointure sur la collection 'inscription' si elle existe dans Cours, ou via l'entité Inscription
+            ->innerJoin('App\Entity\Inscription', 'i', 'WITH', 'i.cours = c')
+            ->andWhere('i.eleve = :eleveId')
+            ->setParameter('eleveId', $eleveId)
+            // On peut s'appuyer sur le tri BDD ici, même si l'ordre exact Lundi-Dimanche n'est pas garanti.
+            ->leftJoin('c.jour', 'j')
+            ->orderBy('j.id', 'ASC') 
+            ->addOrderBy('c.heureDebut', 'ASC')
             ->getQuery()
             ->getResult();
     }
-        /**
-     * Récupère les cours dispensés par un professeur spécifique
+
+    /**
+     * Récupère les cours dispensés par un professeur spécifique.
      * @return Cours[]
      */
     public function findCoursByProfesseur(int $professeurId): array
@@ -126,9 +99,9 @@ class CoursRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('c')
             ->andWhere('c.professeur = :profId')
             ->setParameter('profId', $professeurId)
-            // On trie par jour puis par heure de début pour un emploi du temps clair
-            ->leftJoin('c.jour', 'j') // Jointure pour trier par jour si besoin
-            ->orderBy('j.id', 'ASC')  // ou 'c.jour' selon ta structure
+            // Tri par jour puis par heure de début
+            ->leftJoin('c.jour', 'j') 
+            ->orderBy('j.id', 'ASC') 
             ->addOrderBy('c.heureDebut', 'ASC')
             ->getQuery()
             ->getResult();

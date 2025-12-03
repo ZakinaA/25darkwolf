@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Planning Global des Cours{% endblock %}
+
+{% block body %}
+    <h1><i class="fa-solid fa-calendar-alt"></i> Planning Global des Cours</h1>
+
+    <div class="planning-table-container">
+        
+        <table class="planning-table">
+            <thead>
+                <tr>
+                    <th>Jour</th>
+                    <th>Heure de Début</th>
+                    <th>Heure de Fin</th>
+                    <th>Intitulé du Cours</th>
+                    <th>Professeur</th>
+                    <th class="text-center">Élèves</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for cour in allCourses %}
+                <tr>
+                    {# Jour (avec un style plus marqué) #}
+                    <td class="day-cell">
+                        {{ cour.jour.libelle|default('Non assigné') }}
+                    </td>
+                    
+                    {# Heures #}
+                    <td>{{ cour.heureDebut ? cour.heureDebut|date('H:i') : '-' }}</td>
+                    <td>{{ cour.heureFin ? cour.heureFin|date('H:i') : '-' }}</td>
+                    
+                    {# Libellé et Professeur #}
+                    <td class="name-cell">{{ cour.libelle }}</td>
+                    <td>
+                        {% if cour.professeur %}
+                            {{ cour.professeur.prenom }} {{ cour.professeur.nom }}
+                        {% else %}
+                            <span class="text-muted">À définir</span>
+                        {% endif %}
+                    </td>
+                    
+                    {# Nombre d'élèves inscrits #}
+                    <td class="text-center">
+                        <span class="badge" style="background-color: var(--color-primary-accent); color: white; padding: 5px 10px; border-radius: 4px;">
+                            {{ cour.inscription|length }}
+                        </span>
+                    </td>
+
+                    <td>
+                        <a href="{{ path('app_cours_show', {'id': cour.id}) }}" class="btn-action btn-show">Voir</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="7" class="text-center">Aucun cours n'est actuellement planifié.</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="actions">
+        {# Ce bouton sera stylisé automatiquement par le script de base.html.twig #}
+        <a href="{{ path('app_cours_new') }}" class="btn-create">Ajouter un nouveau cours</a>
+    </div>
+{% endblock %}
