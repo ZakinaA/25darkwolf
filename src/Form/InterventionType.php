@@ -22,11 +22,11 @@ class InterventionType extends AbstractType
             ->add('quotite')
             ->add('professionnel', EntityType::class, [
                 'class' => Professionnel::class,
-                'choice_label' => 'id',
+                'choice_label' => 'nom',
             ])
             ->add('contratPret', EntityType::class, [
                 'class' => ContratPret::class,
-                'choice_label' => 'id',
+                'choice_label' => 'num_contrat',
             ])
         ;
     }

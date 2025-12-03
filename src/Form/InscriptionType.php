@@ -18,11 +18,13 @@ class InscriptionType extends AbstractType
             ->add('dateInscrption')
             ->add('eleve', EntityType::class, [
                 'class' => Eleve::class,
-                'choice_label' => 'id',
+                'choice_label' => function(Eleve $e) {
+                    return $e->getPrenom() . ' ' . $e->getNom();
+                },
             ])
             ->add('cours', EntityType::class, [
                 'class' => Cours::class,
-                'choice_label' => 'id',
+                'choice_label' => 'libelle',
             ])
         ;
     }
