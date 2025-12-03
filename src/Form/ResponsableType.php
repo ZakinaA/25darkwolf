@@ -25,12 +25,14 @@ class ResponsableType extends AbstractType
             ->add('mail')
             ->add('eleves', EntityType::class, [
                 'class' => Eleve::class,
-                'choice_label' => 'id',
+                'choice_label' => function(Eleve $e) {
+                    return $e->getPrenom() . ' ' . $e->getNom();
+                },
                 'multiple' => true,
             ])
             ->add('tranche', EntityType::class, [
                 'class' => Tranche::class,
-                'choice_label' => 'id',
+                'choice_label' => 'libelle',
             ])
         ;
     }

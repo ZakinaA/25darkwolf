@@ -25,12 +25,13 @@ class EleveType extends AbstractType
             ->add('mail')
             ->add('responsable', EntityType::class, [
                 'class' => Responsable::class,
-                'choice_label' => 'id',
+                'choice_label' => function(Responsable $r) {
+        return $r->getPrenom() . ' ' . $r->getNom();},
                 'multiple' => true,
             ])
             ->add('tranche', EntityType::class, [
                 'class' => Tranche::class,
-                'choice_label' => 'id',
+                'choice_label' => 'libelle',
             ])
         ;
     }

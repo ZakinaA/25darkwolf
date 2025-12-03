@@ -46,11 +46,12 @@ class ContratPretType extends AbstractType
                 'required' => false,
             ])
             ->add('eleve', EntityType::class, [
-                'class' => Eleve::class,
-                'choice_label' => 'nom', // Afficher le nom de l'élève
-                'label' => 'Élève Emprunteur',
-                // Ajoutez ici une requête si vous voulez filtrer les élèves
-            ])
+    'class' => Eleve::class,
+    'choice_label' => function(Eleve $e) {
+        return $e->getPrenom() . ' ' . $e->getNom();
+    },
+    'label' => 'Élève Emprunteur',
+])
             // Note: interventions n'est pas ajouté au formulaire car c'est une collection (OneToMany) 
             // gérée par Doctrine et potentiellement par un formulaire imbriqué si nécessaire, 
             // mais pas directement pour la création simple.

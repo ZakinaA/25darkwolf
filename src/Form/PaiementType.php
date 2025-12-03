@@ -17,9 +17,15 @@ class PaiementType extends AbstractType
             ->add('montant')
             ->add('datePaiement')
             ->add('inscription', EntityType::class, [
-                'class' => Inscription::class,
-                'choice_label' => 'id',
-            ])
+                    'class' => Inscription::class,
+                    'choice_label' => function(Inscription $i) {
+                        $eleve = $i->getEleve();
+                        $cours = $i->getCours();
+                        return ($eleve ? $eleve->getPrenom() . ' ' . $eleve->getNom() : 'Élève inconnu') 
+                            . ' - ' 
+                            . ($cours ? $cours->getLibelle() : 'Cours inconnu');
+                    },
+                ])
         ;
     }
 
